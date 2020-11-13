@@ -12,5 +12,10 @@ import java.io.Serializable;
  */
 
 @Data
-public class UserInfoResponse implements Serializable {
+public class UserInfoResponseDto implements Serializable {
+
+    /** 距离 */
+    private Integer distance;
+    /** 星座 */
+    private String zodiac;
 }

@@ -1,5 +1,5 @@
 #! /bin/sh
-name="SEGI-License-2.0"
+name="app-0.1.1"
 pid=${name}".pid"
 echo -n "stop $name ..."
 if [ -f "$pid" ]

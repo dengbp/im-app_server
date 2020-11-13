@@ -1,9 +1,8 @@
 #! /bin/sh
-name="SEGI-License-2.0"
+name="0.1.1"
 Xmx=1024m
 Xms=1024m
 Xmn=512m
-iceConfPath=file:/data/platform/license-2.0/SEGI-License-2.0/config/iceclient.properties
 pid=${name}".pid"
 logName="all"
 cd ..

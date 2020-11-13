@@ -20,6 +20,12 @@ public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long id;
+
+    /**
+     * 用户id对应im-server的_uid
+     */
+    private String userId;
     /**
      * 登录用户名
      */
@@ -96,7 +102,7 @@ public class UserInfo implements Serializable {
     /**
      * 在线状态 0：离线；1：在线
      */
-    private Integer stauts;
+    private Integer status;
 
     /**
      * 创建人
