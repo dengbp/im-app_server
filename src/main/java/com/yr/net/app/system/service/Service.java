@@ -1,11 +1,10 @@
 package com.yr.net.app.system.service;
 
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.pojo.CancelSessionRequest;
 import com.yr.net.app.pojo.ConfirmSessionRequest;
 import com.yr.net.app.pojo.CreateSessionRequest;
-import com.yr.net.app.pojo.GroupAnnouncementPojo;
 import cn.wildfirechat.pojos.InputCreateDevice;
 import org.springframework.web.multipart.MultipartFile;
 

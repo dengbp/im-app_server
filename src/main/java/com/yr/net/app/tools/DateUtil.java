@@ -87,6 +87,11 @@ public class DateUtil {
         return hour + "" + "" + minute + "" + second;
     }
 
+    public static String current_yyyyMMdd(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(YYYY_MM_DD_PATTERN, Locale.CHINA);
+        return simpleDateFormat.format(new Date());
+    }
+
     public static String current_yyyyMMddHHmmss(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FULL_TIME_PATTERN, Locale.CHINA);
         return simpleDateFormat.format(new Date());

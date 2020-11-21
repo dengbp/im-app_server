@@ -1,7 +1,7 @@
 package com.yr.net.app.common.handler;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.common.exception.LimitAccessException;
 import lombok.extern.slf4j.Slf4j;

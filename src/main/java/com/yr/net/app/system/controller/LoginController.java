@@ -1,7 +1,7 @@
 package com.yr.net.app.system.controller;
 
 import com.mysql.cj.util.StringUtils;
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.system.service.Service;
 import com.yr.net.app.pojo.*;
 import cn.wildfirechat.pojos.InputCreateDevice;

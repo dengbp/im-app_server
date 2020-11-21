@@ -4,6 +4,7 @@ package com.yr.net.app.tools;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.function.CacheSelector;
+import com.yr.net.app.customer.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -148,10 +149,15 @@ public class AppUtil {
     }*/
 
 
-   public static String getCurrentUserId() {
-       Subject subject = SecurityUtils.getSubject();
-       return (String) subject.getSession().getAttribute("userId");
-   }
+    public static String getCurrentUserId() {
+        Subject subject = SecurityUtils.getSubject();
+        return (String) subject.getSession().getAttribute("userId");
+    }
+
+    public static UserInfo getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        return (UserInfo) subject.getSession().getAttribute("userInfo");
+    }
     /**
      * token 加密
      *

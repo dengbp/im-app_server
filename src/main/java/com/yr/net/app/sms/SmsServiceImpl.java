@@ -1,6 +1,6 @@
 package com.yr.net.app.sms;
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;

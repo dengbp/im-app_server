@@ -1,7 +1,7 @@
 package com.yr.net.app.shiro;
 
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

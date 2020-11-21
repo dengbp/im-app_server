@@ -1,8 +1,9 @@
 package com.yr.net.app.customer.controller;
 
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
+import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
 import com.yr.net.app.customer.entity.UserCoordinate;
@@ -20,15 +21,16 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @RestController
-@RequestMapping("/customer/user-coordinate")
+@RequestMapping("/customer/user-coordinate/")
 public class UserCoordinateController {
 
     @Autowired
     IUserCoordinateService userCoordinateService;
 
-    @PostMapping("/coordinate")
-    @ControllerEndpoint(operation = "查询用户在线", exceptionMessage = "查询用户在线失败")
+    @PostMapping("coordinate")
+    @ControllerEndpoint(operation = "用户经纬度", exceptionMessage = "用户经纬度上报失败")
     @ResponseBody
+    @Log("用户经纬度上报")
     public RestResult coordinate(@Valid CoordinateRequestDto request)throws AppException{
         userCoordinateService.save(this.copyProperties(request,new UserCoordinate()));
         return RestResult.ok();

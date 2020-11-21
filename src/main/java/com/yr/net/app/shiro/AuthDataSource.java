@@ -1,6 +1,6 @@
 package com.yr.net.app.shiro;
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.model.PCSession;
 import com.yr.net.app.model.Record;
 import com.yr.net.app.pojo.SessionOutput;

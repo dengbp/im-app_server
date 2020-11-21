@@ -1,4 +1,11 @@
-package com.yr.net.app;
+package com.yr.net.app.base.dto;
+
+/**
+ * Description todo
+ * @return
+ * @Author dengbp
+ * @Date 01:52 2020-11-22
+ **/
 
 public class RestResult {
     public enum  RestCode {

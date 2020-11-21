@@ -1,14 +1,18 @@
 package com.yr.net.app.system.service.impl;
 
 
+import com.yr.net.app.common.constant.SexConstant;
 import com.yr.net.app.configure.AppProperties;
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
+import com.yr.net.app.customer.entity.UserInfo;
+import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.model.PCSession;
 import com.yr.net.app.pojo.*;
 import com.yr.net.app.shiro.AuthDataSource;
 import com.yr.net.app.shiro.TokenAuthenticationToken;
 import com.yr.net.app.sms.SmsService;
 import com.yr.net.app.system.service.Service;
+import com.yr.net.app.tools.DateUtil;
 import com.yr.net.app.tools.RateLimiter;
 import com.yr.net.app.tools.ShortUUIDGenerator;
 import com.yr.net.app.tools.Utils;
@@ -36,7 +40,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.yr.net.app.model.PCSession.PCSessionStatus.*;
@@ -68,6 +71,9 @@ public class ServiceImpl implements Service {
 
     @Value("${wfc.compat_pc_quick_login}")
     protected boolean compatPcQuickLogin;
+
+    @Autowired
+    IUserInfoService userInfoService;
 
     private ConcurrentHashMap<String, Boolean> supportPCQuickLoginUsers = new ConcurrentHashMap<>();
 
@@ -225,8 +231,12 @@ public class ServiceImpl implements Service {
             response.setUserId(user.getUserId());
             response.setToken(tokenResult.getResult().getToken());
             response.setRegister(isNewUser);
-
+            UserInfo userInfo = userInfoService.getByUserId(user.getUserId());
             if (isNewUser) {
+                if (userInfo == null) {
+                    this.userConvert(user,userInfo);
+                    userInfoService.save(userInfo);
+                }
                 if (!StringUtils.isEmpty(mIMConfig.getWelcome_for_new_user())) {
                     sendTextMessage("admin", user.getUserId(), mIMConfig.getWelcome_for_new_user());
                 }
@@ -244,12 +254,25 @@ public class ServiceImpl implements Service {
                 }
             }
 
+            subject.getSession().setAttribute("userInfo", userInfo);
+
             return RestResult.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("Exception happens {}", e);
             return RestResult.error(RestResult.RestCode.ERROR_SERVER_ERROR);
         }
+    }
+
+    private ServiceImpl userConvert(InputOutputUserInfo source,UserInfo target){
+        target.setUserId(source.getUserId());
+        target.setUserName(source.getDisplayName());
+        target.setPassword(source.getPassword());
+        target.setPhone(source.getMobile());
+        /** 先暂时设置为 女性，生日为当前时间 */
+        target.setSex(SexConstant.Female.getSex());
+        target.setBirthday(Integer.parseInt(DateUtil.current_yyyyMMdd()));
+        return this;
     }
 
     private boolean isUsernameAvailable(String username) {

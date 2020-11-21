@@ -1,6 +1,6 @@
 package com.yr.net.app.shiro;
 
-import com.yr.net.app.RestResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.google.gson.Gson;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
