@@ -22,7 +22,7 @@ public class UserCoordinate implements Serializable {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 经度

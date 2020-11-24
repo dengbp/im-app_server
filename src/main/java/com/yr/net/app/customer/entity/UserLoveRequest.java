@@ -22,7 +22,7 @@ public class UserLoveRequest implements Serializable {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 工作要求 有无工作要求：0：要有工作；1：有正当工作；2：无要求

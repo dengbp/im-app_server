@@ -14,10 +14,6 @@ import java.io.Serializable;
 @Data
 public class CoordinateRequestDto implements Serializable {
 
-    @NotNull(message = "userId 不能为空")
-    private String userId;
-
-
     /**
      * 经度
      */

@@ -51,7 +51,7 @@ public class CommentArea implements Serializable {
     /**
      * 评论者id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 创建人

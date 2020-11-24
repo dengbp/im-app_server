@@ -22,7 +22,7 @@ public class UserAccount implements Serializable {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 当前金额 单位分

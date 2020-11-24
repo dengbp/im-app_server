@@ -19,20 +19,20 @@ import java.lang.reflect.Method;
  * @Author dengbp
  * @Date 14:41 2020-11-10
  **/
-public class AddressUtil {
+public class AddressByIPUtil {
 
-    private static Logger log = LoggerFactory.getLogger(AddressUtil.class);
+    private static Logger log = LoggerFactory.getLogger(AddressByIPUtil.class);
 
     public static String getCityInfo(String ip) {
         DbSearcher searcher = null;
         try {
-            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
+            String dbPath = AddressByIPUtil.class.getResource("/ip2region/ip2region.db").getPath();
             File file = new File(dbPath);
             if (!file.exists()) {
                 String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
                 dbPath = tmpDir + File.separator + "ip.db";
                 file = new File(dbPath);
-                InputStream resourceAsStream = AddressUtil.class.getClassLoader().getResourceAsStream("classpath:ip2region/ip2region.db");
+                InputStream resourceAsStream = AddressByIPUtil.class.getClassLoader().getResourceAsStream("classpath:ip2region/ip2region.db");
                 if (resourceAsStream != null) {
                     FileUtils.copyInputStreamToFile(resourceAsStream, file);
                 }

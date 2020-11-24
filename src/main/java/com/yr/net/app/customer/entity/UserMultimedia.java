@@ -22,12 +22,17 @@ public class UserMultimedia implements Serializable {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 多媒体名称
      */
     private String multimediaName;
+
+    /**
+     * 配文、我的秀言
+     */
+    private String showWord;
 
     /**
      * 多媒体存储url
@@ -50,6 +55,11 @@ public class UserMultimedia implements Serializable {
     private String addr;
 
     /**
+     * 存储文件名称
+     */
+    private String storeName;
+
+    /**
      * 状态 0:正常；1：已删除
      */
     private Integer state;
@@ -57,7 +67,7 @@ public class UserMultimedia implements Serializable {
     /**
      * 多媒体大小
      */
-    private Integer fileSize;
+    private Long fileSize;
 
     /**
      * 多媒体格式

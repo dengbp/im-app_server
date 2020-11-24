@@ -9,7 +9,7 @@ import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.monitor.entity.LoginLog;
 import com.yr.net.app.monitor.mapper.LoginLogMapper;
 import com.yr.net.app.monitor.service.ILoginLogService;
-import com.yr.net.app.tools.AddressUtil;
+import com.yr.net.app.tools.AddressByIPUtil;
 import com.yr.net.app.tools.HttpContextUtil;
 import com.yr.net.app.tools.IPUtil;
 import com.yr.net.app.tools.SortUtil;
@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author MrBird
@@ -57,7 +56,7 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         String ip = IPUtil.getIpAddr(request);
         loginLog.setIp(ip);
-        loginLog.setLocation(AddressUtil.getCityInfo(ip));
+        loginLog.setLocation(AddressByIPUtil.getCityInfo(ip));
         this.save(loginLog);
     }
 

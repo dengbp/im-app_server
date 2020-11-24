@@ -21,12 +21,12 @@ public class UserRelation implements Serializable {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 被关注用户id
      */
-    private Long relationId;
+    private String relationId;
 
     /**
      * 状态 0：正常1：取消关注；2：已拉黑

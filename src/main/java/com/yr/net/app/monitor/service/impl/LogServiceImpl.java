@@ -13,7 +13,7 @@ import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.monitor.entity.SysLog;
 import com.yr.net.app.monitor.mapper.LogMapper;
 import com.yr.net.app.monitor.service.ILogService;
-import com.yr.net.app.tools.AddressUtil;
+import com.yr.net.app.tools.AddressByIPUtil;
 import com.yr.net.app.tools.SortUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -102,7 +102,7 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements IL
             log.setParams(params.toString());
         }
         log.setCreateTime(new Date());
-        log.setLocation(AddressUtil.getCityInfo(log.getIp()));
+        log.setLocation(AddressByIPUtil.getCityInfo(log.getIp()));
         // 保存系统日志
         save(log);
     }

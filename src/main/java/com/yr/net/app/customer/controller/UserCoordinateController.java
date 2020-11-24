@@ -8,6 +8,7 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
 import com.yr.net.app.customer.entity.UserCoordinate;
 import com.yr.net.app.customer.service.IUserCoordinateService;
+import com.yr.net.app.tools.AppUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class UserCoordinateController {
     }
 
     private UserCoordinate copyProperties(CoordinateRequestDto sources, UserCoordinate target){
-        target.setUserId(Long.parseLong(sources.getUserId()));
+        target.setUserId(AppUtil.getCurrentUserId());
         target.setLatitude(new BigDecimal(sources.getLatitude()));
         target.setLongitude(new BigDecimal(sources.getLongitude()));
         target.setCreatedTime(LocalDateTime.now());
