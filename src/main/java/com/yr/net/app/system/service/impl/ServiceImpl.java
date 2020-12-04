@@ -232,7 +232,9 @@ public class ServiceImpl implements Service {
             response.setToken(tokenResult.getResult().getToken());
             response.setRegister(isNewUser);
             UserInfo userInfo = userInfoService.getByUserId(user.getUserId());
+            response.setIsNewUser(1);
             if (isNewUser) {
+                response.setIsNewUser(0);
                 if (userInfo == null) {
                     this.userConvert(user,userInfo);
                     userInfoService.save(userInfo);

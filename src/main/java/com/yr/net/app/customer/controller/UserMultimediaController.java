@@ -5,7 +5,9 @@ import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.customer.dto.AlbumRequestDto;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
+import com.yr.net.app.customer.dto.VideoRequestDto;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.tools.AppUtil;
 import com.yr.net.app.tools.DateUtil;
@@ -56,5 +58,27 @@ public class UserMultimediaController {
         userMultimediaService.saveFile(file,Integer.parseInt(type),Integer.parseInt(isFree),price,coordinate,showWord);
         return RestResult.ok();
     }
+
+
+    @PostMapping("/list")
+    @ResponseBody
+    @ControllerEndpoint(operation = "视频列表页面接口", exceptionMessage = "视频列表页面接口失败")
+    @Log("视频列表页面接口")
+    public RestResult list(@Valid VideoRequestDto requestDto){
+        requestDto.setUserId(AppUtil.getCurrentUserId());
+        return RestResult.ok().setResult(userMultimediaService.videoList(requestDto));
+    }
+
+
+    @PostMapping("/album")
+    @ResponseBody
+    @ControllerEndpoint(operation = "用户相册\\视频查询接口", exceptionMessage = "用户相册\\视频查询接口失败")
+    @Log("用户相册\\视频查询接口")
+    public RestResult album(@Valid AlbumRequestDto requestDto){
+        requestDto.setUserId(AppUtil.getCurrentUserId());
+        return RestResult.ok().setResult(userMultimediaService.getAlbum(requestDto));
+    }
+
+
 
 }

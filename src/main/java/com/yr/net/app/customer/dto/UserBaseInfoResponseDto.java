@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 
 @Data
-public class UserInfoResponseDto implements Serializable {
+public class UserBaseInfoResponseDto implements Serializable {
 
     private String userId;
     /** 身高 单位 CM*/
@@ -27,9 +27,26 @@ public class UserInfoResponseDto implements Serializable {
     /** 星座 */
     private String zodiac;
 
-    private String picUrl;
     /** 所在城市 */
     private String  nowLife;
 
     private int age;
+
+    /** 用户头像  */
+    private String icon;
+
+    /**
+     * 多媒体类型 0：图片；1：视频
+     */
+    private Integer type;
+
+    /**
+     * 是否收费 0:免费:1收费
+     */
+    private Integer isFree;
+
+    /**
+     * 解锁值
+     */
+    private BigDecimal price;
 }

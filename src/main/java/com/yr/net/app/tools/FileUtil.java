@@ -2,6 +2,7 @@ package com.yr.net.app.tools;
 
 import com.google.common.base.Preconditions;
 import com.yr.net.app.common.entity.AppConstant;
+import com.yr.net.app.configure.AppProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,8 +56,9 @@ public class FileUtil {
      */
     public static void download(String filePath, String fileName, Boolean delete, HttpServletResponse response) throws Exception {
         File file = new File(filePath);
-        if (!file.exists())
+        if (!file.exists()) {
             throw new Exception("文件未找到");
+        }
 
         String fileType = getFileType(file);
         if (!fileTypeIsValid(fileType)) {
@@ -72,8 +74,9 @@ public class FileUtil {
                 os.write(b, 0, length);
             }
         } finally {
-            if (delete)
+            if (delete) {
                 delete(filePath);
+            }
         }
     }
 
@@ -86,7 +89,9 @@ public class FileUtil {
         File file = new File(filePath);
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            if (files != null) Arrays.stream(files).forEach(f -> delete(f.getPath()));
+            if (files != null) {
+                Arrays.stream(files).forEach(f -> delete(f.getPath()));
+            }
         }
         file.delete();
     }
@@ -151,5 +156,22 @@ public class FileUtil {
                 zipOut.write(data, 0, count);
             }
         }
+    }
+
+    /**
+     * Description todo
+     * @param appProperties
+ * @param originName 文件上传名称
+     * @return java.lang.String
+     * @Author dengbp
+     * @Date 23:52 2020-12-04
+     **/
+
+    public static String getFilePath(AppProperties appProperties,String originName){
+        String storeName = DateUtil.current_yyyyMMddHHmmss() + "_"+ AppUtil.getCurrentUserId() + "_"+ originName;
+        log.info("保存的文件名为: {}",storeName);
+        String path = appProperties.getMultimedia_path()+"/" +storeName;
+        log.info("保存文件绝对路径{}",path);
+        return path;
     }
 }

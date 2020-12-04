@@ -25,7 +25,7 @@ public class UserMultimedia implements Serializable {
     private String userId;
 
     /**
-     * 多媒体名称
+     * 原上传的多媒体名称
      */
     private String multimediaName;
 
@@ -37,12 +37,12 @@ public class UserMultimedia implements Serializable {
     /**
      * 多媒体存储url
      */
-    private String url;
+    private String path;
 
     /**
      * 多媒体访问url
      */
-    private String httpUrl;
+    private String url;
 
     /**
      * 上传时间

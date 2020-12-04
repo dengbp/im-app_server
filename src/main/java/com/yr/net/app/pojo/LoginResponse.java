@@ -1,11 +1,16 @@
 package com.yr.net.app.pojo;
 
+import lombok.Data;
+
+@Data
 public class LoginResponse {
     private String userId;
     private String token;
     private boolean register;
     private String userName;
     private String portrait;
+    /** 0是新用户，1不是 */
+    private int isNewUser;
 
     public String getUserId() {
         return userId;

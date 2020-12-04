@@ -19,5 +19,6 @@ public class NearUserResponseDto {
     /** 距离单位 KM*/
     private double distance;
 
-    private String picUrl;
+    /** 用户头像  */
+    private String icon;
 }

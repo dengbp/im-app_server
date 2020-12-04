@@ -104,6 +104,9 @@ public class UserInfo implements Serializable {
      */
     private Integer status;
 
+    /** 用户头像  */
+    private String icon;
+
     /**
      * 创建人
      */

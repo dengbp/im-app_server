@@ -30,4 +30,6 @@ public class AppProperties {
     private boolean openAopLog = true;
     private boolean autoOpenBrowser = true;
     private String[] autoOpenBrowserEnv = {};
+    private String multimedia_url;
+    private String multimedia_path;
 }
