@@ -19,9 +19,9 @@ public class TagInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 标签名称
+     * 标签内容
      */
-    private String tagName;
+    private String tagContent;
 
     /**
      * 标签类型 0:性格类；1：爱好类；

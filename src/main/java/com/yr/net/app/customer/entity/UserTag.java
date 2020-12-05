@@ -29,7 +29,12 @@ public class UserTag implements Serializable {
     private Long tagId;
 
     /**
-     * 标签类型 0:性格类；1：爱好类；
+     * 标签内容（对应标签表的tag_name）
+     */
+    private String tagContent;
+
+    /**
+     * 标签类型 0:性格类；1：爱好类；...
      */
     private Integer tagType;
 

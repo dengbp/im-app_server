@@ -99,13 +99,16 @@ public class UserInfo implements Serializable {
      */
     private Integer housePurchase;
 
-    /**
+   /* *//**
      * 在线状态 0：离线；1：在线
-     */
-    private Integer status;
+     *//*
+    private Integer status;*/
 
     /** 用户头像  */
     private String icon;
+
+    /** 0正常1已注销2已被拉黑，3被锁定 */
+    private Integer state;
 
     /**
      * 创建人

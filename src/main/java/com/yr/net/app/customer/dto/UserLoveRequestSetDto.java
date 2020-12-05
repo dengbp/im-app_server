@@ -1,28 +1,23 @@
-package com.yr.net.app.customer.entity;
+package com.yr.net.app.customer.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 /**
- * 恋爱要求
+ * 恋爱要求设置
  *
  * @author dengbp
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class UserLoveRequest implements Serializable {
+public class UserLoveRequestSetDto{
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 用户id
-     */
-    private String userId;
 
     /**
      * 工作要求 有无工作要求：0：要有工作；1：有正当工作；2：无要求
@@ -37,12 +32,12 @@ public class UserLoveRequest implements Serializable {
     /**
      * 体重
      */
-    private BigDecimal bodyWeight;
+    private String bodyWeight;
 
     /**
      * 身高
      */
-    private BigDecimal bodyHeight;
+    private String bodyHeight;
 
     /**
      * 爱好要求
@@ -52,7 +47,7 @@ public class UserLoveRequest implements Serializable {
     /**
      * 婚姻状况 0:要求未婚，1：离异也可以，2：无要求
      */
-    private Integer maritalStatus;
+    private Integer marita;
 
     /**
      * 是否接受异地 0:不接受；1：接受
@@ -97,26 +92,5 @@ public class UserLoveRequest implements Serializable {
      * 预留字段
      */
     private String c3;
-
-    /**
-     * 创建人
-     */
-    private String createdBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createdTime;
-
-    /**
-     * 更新人
-     */
-    private String updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedTime;
-
 
 }
