@@ -23,7 +23,7 @@ public class Multimedia implements Serializable {
     /**
      * 动态id或评论id
      */
-    private Long momentsId;
+    private Long commentId;
 
     /**
      * 多媒体url
