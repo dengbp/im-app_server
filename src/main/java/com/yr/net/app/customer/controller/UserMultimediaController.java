@@ -64,7 +64,7 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "视频列表页面接口", exceptionMessage = "视频列表页面接口失败")
     @Log("视频列表页面接口")
-    public RestResult list(@Valid VideoRequestDto requestDto){
+    public RestResult list(@RequestBody @Valid VideoRequestDto requestDto){
         requestDto.setUserId(AppUtil.getCurrentUserId());
         return RestResult.ok().setResult(userMultimediaService.videoList(requestDto));
     }
@@ -74,7 +74,7 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "用户相册\\视频查询接口", exceptionMessage = "用户相册\\视频查询接口失败")
     @Log("用户相册\\视频查询接口")
-    public RestResult album(@Valid AlbumRequestDto requestDto){
+    public RestResult album(@RequestBody @Valid AlbumRequestDto requestDto){
         requestDto.setUserId(AppUtil.getCurrentUserId());
         return RestResult.ok().setResult(userMultimediaService.getAlbum(requestDto));
     }

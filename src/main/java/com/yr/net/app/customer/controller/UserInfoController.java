@@ -39,7 +39,7 @@ public class UserInfoController {
     @ControllerEndpoint(operation = "查询用户基本信息", exceptionMessage = "查询用户基本信息失败")
     @ResponseBody
     @Log("查询用户基本信息")
-    public RestResult getOnlineUsers(@Valid UserBaseInfoRequestDto requestDto)throws AppException{
+    public RestResult getOnlineUsers(@RequestBody @Valid UserBaseInfoRequestDto requestDto)throws AppException{
         return RestResult.ok().setResult(userInfoService.getUserInfo(requestDto));
     }
 
@@ -48,7 +48,7 @@ public class UserInfoController {
     @ControllerEndpoint(operation = "查询用户在线", exceptionMessage = "查询用户在线失败")
     @ResponseBody
     @Log("查询用户在线")
-    public RestResult getOnlineUsers(@Valid OnlineRequestDto query)throws AppException{
+    public RestResult getOnlineUsers(@RequestBody @Valid OnlineRequestDto query)throws AppException{
         return RestResult.ok().setResult(userInfoService.findOnline(query));
     }
 
@@ -68,7 +68,7 @@ public class UserInfoController {
     @ControllerEndpoint(operation = "完善基本信息", exceptionMessage = "完善基本信息失败")
     @ResponseBody
     @Log("完善基本信息")
-    public RestResult addMoreInfo(@Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
+    public RestResult addMoreInfo(@RequestBody @Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(baseInfoRequestDto,userInfo);
         return RestResult.ok().setResult(userInfoService.save(userInfo));
@@ -78,7 +78,7 @@ public class UserInfoController {
     @ControllerEndpoint(operation = "第一次个人信息完善", exceptionMessage = "第一次个人信息完善失败")
     @ResponseBody
     @Log("第一次个人信息完善")
-    public RestResult baseAdd(@Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
+    public RestResult baseAdd(@RequestBody @Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(baseInfoRequestDto,userInfo);
         return RestResult.ok().setResult(userInfoService.save(userInfo));

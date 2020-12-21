@@ -1,5 +1,5 @@
 #! /bin/sh
-name="0.1.1"
+name="app-0.1.1"
 Xmx=1024m
 Xms=1024m
 Xmn=512m

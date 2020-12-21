@@ -32,7 +32,7 @@ public class UserCoordinateController {
     @ControllerEndpoint(operation = "用户经纬度", exceptionMessage = "用户经纬度上报失败")
     @ResponseBody
     @Log("用户经纬度上报")
-    public RestResult coordinate(@Valid CoordinateRequestDto request)throws AppException{
+    public RestResult coordinate(@RequestBody @Valid CoordinateRequestDto request)throws AppException{
         userCoordinateService.save(this.copyProperties(request,new UserCoordinate()));
         return RestResult.ok();
     }

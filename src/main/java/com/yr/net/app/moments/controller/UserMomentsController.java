@@ -7,11 +7,7 @@ import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.service.IUserMomentsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,7 +27,7 @@ public class UserMomentsController {
     @ControllerEndpoint(operation = "用户动态", exceptionMessage = "用户动态失败")
     @ResponseBody
     @Log("用户动态")
-    public RestResult mottoEdit(@Valid UserMomentsReqDto reqDto){
+    public RestResult mottoEdit(@RequestBody  @Valid UserMomentsReqDto reqDto){
         return RestResult.ok().setResult(userMomentsService.findUserMoments(reqDto));
     }
 

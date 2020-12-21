@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class LicenseStartedUpRunner implements ApplicationRunner {
+public class AppServerStartedUpRunner implements ApplicationRunner {
 
     @Autowired
     private ConfigurableApplicationContext context;

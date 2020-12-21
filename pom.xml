@@ -125,7 +125,7 @@
 			<version>1.0.5</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>cn.wildfirechat</groupId>
 			<artifactId>sdk</artifactId>
 			<version>${wfc.sdk.version}</version>
@@ -139,6 +139,16 @@
 			<version>${wfc.sdk.version}</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/lib/common-${wfc.sdk.version}.jar</systemPath>
+		</dependency>-->
+		<dependency>
+			<groupId>cn.wildfirechat</groupId>
+			<artifactId>sdk</artifactId>
+			<version>${wfc.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.wildfirechat</groupId>
+			<artifactId>common</artifactId>
+			<version>${wfc.sdk.version}</version>
 		</dependency>
 
 
@@ -265,6 +275,10 @@
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
 		</dependency>
 
 

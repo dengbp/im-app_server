@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path:  /yr-app-server
-  port: 8082
+  port: 8888
   tomcat:
     uri-encoding: utf-8
 
@@ -18,7 +18,7 @@ spring:
 
 mybatis-plus:
   # 实体类扫描路径
-  type-aliases-package: com.yr.net.app.base.entity,com.yr.net.app.common.entity,com.yr.net.app.customer.entity,com.yr.net.app.log.entity,com.yr.net.app.message.entity,com.yr.net.app.moments.entity,com.yr.net.app.monitor.entity
+  type-aliases-package: com.yr.net.app.base.entity,com.yr.net.app.common.entity,com.yr.net.app.customer.entity,com.yr.net.app.log.entity,com.yr.net.app.message.entity,com.yr.net.app.moments.entity,com.yr.net.app.monitor.entity,com.yr.net.app.moments.entity
   # xml 扫描路径
   mapper-locations: classpath:mapper/*/*.xml
   configuration:

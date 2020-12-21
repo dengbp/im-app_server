@@ -6,10 +6,7 @@ import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.transmitter.dto.MessageDto;
 import com.yr.net.app.transmitter.service.ITransmitService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -31,7 +28,7 @@ public class TransmitController {
     @ControllerEndpoint(operation = "给用户发送消息", exceptionMessage = "给用户发送消息失败")
     @ResponseBody
     @Log("给用户发送消息")
-    public RestResult vicinity(@Valid MessageDto messageDto)throws AppException {
+    public RestResult vicinity(@RequestBody  @Valid MessageDto messageDto)throws AppException {
         return RestResult.ok().setResult(transmitService.transmit(messageDto));
     }
 }

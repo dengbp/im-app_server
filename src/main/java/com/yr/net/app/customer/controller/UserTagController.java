@@ -8,11 +8,7 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.UserTagRequestDto;
 import com.yr.net.app.customer.service.IUserTagService;
 import com.yr.net.app.tools.AppUtil;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -31,7 +27,7 @@ public class UserTagController {
     @ControllerEndpoint(operation = "查询用户爱好信息", exceptionMessage = "查询用户爱好信息失败")
     @ResponseBody
     @Log("查询用户爱好信息")
-    public RestResult getOnlineUsers(String userId) {
+    public RestResult getOnlineUsers(@RequestBody String userId) {
         return RestResult.ok().setResult(userTagService.findByUserId(userId));
     }
 
@@ -40,7 +36,7 @@ public class UserTagController {
     @ControllerEndpoint(operation = "用户爱好设置", exceptionMessage = "用户爱好设置失败")
     @ResponseBody
     @Log("用户爱好设置")
-    public RestResult edit(@Valid UserTagRequestDto requestDto) {
+    public RestResult edit(@RequestBody @Valid UserTagRequestDto requestDto) {
         userTagService.setUserTag(AppUtil.getCurrentUserId(),requestDto);
         return RestResult.ok();
     }
