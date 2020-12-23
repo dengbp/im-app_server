@@ -1,6 +1,12 @@
 package com.yr.net.app.customer.dto;
 
+import com.yr.net.app.customer.entity.UserInfo;
+import com.yr.net.app.tools.DateUtil;
 import lombok.Data;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author dengbp
@@ -21,4 +27,5 @@ public class NearUserResponseDto {
 
     /** 用户头像  */
     private String icon;
+
 }

@@ -18,6 +18,7 @@ import com.yr.net.app.customer.service.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.pojo.Position;
 import com.yr.net.app.tools.AppUtil;
+import com.yr.net.app.tools.DateUtil;
 import com.yr.net.app.tools.FileUtil;
 import com.yr.net.app.tools.SortUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -70,7 +71,27 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public List<NearUserResponseDto> findNear(String userId, Position position) throws AppException {
-        return null;
+        List<UserInfo> list = this.list();
+        List<NearUserResponseDto> responses = new ArrayList<>();
+        list.forEach(userInfo -> {
+            try {
+                responses.add(this.assemblyResponse(userInfo));
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new AppException(e.getMessage());
+            }
+        });
+        return responses;
+    }
+
+    private NearUserResponseDto assemblyResponse(final UserInfo userInfo) throws Exception {
+        NearUserResponseDto responseDto = new NearUserResponseDto();
+        responseDto.setUserId(userInfo.getUserId());
+        responseDto.setIcon(userInfo.getIcon());
+        responseDto.setAge(DateUtil.getAge(userInfo.getBirthday().toString(),DateUtil.YYYY_MM_DD_PATTERN));
+        responseDto.setBodyHeight(userInfo.getBodyHeight().intValue());
+        responseDto.setDistance(Double.valueOf("1.5"));
+        return responseDto;
     }
 
     @Override

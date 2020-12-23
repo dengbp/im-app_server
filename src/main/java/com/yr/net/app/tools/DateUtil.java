@@ -118,4 +118,34 @@ public class DateUtil {
         calEnd.setTime(endDate);
         return calEnd.get(Calendar.YEAR) - calBegin.get(Calendar.YEAR);
     }
+
+
+
+    /**
+     * Description 生日计算年龄
+     *
+     * @param birthday
+     * @return java.lang.Integer
+     * @Author dengbp
+     * @Date 23:32 2020-12-23
+     **/
+    public static Integer getAge(String birthday,String pattern) throws Exception{
+        SimpleDateFormat df = new SimpleDateFormat(pattern);
+        Date birth = df.parse(birthday);
+        Calendar now = Calendar.getInstance();
+        Calendar born = Calendar.getInstance();
+
+        now.setTime(new Date());
+        born.setTime(birth);
+
+        if(born.after(now)){
+            throw new IllegalArgumentException("Can't be born in the future");
+        }
+
+        int age = now.get(Calendar.YEAR)-born.get(Calendar.YEAR);
+        if(now.get(Calendar.DAY_OF_YEAR) < born.get(Calendar.DAY_OF_YEAR)) {
+            age -= 1;
+        }
+        return age;
+    }
 }
