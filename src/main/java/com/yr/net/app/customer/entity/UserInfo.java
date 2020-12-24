@@ -42,7 +42,7 @@ public class UserInfo implements Serializable {
     private Integer sex;
 
     /**
-     * 出生日期
+     * 出生日期（yyyyMMdd）
      */
     private Integer birthday;
 

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 星座信息
+ * 用户星座信息
  *
  * @author dengbp
  */
@@ -19,14 +19,14 @@ public class ZodiacInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 名称
+     * 星座
      */
-    private String zodiacName;
+    private String star;
 
     /**
-     * 编码
+     * 用户id
      */
-    private String zodiacCode;
+    private String userId;
 
     /**
      * 创建人
@@ -39,14 +39,9 @@ public class ZodiacInfo implements Serializable {
     private LocalDateTime createdTime;
 
     /**
-     * 更新人
-     */
-    private String updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedTime;
+     * 属相
+     **/
+    private String zodiac;
 
 
 }

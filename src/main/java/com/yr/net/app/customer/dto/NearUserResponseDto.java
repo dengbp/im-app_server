@@ -5,6 +5,7 @@ import com.yr.net.app.tools.DateUtil;
 import lombok.Data;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,5 +28,17 @@ public class NearUserResponseDto {
 
     /** 用户头像  */
     private String icon;
+
+    /**
+     * 星座
+     */
+    private String star;
+
+    /**
+     * 属相
+     **/
+    private String zodiac;
+
+    private String userName;
 
 }

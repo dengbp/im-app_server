@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yr.net.app.base.service.IZodiacInfoService;
 import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
@@ -17,10 +18,7 @@ import com.yr.net.app.customer.mapper.UserInfoMapper;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.pojo.Position;
-import com.yr.net.app.tools.AppUtil;
-import com.yr.net.app.tools.DateUtil;
-import com.yr.net.app.tools.FileUtil;
-import com.yr.net.app.tools.SortUtil;
+import com.yr.net.app.tools.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private UserManager userManager;
     @Autowired
     private AppProperties appProperties;
+    @Autowired
+    private IZodiacInfoService zodiacInfoService;
 
     @Override
     public IPage<UserBaseInfoResponseDto> findOnline(OnlineRequestDto query) throws AppException {
@@ -88,9 +88,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         NearUserResponseDto responseDto = new NearUserResponseDto();
         responseDto.setUserId(userInfo.getUserId());
         responseDto.setIcon(userInfo.getIcon());
-        responseDto.setAge(DateUtil.getAge(userInfo.getBirthday().toString(),DateUtil.YYYY_MM_DD_PATTERN));
+        String birthday = userInfo.getBirthday().toString();
+        responseDto.setAge(DateUtil.getAge(birthday,DateUtil.YYYY_MM_DD_PATTERN));
         responseDto.setBodyHeight(userInfo.getBodyHeight().intValue());
         responseDto.setDistance(Double.valueOf("1.5"));
+        String year = birthday.substring(0,4);
+        String moth = birthday.substring(4,6);
+        String day = birthday.substring(6);
+        //要初始化到用户星座表去ZodiacInfo，从星座表里查
+        responseDto.setStar(ZodiacUtil.getStar(Integer.parseInt(moth),Integer.parseInt(day)));
+        responseDto.setZodiac(ZodiacUtil.getZodiac(Integer.parseInt(year)));
+        responseDto.setUserName(userInfo.getUserName());
         return responseDto;
     }
 

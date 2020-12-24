@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix="alisms")
-@PropertySource(value = "file:config/aliyun_sms.properties",encoding = "utf-8")
+@PropertySource(value = "file:${CONF_DIR}/aliyun_sms.properties",encoding = "utf-8")
 public class AliyunSMSConfig {
     String accessKeyId;
     String accessSecret;

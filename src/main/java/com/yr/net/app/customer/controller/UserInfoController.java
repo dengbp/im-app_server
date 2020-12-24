@@ -14,6 +14,7 @@ import com.yr.net.app.customer.service.IUserCoordinateService;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.pojo.Position;
 import com.yr.net.app.tools.AppUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 /**
  * @author dengbp
  */
+@Slf4j
 @RestController
 @RequestMapping("/customer/user-info/")
 public class UserInfoController {
@@ -58,6 +60,7 @@ public class UserInfoController {
     @Log("查询附近用户")
     public RestResult vicinity()throws AppException{
         String userId = AppUtil.getCurrentUserId();
+        log.info("用户附近查询，用户id={}",userId);
         UserCoordinate coordinate = userCoordinateService.findByUserId(userId);
         Position position = new Position(coordinate.getLongitude(),coordinate.getLatitude());
         return RestResult.ok().setResult(userInfoService.findNear(AppUtil.getCurrentUserId(),position));
