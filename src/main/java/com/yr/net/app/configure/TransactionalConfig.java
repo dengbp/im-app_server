@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * @author dengbp
  * @ClassName TransactionalConfig
- * @Description TODO
+ * @Description 全局事务
  * @date 2020-12-14 19:45
  */
 

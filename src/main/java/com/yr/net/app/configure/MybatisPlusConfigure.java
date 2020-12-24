@@ -1,4 +1,4 @@
-package com.yr.net.app.common.configure;
+package com.yr.net.app.configure;
 
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
