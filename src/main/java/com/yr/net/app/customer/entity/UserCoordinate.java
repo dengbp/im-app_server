@@ -39,5 +39,20 @@ public class UserCoordinate implements Serializable {
      */
     private LocalDateTime createdTime;
 
+    /** 省 */
+    private String province;
+    /** 市编码 */
+    private String cityCode;
+    /** 市 */
+    private String city;
+    /** 区 */
+    private String district;
+    /** 街道 */
+    private String street;
+    /** 门牌号 */
+    private String  streetNumber;
+    /** 从省到门牌连串一起的详细地址*/
+    private String formattedAddress;
+
 
 }

@@ -29,6 +29,7 @@
 		<mybatis-generator-core>1.3.2</mybatis-generator-core>
 		<mysql-connect>5.1.46</mysql-connect>
 		<mzservice.path>${project.build.directory}/segi-license-manager</mzservice.path>
+		<javacpp.version>1.3</javacpp.version>
 	</properties>
 
 	<dependencies>
@@ -281,6 +282,112 @@
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
 
+
+		<!-- 图形计算  -->
+		<!-- https://mvnrepository.com/artifact/org.locationtech.spatial4j/spatial4j -->
+		<dependency>
+			<groupId>org.locationtech.spatial4j</groupId>
+			<artifactId>spatial4j</artifactId>
+			<version>0.7</version>
+		</dependency>
+
+		<!--截取视频第一帧-->
+		<!--<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacpp</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>opencv-platform</artifactId>
+			<version>3.4.1-1.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>ffmpeg-platform</artifactId>
+			<version>4.0.2-1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openpnp</groupId>
+			<artifactId>opencv</artifactId>
+			<version>3.4.2-1</version>
+		</dependency>-->
+
+
+
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>flycapture</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>libdc1394</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>libfreenect</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>libfreenect2</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>librealsense</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>videoinput</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>artoolkitplus</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>artoolkitplus</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bytedeco.javacpp-presets</groupId>
+					<artifactId>flandmark</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>opencv</artifactId>
+			<version>3.1.0-${javacpp.version}</version>
+			<classifier>linux-x86_64</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>opencv</artifactId>
+			<version>3.1.0-${javacpp.version}</version>
+			<classifier>windows-x86_64</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>3.2.1-${javacpp.version}</version>
+			<classifier>windows-x86_64</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>3.2.1-${javacpp.version}</version>
+			<classifier>linux-x86_64</classifier>
+		</dependency>
 
 	</dependencies>
 

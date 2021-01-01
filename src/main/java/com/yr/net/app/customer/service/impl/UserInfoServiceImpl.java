@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yr.net.app.base.service.IZodiacInfoService;
 import com.yr.net.app.common.entity.AppConstant;
+import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
 import com.yr.net.app.customer.dto.NearUserResponseDto;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,20 +44,35 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private IZodiacInfoService zodiacInfoService;
 
     @Override
-    public IPage<UserBaseInfoResponseDto> findOnline(OnlineRequestDto query) throws AppException {
+    public List<UserBaseInfoResponseDto> findOnline(OnlineRequestDto query) throws AppException {
 
         Page<UserInfo> page = new Page<>();
-        SortUtil.handlePageSort(query, page, "CREATED_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
         IPage<UserInfo> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserBaseInfoResponseDto> userInfoResponses = new ArrayList<>();
-        BeanUtils.copyProperties(infoIPage.getRecords(), userInfoResponses);
-        Page<UserBaseInfoResponseDto> result = new Page();
-        result.setRecords(userInfoResponses);
-        result.setSize(infoIPage.getSize());
-        result.setTotal(infoIPage.getTotal());
-        result.setCurrent(infoIPage.getCurrent());
-        return result;
+        infoIPage.getRecords().forEach(e->{
+            UserBaseInfoResponseDto responseDto = new UserBaseInfoResponseDto();
+            BeanUtils.copyProperties(e,responseDto);
+            String birthday = e.getBirthday().toString();
+            try {
+                responseDto.setAge(DateUtil.getAge(birthday,DateUtil.YYYY_MM_DD_PATTERN));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                throw new AppException(e1.getMessage());
+            }
+            String moth = birthday.substring(4,6);
+            String day = birthday.substring(6);
+            //要初始化到用户星座表去ZodiacInfo，从星座表里查
+            responseDto.setZodiac(ZodiacUtil.getStar(Integer.parseInt(moth),Integer.parseInt(day)));
+            responseDto.setType(0);
+            responseDto.setIsFree(0);
+            responseDto.setPrice(BigDecimal.ZERO);
+            responseDto.setBodyHeight(e.getBodyHeight().movePointRight(2).intValue());
+            userInfoResponses.add(responseDto);
+        });
+        return userInfoResponses;
     }
 
     @Override
@@ -69,11 +86,25 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return null;
     }
 
+    /**
+     * Description 取附近的人参加：
+     * @see com.yr.net.app.NearBySearchTest
+     * @param userId
+ * @param position
+     * @throws AppException
+     * @return java.util.List<com.yr.net.app.customer.dto.NearUserResponseDto>
+     * @Author dengbp
+     * @Date 10:47 PM 12/26/20
+     **/
     @Override
-    public List<NearUserResponseDto> findNear(String userId, Position position) throws AppException {
-        List<UserInfo> list = this.list();
+    public List<NearUserResponseDto> findNear(QueryRequestPage requestPage, String userId, Position position) throws AppException {
+        Page<UserInfo> page = new Page<>();
+        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        page.setCurrent(requestPage.getPageNum());
+        page.setSize(requestPage.getPageSize());
+        IPage<UserInfo> list = this.baseMapper.selectPage(page, wrapper);
         List<NearUserResponseDto> responses = new ArrayList<>();
-        list.forEach(userInfo -> {
+        list.getRecords().forEach(userInfo -> {
             try {
                 responses.add(this.assemblyResponse(userInfo));
             } catch (Exception e) {
@@ -90,8 +121,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         responseDto.setIcon(userInfo.getIcon());
         String birthday = userInfo.getBirthday().toString();
         responseDto.setAge(DateUtil.getAge(birthday,DateUtil.YYYY_MM_DD_PATTERN));
-        responseDto.setBodyHeight(userInfo.getBodyHeight().intValue());
-        responseDto.setDistance(Double.valueOf("1.5"));
+        responseDto.setDistance(Double.valueOf("1.50"));
         String year = birthday.substring(0,4);
         String moth = birthday.substring(4,6);
         String day = birthday.substring(6);
@@ -99,6 +129,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         responseDto.setStar(ZodiacUtil.getStar(Integer.parseInt(moth),Integer.parseInt(day)));
         responseDto.setZodiac(ZodiacUtil.getZodiac(Integer.parseInt(year)));
         responseDto.setUserName(userInfo.getUserName());
+        responseDto.setSex(userInfo.getSex());
+        responseDto.setBodyHeight(userInfo.getBodyHeight().movePointRight(2).intValue());
         return responseDto;
     }
 

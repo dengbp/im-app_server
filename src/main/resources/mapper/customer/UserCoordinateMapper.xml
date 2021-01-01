@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yr.net.app.customer.mapper.UserCoordinateMapper">
 
+    <select id="selectNear" resultType="com.yr.net.app.customer.entity.UserCoordinate">
+        SELECT * FROM user
+        WHERE 1=1
+        and (longitude BETWEEN ${minlng} AND ${maxlng})
+        and (latitude BETWEEN ${minlat} AND ${maxlat})
+    </select>
+
 </mapper>

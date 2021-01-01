@@ -4,6 +4,7 @@ package com.yr.net.app.customer.controller;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
+import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.AddBaseInfoRequestDto;
 import com.yr.net.app.customer.dto.OnlineRequestDto;
@@ -58,12 +59,16 @@ public class UserInfoController {
     @ControllerEndpoint(operation = "查询附近在线用户", exceptionMessage = "查询附近在线用户失败")
     @ResponseBody
     @Log("查询附近用户")
-    public RestResult vicinity()throws AppException{
+    public RestResult vicinity(@RequestBody QueryRequestPage page)throws AppException{
+        if (page.getPageNum()==0 || page.getPageSize()==0) {
+            return RestResult.error("page信息不能为空");
+        }
+        log.info("请求入参：PageNum:{},PageSize:{}",page.getPageNum(),page.getPageSize());
         String userId = AppUtil.getCurrentUserId();
         log.info("用户附近查询，用户id={}",userId);
         UserCoordinate coordinate = userCoordinateService.findByUserId(userId);
         Position position = new Position(coordinate.getLongitude(),coordinate.getLatitude());
-        return RestResult.ok().setResult(userInfoService.findNear(AppUtil.getCurrentUserId(),position));
+        return RestResult.ok().setResult(userInfoService.findNear(page,AppUtil.getCurrentUserId(),position));
     }
 
 

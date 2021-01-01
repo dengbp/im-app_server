@@ -3,6 +3,8 @@ package com.yr.net.app.tools;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yr.net.app.pojo.BaiduMapPositionResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,46 +19,41 @@ import java.net.URL;
 public class AddressByCoordUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(AddressByCoordUtil.class);
-    public static void main(String[] args) {
-        // lat 31.2990170   纬度
-        //log 121.3466440    经度
-        String add = AddressByCoordUtil.getAdd("121.3466440", "31.2990170");
-        logger.info(add);
+    private static final String ADDR_URL = "http://api.map.baidu.com/geocoder?";
 
-    }
+    private static final String RESULT_OK = "OK";
 
     /**
      *根据经纬度获取省市区
-     * @param log
-     * @param lat
+     * @param lat 维度
+     * @param log 经度
      * @return
      */
-    public static String getAdd(String log, String lat ){
-        //lat 小  log  大
-        //参数解释: 纬度,经度 采用高德API可参考高德文档https://lbs.amap.com/
-        String key = "4f979382885e4f573ba0fb1298eb7f13";
-        String urlString = "https://restapi.amap.com/v3/geocode/regeo?location="+lat+","+log+"&extensions=base&batch=false&roadlevel=0&key="+key;
+    public static BaiduMapPositionResponse getAdd(String lat, String log){
+        String param = "location="+lat+","+log+"&output=json";
         String res = "";
+        BaiduMapPositionResponse response = null;
         try {
-            URL url = new URL(urlString);
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(),"UTF-8"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                res += line+"\n";
-            }
-            in.close();
-            //解析结果
+             res = HttpUtil.sendPost(ADDR_URL+param,"GET",null);
             JSONObject jsonObject = JSONObject.parseObject(res);
-            logger.info(jsonObject.toJSONString());
-            JSONObject jsonObject1 = jsonObject.getJSONObject("regeocode");
-            res =jsonObject1.getString("formatted_address");
+            if (StringUtils.equals(RESULT_OK,(String)jsonObject.get("status"))) {
+                JSONObject result = jsonObject.getJSONObject("result");
+                if (result != null){
+                    String formattedAddress = (String) result.get("formatted_address");
+                    String cityCode = result.getInteger("cityCode").toString();
+                    JSONObject addressComponent = result.getJSONObject("addressComponent");
+                    String city = addressComponent.getString("city");
+                    String district = addressComponent.getString("district");
+                    String province = addressComponent.getString("province");
+                    String street = addressComponent.getString("street");
+                    String streetNumber = addressComponent.getString("street_number");
+                    response = new BaiduMapPositionResponse(province,cityCode,city,district,street,streetNumber,formattedAddress);
+                }
+            }
         } catch (Exception e) {
             logger.error("获取地址信息异常{}",e.getMessage());
             return null;
         }
-        return res;
+        return response;
     }
 }

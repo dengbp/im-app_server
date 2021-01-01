@@ -8,8 +8,11 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
 import com.yr.net.app.customer.entity.UserCoordinate;
 import com.yr.net.app.customer.service.IUserCoordinateService;
+import com.yr.net.app.pojo.BaiduMapPositionResponse;
+import com.yr.net.app.tools.AddressByCoordUtil;
 import com.yr.net.app.tools.AppUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +45,8 @@ public class UserCoordinateController {
         target.setLatitude(new BigDecimal(sources.getLatitude()));
         target.setLongitude(new BigDecimal(sources.getLongitude()));
         target.setCreatedTime(LocalDateTime.now());
+        BaiduMapPositionResponse response = AddressByCoordUtil.getAdd(target.getLatitude().toString(),target.getLongitude().toString());
+        BeanUtils.copyProperties(response,target);
         return target;
     }
 

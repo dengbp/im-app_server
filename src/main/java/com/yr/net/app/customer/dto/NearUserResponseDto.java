@@ -41,4 +41,9 @@ public class NearUserResponseDto {
 
     private String userName;
 
+    /**
+     * 性别，1男2女
+     */
+    private Integer sex;
+
 }

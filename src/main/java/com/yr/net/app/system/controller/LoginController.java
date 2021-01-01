@@ -37,9 +37,15 @@ public class LoginController {
         return RestResult.ok("OK");
     }
 
-    /*
-    移动端登录
-     */
+
+   /**
+    * Description 获取短信验证码
+    * @param request
+    * @return java.lang.Object
+    * @Author dengbp
+    * @Date 10:35 PM 12/26/20
+    **/
+
     @PostMapping(value = "/send_code", produces = "application/json;charset=UTF-8")
     public Object sendCode(@RequestBody SendCodeRequest request) {
         return mService.sendCode(request.getMobile());

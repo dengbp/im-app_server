@@ -49,7 +49,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         }
         try {
             file.transferTo(dest);
-            this.save(createUserMultimedia( file, path.substring(path.lastIndexOf("/")), AddressByCoordUtil.getAdd(coordinate.getLongitude(),coordinate.getLatitude()), path, isFree, price,showWord));
+            this.save(createUserMultimedia( file, path.substring(path.lastIndexOf("/")), AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude()).getFormattedAddress(), path, isFree, price,showWord));
             log.info("upload file[{}]success",originName);
         } catch (Exception e) {
             log.error("上传失败",e);
