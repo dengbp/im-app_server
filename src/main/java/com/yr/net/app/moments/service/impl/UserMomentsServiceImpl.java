@@ -46,7 +46,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     private ICommentAreaService commentAreaService;
 
     @Override
-    public IPage<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto) throws AppException {
+    public List<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto) throws AppException {
         Page<UserMoments> page = new Page<>();
         SortUtil.handlePageSort(reqDto, page, "CREATED_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserMoments> wrapper = new LambdaQueryWrapper<>();
@@ -63,7 +63,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         result.setSize(infoIPage.getSize());
         result.setTotal(infoIPage.getTotal());
         result.setCurrent(infoIPage.getCurrent());
-        return result;
+        return result.getRecords();
     }
 
     private String queryCondition(List<UserMoments> source){

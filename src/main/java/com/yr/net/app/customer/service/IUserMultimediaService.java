@@ -2,10 +2,7 @@ package com.yr.net.app.customer.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yr.net.app.common.exception.AppException;
-import com.yr.net.app.customer.dto.AlbumRequestDto;
-import com.yr.net.app.customer.dto.CoordinateRequestDto;
-import com.yr.net.app.customer.dto.MultimediaResponseDto;
-import com.yr.net.app.customer.dto.VideoRequestDto;
+import com.yr.net.app.customer.dto.*;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +16,21 @@ import java.util.List;
 public interface IUserMultimediaService extends IService<UserMultimedia> {
 
     /**
-     * Description todo
+     * Description 用户多媒体
      * @param file
+     * @throws AppException
+     * @return MultipartFileRespDto
+     * @Author dengbp
+     * @Date 00:42 2020-11-25
+     **/
+
+    MultipartFileRespDto saveFile(MultipartFile file)throws AppException;
+
+
+    /**
+     * Description 用户多媒体信息
+ * @param id	 多媒体id
+     * @param using 用处:0个人资料里的相册(或视频),1个人动态
  * @param type	 多媒体类型 0：图片；1：视频
  * @param isFree	是否收费 0:免费:1收费
  * @param price
@@ -32,7 +42,7 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      * @Date 00:42 2020-11-25
      **/
 
-    void saveFile(MultipartFile file, int type, int isFree, String price, CoordinateRequestDto coordinate,String showWord)throws AppException;
+    void updateMulInfo(Long id,Integer using, int type, int isFree, String price, CoordinateRequestDto coordinate,String showWord)throws AppException;
 
     /**
      * Description 视频列表
@@ -53,6 +63,18 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      * @Author dengbp
      * @Date 18:28 2020-12-04
      **/
-    IPage<MultimediaResponseDto> getAlbum(AlbumRequestDto requestDto)throws AppException;
+    List<MultimediaResponseDto> getAlbum(AlbumRequestDto requestDto)throws AppException;
+
+
+    /**
+     * Description 获取用户相片数量
+     * @param userId
+     * @throws AppException
+     * @return java.lang.Integer
+     * @Author dengbp
+     * @Date 12:55 AM 1/17/21
+     **/
+
+    Integer getAlbumCount(String userId)throws AppException;
 
 }

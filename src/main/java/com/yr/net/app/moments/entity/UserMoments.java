@@ -3,6 +3,9 @@ package com.yr.net.app.moments.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,6 +22,7 @@ public class UserMoments implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
     /**
      * 用户id
@@ -26,9 +30,21 @@ public class UserMoments implements Serializable {
     private String userId;
 
     /**
-     * 发布主题
+     * 配文、我的秀言
      */
-    private String publicTheme;
+    private String showWord;
+
+
+    /**
+     * 关联多媒体id
+     */
+    private Long multimediaId;
+
+
+    /**
+     * 多媒体访问url
+     */
+    private String url;
 
     /**
      * 发布时间
@@ -49,6 +65,7 @@ public class UserMoments implements Serializable {
      * 解锁值
      */
     private BigDecimal price;
+
 
     /**
      * 状态 0：正常；1：已删除

@@ -31,4 +31,22 @@ public class UserMomentsController {
         return RestResult.ok().setResult(userMomentsService.findUserMoments(reqDto));
     }
 
+    @PostMapping("/fans")
+    @ControllerEndpoint(operation = "用户粉丝量", exceptionMessage = "用户粉丝量查询失败")
+    @ResponseBody
+    @Log("用户粉丝量查询接口")
+    public RestResult fans(@RequestBody  String userId){
+        return RestResult.ok().setResult(2321);
+    }
+
+    @PostMapping("/follow")
+    @ControllerEndpoint(operation = "用户关注量", exceptionMessage = "用户关注量查询失败")
+    @ResponseBody
+    @Log("用户关注量查询接口")
+    public RestResult follow(@RequestBody  String userId){
+        return RestResult.ok().setResult(210);
+    }
+
+
+
 }

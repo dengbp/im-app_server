@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 用户动态接口
+ *
  * @author dengbp
  */
 public interface IUserMomentsService extends IService<UserMoments> {
@@ -24,6 +26,7 @@ public interface IUserMomentsService extends IService<UserMoments> {
      * @Author dengbp
      * @Date 20:58 2020-12-17
      **/
-    IPage<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto)throws AppException;
+    List<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto)throws AppException;
+
 
 }

@@ -7,6 +7,7 @@ import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.AlbumRequestDto;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
+import com.yr.net.app.customer.dto.MultipartInfoRequestDto;
 import com.yr.net.app.customer.dto.VideoRequestDto;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.tools.AppUtil;
@@ -34,9 +35,8 @@ public class UserMultimediaController {
     IUserMultimediaService userMultimediaService;
 
     /**
-     * Description todo
+     * Description 用户多媒体上传接口
      * @param file 文件
- * @param type type: 多媒体类型 0：图片；1：视频
      * @return com.yr.net.app.base.dto.RestResult
      * @Author dengbp
      * @Date 23:59 2020-11-24
@@ -45,19 +45,36 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "用户多媒体上传", exceptionMessage = "用户多媒体上传失败")
     @Log("用户多媒体上传")
-    public RestResult upload(@RequestParam("file") MultipartFile file,@Valid CoordinateRequestDto coordinate,String type,String isFree, String price,String showWord){
+    public RestResult upload(@RequestParam("file") MultipartFile file){
         if (file == null) {
             return RestResult.error("上传失败，文件为空");
         }
-        if (StringUtils.isBlank(type)) {
-            return RestResult.error("上传失败，文件类型为空");
-        }
-        if (StringUtils.isBlank(isFree)) {
-            return RestResult.error("上传失败，是否开放为空");
-        }
-        userMultimediaService.saveFile(file,Integer.parseInt(type),Integer.parseInt(isFree),price,coordinate,showWord);
+        return RestResult.ok().setResult( userMultimediaService.saveFile(file));
+    }
+
+    /**
+     * Description 多媒体上传后信息的补录
+     * @param type type: 多媒体类型 0：图片；1：视频
+     * @param using 用处:0个人资料里的相册(或视频),1个人动态
+     *
+     *
+     * @return com.yr.net.app.base.dto.RestResult
+     * @Author dengbp
+     * @Date 23:59 2020-11-24
+     **/
+    @PostMapping("/mutSet")
+    @ResponseBody
+    @ControllerEndpoint(operation = "用户多媒体信息", exceptionMessage = "用户多媒体信息失败")
+    @Log("用户多媒体信息")
+    public RestResult upload(@RequestBody @Valid MultipartInfoRequestDto requestDto){
+        CoordinateRequestDto coordinate = new CoordinateRequestDto();
+        coordinate.setLatitude(requestDto.getLatitude());
+        coordinate.setLongitude(requestDto.getLongitude());
+        userMultimediaService.updateMulInfo(requestDto.getMulId(),requestDto.getUsing(),Integer.parseInt(requestDto.getType()),Integer.parseInt(requestDto.getIsFree()),requestDto.getPrice(),coordinate,requestDto.getShowWord());
         return RestResult.ok();
     }
+
+
 
 
     @PostMapping("/list")
@@ -70,10 +87,19 @@ public class UserMultimediaController {
     }
 
 
+    @PostMapping("/albumC")
+    @ResponseBody
+    @ControllerEndpoint(operation = "用户相册里的相片数接口", exceptionMessage = "用户相册里的相片数查询失败")
+    @Log("用户相册里的相片数接口")
+    public RestResult albumCount(@RequestBody  String userId){
+        return RestResult.ok().setResult(userMultimediaService.getAlbumCount(userId));
+    }
+
+
     @PostMapping("/album")
     @ResponseBody
-    @ControllerEndpoint(operation = "用户相册\\视频查询接口", exceptionMessage = "用户相册\\视频查询接口失败")
-    @Log("用户相册\\视频查询接口")
+    @ControllerEndpoint(operation = "用户相册查询接口", exceptionMessage = "用户相册查询接口失败")
+    @Log("用户相册查询接口")
     public RestResult album(@RequestBody @Valid AlbumRequestDto requestDto){
         requestDto.setUserId(AppUtil.getCurrentUserId());
         return RestResult.ok().setResult(userMultimediaService.getAlbum(requestDto));

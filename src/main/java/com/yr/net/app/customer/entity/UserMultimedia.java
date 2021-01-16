@@ -3,6 +3,9 @@ package com.yr.net.app.customer.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,6 +22,8 @@ public class UserMultimedia implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Long id;
     /**
      * 用户id
      */
@@ -29,10 +34,6 @@ public class UserMultimedia implements Serializable {
      */
     private String multimediaName;
 
-    /**
-     * 配文、我的秀言
-     */
-    private String showWord;
 
     /**
      * 多媒体存储url
@@ -74,20 +75,17 @@ public class UserMultimedia implements Serializable {
      */
     private String format;
 
-    /**
-     * 是否收费 0:免费:1收费
-     */
-    private Integer isFree;
 
-    /**
-     * 解锁值
-     */
-    private BigDecimal price;
 
     /**
      * 多媒体类型 0：图片；1：视频
      */
     private Integer type;
+
+    /**
+     * 用处:0个人资料里的相册(或视频),1个人动态，...
+     */
+    private Integer beUsed;
 
     /**
      * 创建人
