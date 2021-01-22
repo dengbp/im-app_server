@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Data
 public class MultimediaResponseDto {
 
+    /** 多媒体id */
+    private Long id;
     /**
      * 用户id
      */

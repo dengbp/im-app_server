@@ -18,7 +18,7 @@ spring:
           username: root
           password: 20200922#doc
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://121.37.181.23:3306/appdata?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+          url: jdbc:mysql://121.37.181.23:3306/wfchat?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
 
   redis:
     # Redis数据库索引（默认为 0）

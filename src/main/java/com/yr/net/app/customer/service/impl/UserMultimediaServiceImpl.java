@@ -1,21 +1,22 @@
 package com.yr.net.app.customer.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
 import com.yr.net.app.customer.dto.*;
-import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.yr.net.app.customer.mapper.UserMultimediaMapper;
 import com.yr.net.app.customer.service.IUserMultimediaService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.moments.entity.UserMomentsSub;
 import com.yr.net.app.moments.service.IUserMomentsService;
-import com.yr.net.app.tools.*;
+import com.yr.net.app.tools.AddressByCoordUtil;
+import com.yr.net.app.tools.AppUtil;
+import com.yr.net.app.tools.FileUtil;
+import com.yr.net.app.tools.SortUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -107,6 +107,11 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         String userId = StringUtils.isBlank(requestDto.getUserId())?AppUtil.getCurrentUserId():requestDto.getUserId();
         queryWrapper.eq(UserMultimedia::getUserId,userId);
         return search(queryPage,queryWrapper).getRecords();
+    }
+
+    @Override
+    public void albumDel(List<Long> ids) throws AppException {
+           this.removeByIds(ids);
     }
 
     @Override

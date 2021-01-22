@@ -150,7 +150,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         queryWrapper.eq(UserInfo::getUserId,userId);
         UserInfo userInfo = this.getOne(queryWrapper);
         UserBaseInfoResponseDto responseDto = new UserBaseInfoResponseDto();
-        BeanUtils.copyProperties(userInfo,responseDto);
+        if (userInfo != null) {
+            BeanUtils.copyProperties(userInfo,responseDto);
+        }
         return responseDto;
     }
 }

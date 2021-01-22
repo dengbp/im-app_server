@@ -27,8 +27,12 @@ public class MultipartInfoRequestDto implements Serializable {
     private String latitude;
     @NotNull
     private Long mulId;
+
+    /** 用处:0个人资料里的相册(或视频),1个人动态 */
     @NotNull
     private Integer using;
+
+    /** 多媒体类型 0：图片；1：视频 */
     @NotNull
     private String type;
     @NotNull

@@ -266,6 +266,14 @@ public class ServiceImpl implements Service {
         }
     }
 
+    private ServiceImpl updateInOutUserInfo(UserInfo source,InputOutputUserInfo target){
+        target.setName(source.getUserName());
+        target.setPortrait(source.getIcon());
+        target.setGender(source.getSex());
+        target.setName(source.getUserName());
+        return this;
+    }
+
     private ServiceImpl userConvert(InputOutputUserInfo source,UserInfo target){
         target.setUserId(source.getUserId());
         target.setUserName(source.getDisplayName());

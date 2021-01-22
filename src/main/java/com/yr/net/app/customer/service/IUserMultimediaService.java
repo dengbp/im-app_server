@@ -65,6 +65,16 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      **/
     List<MultimediaResponseDto> getAlbum(AlbumRequestDto requestDto)throws AppException;
 
+    /**
+     * Description 根据多媒体删除用户媒体
+     * @param ids	多媒体id
+     * @return void
+     * @throws AppException
+     * @Author dengbp
+     * @Date 10:15 PM 1/22/21
+     **/
+    void albumDel(List<Long> ids)throws AppException;
+
 
     /**
      * Description 获取用户相片数量

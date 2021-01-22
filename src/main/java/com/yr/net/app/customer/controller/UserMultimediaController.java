@@ -4,24 +4,22 @@ package com.yr.net.app.customer.controller;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
-import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.AlbumRequestDto;
 import com.yr.net.app.customer.dto.CoordinateRequestDto;
 import com.yr.net.app.customer.dto.MultipartInfoRequestDto;
 import com.yr.net.app.customer.dto.VideoRequestDto;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.tools.AppUtil;
-import com.yr.net.app.tools.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author dengbp
@@ -54,10 +52,6 @@ public class UserMultimediaController {
 
     /**
      * Description 多媒体上传后信息的补录
-     * @param type type: 多媒体类型 0：图片；1：视频
-     * @param using 用处:0个人资料里的相册(或视频),1个人动态
-     *
-     *
      * @return com.yr.net.app.base.dto.RestResult
      * @Author dengbp
      * @Date 23:59 2020-11-24
@@ -106,5 +100,17 @@ public class UserMultimediaController {
     }
 
 
+    @PostMapping("/album_del")
+    @ResponseBody
+    @ControllerEndpoint(operation = "用户相片删除接口", exceptionMessage = "用户相片删除失败")
+    @Log("用户相片删除接口")
+    public RestResult albumDel(@RequestBody String ids){
+        if (StringUtils.isBlank(ids)){
+            return RestResult.error("多媒体id不能为空");
+        }
+        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        userMultimediaService.albumDel(listIds);
+        return RestResult.ok();
+    }
 
 }
