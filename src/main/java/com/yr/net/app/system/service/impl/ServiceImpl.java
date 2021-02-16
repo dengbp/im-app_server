@@ -40,6 +40,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.yr.net.app.model.PCSession.PCSessionStatus.*;
@@ -236,6 +237,7 @@ public class ServiceImpl implements Service {
             if (isNewUser) {
                 response.setIsNewUser(0);
                 if (userInfo == null) {
+                    userInfo = new UserInfo();
                     this.userConvert(user,userInfo);
                     userInfoService.save(userInfo);
                 }
@@ -275,6 +277,9 @@ public class ServiceImpl implements Service {
     }
 
     private ServiceImpl userConvert(InputOutputUserInfo source,UserInfo target){
+        if (target==null){
+            return this;
+        }
         target.setUserId(source.getUserId());
         target.setUserName(source.getDisplayName());
         target.setPassword(source.getPassword());
@@ -282,6 +287,7 @@ public class ServiceImpl implements Service {
         /** 先暂时设置为 女性，生日为当前时间 */
         target.setSex(SexConstant.Female.getSex());
         target.setBirthday(Integer.parseInt(DateUtil.current_yyyyMMdd()));
+        target.setCreatedTime(LocalDateTime.now());
         return this;
     }
 

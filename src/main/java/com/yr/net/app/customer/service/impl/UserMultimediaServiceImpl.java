@@ -13,10 +13,7 @@ import com.yr.net.app.customer.mapper.UserMultimediaMapper;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.moments.entity.UserMomentsSub;
 import com.yr.net.app.moments.service.IUserMomentsService;
-import com.yr.net.app.tools.AddressByCoordUtil;
-import com.yr.net.app.tools.AppUtil;
-import com.yr.net.app.tools.FileUtil;
-import com.yr.net.app.tools.SortUtil;
+import com.yr.net.app.tools.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,8 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -66,20 +66,22 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     }
 
     @Override
-    public void updateMulInfo(Long id, Integer using,int type, int isFree, String price, CoordinateRequestDto coordinate, String showWord) throws AppException {
-        UserMultimedia userMultimedia = this.setUserMulInfo(id,AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude()).getFormattedAddress());
-        if (using != null){
-            userMultimedia.setBeUsed(using);
-        }
-        this.updateById(userMultimedia);
-        /** 如果是用于动态 */
-        if (using==1){
-            userMomentsService.save(UserMomentsSub.buildUserMoment(this.getById(id),isFree,price,showWord));
-        }
+    public void updateMulInfo(String ids, Integer using,int type, int isFree, String price, CoordinateRequestDto coordinate, String showWord) throws AppException {
+        Arrays.asList(ids.split(",")).forEach(id->{
+            UserMultimedia userMultimedia = this.setUserMulInfo(Long.parseLong(id.trim()),AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude()).getFormattedAddress());
+            if (using != null){
+                userMultimedia.setBeUsed(using);
+            }
+            this.updateById(userMultimedia);
+            /** 如果是用于动态 */
+            if (using==1){
+                userMomentsService.save(UserMomentsSub.buildUserMoment(this.getById(Long.parseLong(id.trim())),isFree,price,showWord));
+            }
+        });
     }
 
     @Override
-    public IPage<MultimediaResponseDto> videoList(VideoRequestDto requestDto) throws AppException {
+    public List<MultimediaResponseDto> videoList(VideoRequestDto requestDto) throws AppException {
         Page<UserMultimedia> queryPage = new Page<>();
         LambdaQueryWrapper<UserMultimedia> queryWrapper = new LambdaQueryWrapper();
         if (-1 != requestDto.getType().intValue()) {
@@ -89,11 +91,17 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         return search(queryPage,queryWrapper);
     }
 
-    private IPage<MultimediaResponseDto> search(Page queryPage,LambdaQueryWrapper queryWrapper){
+    private List<MultimediaResponseDto> search(Page queryPage,LambdaQueryWrapper queryWrapper){
         IPage<UserMultimedia> page = this.page(queryPage,queryWrapper);
-        IPage<MultimediaResponseDto> responseDtoIPage = new Page<>();
-        BeanUtils.copyProperties(page.getRecords(),responseDtoIPage.getRecords());
-        return responseDtoIPage;
+        List<MultimediaResponseDto> result = new ArrayList<>();
+        if (!page.getRecords().isEmpty()){
+            page.getRecords().forEach(e->{
+                MultimediaResponseDto multimedia = new MultimediaResponseDto();
+                result.add(multimedia);
+                BeanUtils.copyProperties(e,multimedia);
+            });
+        }
+        return result;
     }
 
     @Override
@@ -106,7 +114,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         SortUtil.handlePageSort(requestDto,queryPage,  false);
         String userId = StringUtils.isBlank(requestDto.getUserId())?AppUtil.getCurrentUserId():requestDto.getUserId();
         queryWrapper.eq(UserMultimedia::getUserId,userId);
-        return search(queryPage,queryWrapper).getRecords();
+        return search(queryPage,queryWrapper);
     }
 
     @Override
@@ -132,11 +140,14 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         userMultimedia.setState(0);
         userMultimedia.setFileSize(file.getSize());
         userMultimedia.setFormat(extName);
-        userMultimedia.setUrl(appProperties.getMultimedia_url()+"/"+path);
+        userMultimedia.setUrl(appProperties.getMultimedia_url()+"/"+storeName);
         userMultimedia.setUploadTime(LocalDateTime.now());
         userMultimedia.setPath(path);
         userMultimedia.setMultimediaName(originName);
         userMultimedia.setStoreName(storeName);
+        String preFileName = storeName.substring(0,storeName.lastIndexOf("."))+"_small.png";
+        ImgCompressUtil.writeToFile(appProperties.getMultimedia_path()+preFileName, ImgCompressUtil.resize(userMultimedia.getPath(),0.25));
+        userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+preFileName);
         return userMultimedia;
     }
 

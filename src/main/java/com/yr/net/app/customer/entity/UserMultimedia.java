@@ -44,6 +44,10 @@ public class UserMultimedia implements Serializable {
      * 多媒体访问url
      */
     private String url;
+    /**
+     * 对应缩略图、视频第一帧
+     **/
+    private String previewUrl;
 
     /**
      * 上传时间

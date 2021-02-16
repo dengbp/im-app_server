@@ -38,6 +38,8 @@ public class MultimediaResponseDto {
      */
     private String url;
 
+    private String previewUrl;
+
     /**
      * 上传时间
      */

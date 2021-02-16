@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "用户多媒体上传", exceptionMessage = "用户多媒体上传失败")
     @Log("用户多媒体上传")
-    public RestResult upload(@RequestParam("file") MultipartFile file){
+    public RestResult upload(@RequestParam("file") MultipartFile file)throws IOException {
         if (file == null) {
             return RestResult.error("上传失败，文件为空");
         }
@@ -64,7 +65,7 @@ public class UserMultimediaController {
         CoordinateRequestDto coordinate = new CoordinateRequestDto();
         coordinate.setLatitude(requestDto.getLatitude());
         coordinate.setLongitude(requestDto.getLongitude());
-        userMultimediaService.updateMulInfo(requestDto.getMulId(),requestDto.getUsing(),Integer.parseInt(requestDto.getType()),Integer.parseInt(requestDto.getIsFree()),requestDto.getPrice(),coordinate,requestDto.getShowWord());
+        userMultimediaService.updateMulInfo(requestDto.getMulIds(),requestDto.getUsing(),Integer.parseInt(requestDto.getType()),Integer.parseInt(requestDto.getIsFree()),requestDto.getPrice(),coordinate,requestDto.getShowWord());
         return RestResult.ok();
     }
 

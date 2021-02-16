@@ -170,7 +170,7 @@ public class FileUtil {
     public static String getFilePath(AppProperties appProperties,String originName){
         String storeName = DateUtil.current_yyyyMMddHHmmss() + "_"+ AppUtil.getCurrentUserId() + "_"+ originName;
         log.info("保存的文件名为: {}",storeName);
-        String path = appProperties.getMultimedia_path()+"/" +storeName;
+        String path = appProperties.getMultimedia_path()+storeName;
         log.info("保存文件绝对路径{}",path);
         return path;
     }

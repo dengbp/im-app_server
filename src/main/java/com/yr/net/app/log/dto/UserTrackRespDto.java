@@ -1,28 +1,18 @@
-package com.yr.net.app.log.entity;
+package com.yr.net.app.log.dto;
 
-import java.time.LocalDateTime;
+import lombok.Data;
+
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
 /**
- * 用户轨迹表(记录查看其它用户信息等)
- *
  * @author dengbp
+ * @ClassName UserTrackRespDto
+ * @Description TODO
+ * @date 1/25/21 1:26 PM
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class UserTrack implements Serializable {
+public class UserTrackRespDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "ID", type = IdType.AUTO)
-    private Long id;
     /**
      * 浏览用户id
      */
@@ -52,14 +42,8 @@ public class UserTrack implements Serializable {
     private Integer operatorType;
 
     /**
-     * 开始时间
+     * 浏览时间
      */
-    private LocalDateTime startTime;
-
-    /**
-     * 结束时间
-     */
-    private LocalDateTime endTime;
-
+    private String viewTime;
 
 }
