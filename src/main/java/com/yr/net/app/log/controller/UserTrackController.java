@@ -22,9 +22,9 @@ public class UserTrackController {
     private IUserTrackService userTrackService;
 
     @PostMapping("operation")
-    @ControllerEndpoint(operation = "谁看过谁接口", exceptionMessage = "谁看过谁接口失败")
+    @ControllerEndpoint(operation = "谁看过谁相关信息接口", exceptionMessage = "谁看过谁接口失败")
     @ResponseBody
-    @Log("谁看过谁接口")
+    @Log("谁看过谁相关信息接口")
     public RestResult operationBy(@RequestBody @Valid OperationReqDto reqDto){
         return RestResult.ok().setResult(userTrackService.findByUserId(reqDto.getUserId(),reqDto.getOperatorType()));
     }

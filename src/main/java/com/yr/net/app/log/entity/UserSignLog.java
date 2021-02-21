@@ -3,6 +3,7 @@ package com.yr.net.app.log.entity;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ public class UserSignLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId
+    @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
     /**
      * 用户id
@@ -31,11 +32,6 @@ public class UserSignLog implements Serializable {
      * 登录时间
      */
     private LocalDateTime signInTime;
-
-    /**
-     * 退出时间
-     */
-    private LocalDateTime signOutTime;
 
     /**
      * 登录地点

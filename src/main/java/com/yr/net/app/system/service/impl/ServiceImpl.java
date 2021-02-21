@@ -8,6 +8,8 @@ import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserInfoDetail;
 import com.yr.net.app.customer.service.IUserInfoDetailService;
 import com.yr.net.app.customer.service.IUserInfoService;
+import com.yr.net.app.log.entity.UserSignLog;
+import com.yr.net.app.log.service.IUserSignLogService;
 import com.yr.net.app.model.PCSession;
 import com.yr.net.app.pojo.*;
 import com.yr.net.app.shiro.AuthDataSource;
@@ -81,6 +83,7 @@ public class ServiceImpl implements Service {
 
     @Resource
     private IUserInfoDetailService userInfoDetailService;
+
 
 
     private ConcurrentHashMap<String, Boolean> supportPCQuickLoginUsers = new ConcurrentHashMap<>();
@@ -270,7 +273,6 @@ public class ServiceImpl implements Service {
             }
 
             subject.getSession().setAttribute("userInfo", userInfo);
-
             return RestResult.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,6 +280,7 @@ public class ServiceImpl implements Service {
             return RestResult.error(RestResult.RestCode.ERROR_SERVER_ERROR);
         }
     }
+
 
     private ServiceImpl updateInOutUserInfo(UserInfo source,InputOutputUserInfo target){
         target.setName(source.getUserName());
