@@ -5,6 +5,8 @@ import com.yr.net.app.common.constant.SexConstant;
 import com.yr.net.app.configure.AppProperties;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.customer.entity.UserInfo;
+import com.yr.net.app.customer.entity.UserInfoDetail;
+import com.yr.net.app.customer.service.IUserInfoDetailService;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.model.PCSession;
 import com.yr.net.app.pojo.*;
@@ -37,6 +39,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +78,10 @@ public class ServiceImpl implements Service {
 
     @Autowired
     IUserInfoService userInfoService;
+
+    @Resource
+    private IUserInfoDetailService userInfoDetailService;
+
 
     private ConcurrentHashMap<String, Boolean> supportPCQuickLoginUsers = new ConcurrentHashMap<>();
 
@@ -240,6 +247,10 @@ public class ServiceImpl implements Service {
                     userInfo = new UserInfo();
                     this.userConvert(user,userInfo);
                     userInfoService.save(userInfo);
+                    UserInfoDetail userInfoDetail = new UserInfoDetail();
+                    userInfoDetail.setUserId(user.getUserId());
+                    userInfoDetail.setCreatedTime(LocalDateTime.now());
+                    userInfoDetailService.save(userInfoDetail);
                 }
                 if (!StringUtils.isEmpty(mIMConfig.getWelcome_for_new_user())) {
                     sendTextMessage("admin", user.getUserId(), mIMConfig.getWelcome_for_new_user());
