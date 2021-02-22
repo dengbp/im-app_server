@@ -4,6 +4,7 @@ package com.yr.net.app.customer.controller;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
+import com.yr.net.app.customer.dto.MottoSetDto;
 import com.yr.net.app.customer.dto.UserBaseInfoRequestDto;
 import com.yr.net.app.customer.dto.UserDetailSetRequestDto;
 import com.yr.net.app.customer.service.IUserInfoDetailService;
@@ -36,11 +37,11 @@ public class UserInfoDetailController {
     @ControllerEndpoint(operation = "内心独白设置", exceptionMessage = "内心独白设置失败")
     @ResponseBody
     @Log("内心独白设置")
-    public RestResult mottoEdit(@RequestBody String motto){
-        if (StringUtils.isBlank(motto)) {
+    public RestResult mottoEdit(@RequestBody MottoSetDto motto){
+        if (StringUtils.isBlank(motto.getMotto())) {
             return RestResult.error("内容不能为空");
         }
-        userInfoDetailService.updateMotto(AppUtil.getCurrentUserId(),motto);
+        userInfoDetailService.updateMotto(AppUtil.getCurrentUserId(),motto.getMotto());
         return RestResult.ok();
     }
 

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.yr.net.app.tools.ZodiacUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -134,6 +136,15 @@ public class UserInfo implements Serializable {
         @TableField("UPDATED_TIME")
     private LocalDateTime updatedTime;
 
-
+    /**
+     * 转星座
+     */
+        public static String getZodiac(UserInfo userInfo){
+            String birthday = userInfo.getBirthday().toString();
+            String moth = birthday.substring(4,6);
+            String day = birthday.substring(6);
+            //要初始化到用户星座表去ZodiacInfo，从星座表里查
+            return ZodiacUtil.getStar(Integer.parseInt(moth),Integer.parseInt(day));
+        }
 
 }

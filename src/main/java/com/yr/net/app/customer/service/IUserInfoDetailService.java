@@ -12,6 +12,20 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserInfoDetailService extends IService<UserInfoDetail> {
 
     /**
+     * Description todo
+     * @param userId
+     * @throws AppException
+     * @return com.yr.net.app.customer.entity.UserInfoDetail
+     * @Author dengbp
+     * @Date 9:53 AM 2/22/21
+     **/
+
+
+
+
+    UserInfoDetail findByUserId(String userId)throws AppException;
+
+    /**
      * Description 获取用户详细信息
      * @param requestDto
      * @throws AppException

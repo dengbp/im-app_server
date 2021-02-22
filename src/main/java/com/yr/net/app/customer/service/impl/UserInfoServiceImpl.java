@@ -62,10 +62,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 e1.printStackTrace();
                 throw new AppException(e1.getMessage());
             }
-            String moth = birthday.substring(4,6);
-            String day = birthday.substring(6);
-            //要初始化到用户星座表去ZodiacInfo，从星座表里查
-            responseDto.setZodiac(ZodiacUtil.getStar(Integer.parseInt(moth),Integer.parseInt(day)));
+            responseDto.setZodiac(UserInfo.getZodiac(e));
             responseDto.setType(0);
             responseDto.setIsFree(0);
             responseDto.setPrice(BigDecimal.ZERO);
@@ -152,6 +149,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserBaseInfoResponseDto responseDto = new UserBaseInfoResponseDto();
         if (userInfo != null) {
             BeanUtils.copyProperties(userInfo,responseDto);
+        }
+        try {
+            responseDto.setAge(DateUtil.getAge(userInfo.getBirthday().toString(),DateUtil.YYYY_MM_DD_PATTERN));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  new AppException("获取年龄异常");
         }
         return responseDto;
     }

@@ -13,11 +13,21 @@ import java.io.Serializable;
  */
 
 @Data
-public class OperationReqDto implements Serializable {
+public class OperationReportDto implements Serializable {
 
+
+    /** 当前操作用户id */
     private String userId;
+
+    /**
+     * 被操作(浏览用户信息；用户动态；点赞；关注；拉黑等)对象id
+     */
+    @NotNull
+    private String byOperatorId;
+
     /**
      * 操作类型 0：查看用户信息；1：用户动态；2:点赞；3：关注；4：拉黑;.....
      */
+    @NotNull
     private Integer operatorType;
 }

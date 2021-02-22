@@ -56,10 +56,6 @@ public class UserTrack implements Serializable {
      */
     private LocalDateTime startTime;
 
-    /**
-     * 结束时间
-     */
-    private LocalDateTime endTime;
 
 
 }

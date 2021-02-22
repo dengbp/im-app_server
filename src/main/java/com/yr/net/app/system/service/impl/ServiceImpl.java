@@ -244,16 +244,18 @@ public class ServiceImpl implements Service {
             response.setRegister(isNewUser);
             UserInfo userInfo = userInfoService.getByUserId(user.getUserId());
             response.setIsNewUser(1);
+            if (userInfoDetailService.findByUserId(user.getUserId()) == null) {
+                UserInfoDetail userInfoDetail = new UserInfoDetail();
+                userInfoDetail.setUserId(user.getUserId());
+                userInfoDetail.setCreatedTime(LocalDateTime.now());
+                userInfoDetailService.save(userInfoDetail);
+            }
             if (isNewUser) {
                 response.setIsNewUser(0);
                 if (userInfo == null) {
                     userInfo = new UserInfo();
                     this.userConvert(user,userInfo);
                     userInfoService.save(userInfo);
-                    UserInfoDetail userInfoDetail = new UserInfoDetail();
-                    userInfoDetail.setUserId(user.getUserId());
-                    userInfoDetail.setCreatedTime(LocalDateTime.now());
-                    userInfoDetailService.save(userInfoDetail);
                 }
                 if (!StringUtils.isEmpty(mIMConfig.getWelcome_for_new_user())) {
                     sendTextMessage("admin", user.getUserId(), mIMConfig.getWelcome_for_new_user());

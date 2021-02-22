@@ -18,11 +18,15 @@ public class UserLoveRequestSetDto{
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用户id
+     */
+    private String userId;
 
     /**
-     * 工作要求 有无工作要求：0：要有工作；1：有正当工作；2：无要求
+     * 职业要求
      */
-    private Integer jobRequest;
+    private String jobRequest;
 
     /**
      * 性格要求
@@ -39,33 +43,23 @@ public class UserLoveRequestSetDto{
      */
     private String bodyHeight;
 
-    /**
-     * 爱好要求
-     */
-    private String interestRequest;
+
 
     /**
-     * 婚姻状况 0:要求未婚，1：离异也可以，2：无要求
+     * 婚姻状况要求
      */
-    private Integer marita;
+    private String marita;
+
+
+
 
     /**
-     * 是否接受异地 0:不接受；1：接受
-     */
-    private Integer distanceRelation;
-
-    /**
-     * 喜欢定居城市
-     */
-    private String enjoyLifeCity;
-
-    /**
-     * 文化程度
+     * 学历要求
      */
     private String education;
 
     /**
-     * 薪资
+     * 薪资范围
      */
     private String salary;
 

@@ -46,6 +46,10 @@ public class UserCoordinateController {
     public RestResult coordinate(@RequestBody @Valid CoordinateRequestDto request)throws AppException{
         try {
             UserCoordinate userCoordinate = this.copyProperties(request,new UserCoordinate());
+            if(userCoordinate == null) {
+                return RestResult.error("经纬度上报异常");
+            }
+
             userCoordinateService.save(userCoordinate);
             userSignLogService.save(this.createLog(userCoordinate));
         } catch (Exception e) {
@@ -64,14 +68,15 @@ public class UserCoordinateController {
         return log;
     }
 
-    private UserCoordinate copyProperties(CoordinateRequestDto sources, UserCoordinate target)throws Exception{
+    private UserCoordinate copyProperties(CoordinateRequestDto sources, UserCoordinate target){
         target.setUserId(AppUtil.getCurrentUserId());
         target.setLatitude(new BigDecimal(sources.getLatitude()));
         target.setLongitude(new BigDecimal(sources.getLongitude()));
         target.setCreatedTime(LocalDateTime.now());
         BaiduMapPositionResponse response = AddressByCoordUtil.getAdd(target.getLatitude().toString(),target.getLongitude().toString());
         if (response == null){
-            throw new Exception("上传经维度异常");
+            log.error("地址转换异常:Latitude:{},Longitude:{}",target.getLatitude().toString(),target.getLongitude().toString());
+            return null;
         }
         BeanUtils.copyProperties(response,target);
         return target;

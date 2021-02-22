@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @author dengbp
@@ -32,6 +33,10 @@ public class UserLoveRequestServiceImpl extends ServiceImpl<UserLoveRequestMappe
 
     @Override
     public void setLoveRequest(String userId, UserLoveRequestSetDto requestSetDto) throws AppException {
+        if (this.count(new LambdaQueryWrapper<UserLoveRequest>().eq(UserLoveRequest::getUserId,requestSetDto.getUserId()))==0) {
+            this.save(UserLoveRequest.create(requestSetDto));
+            return;
+        }
         LambdaUpdateWrapper<UserLoveRequest> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(UserLoveRequest::getUserId,userId);
         if (StringUtils.isNotBlank(requestSetDto.getAgeRange())) {
@@ -46,12 +51,6 @@ public class UserLoveRequestServiceImpl extends ServiceImpl<UserLoveRequestMappe
         if (StringUtils.isNotBlank(requestSetDto.getEducation())) {
             updateWrapper.set(UserLoveRequest::getEducation,requestSetDto.getEducation());
         }
-        if (StringUtils.isNotBlank(requestSetDto.getEnjoyLifeCity())) {
-            updateWrapper.set(UserLoveRequest::getEnjoyLifeCity,requestSetDto.getEnjoyLifeCity());
-        }
-        if (StringUtils.isNotBlank(requestSetDto.getInterestRequest())) {
-            updateWrapper.set(UserLoveRequest::getInterestRequest,requestSetDto.getInterestRequest());
-        }
         if (StringUtils.isNotBlank(requestSetDto.getSalary())) {
             updateWrapper.set(UserLoveRequest::getSalary,requestSetDto.getSalary());
         }
@@ -62,16 +61,13 @@ public class UserLoveRequestServiceImpl extends ServiceImpl<UserLoveRequestMappe
             updateWrapper.set(UserLoveRequest::getJobRequest,requestSetDto.getJobRequest());
         }
         if (StringUtils.isNotBlank(requestSetDto.getBodyHeight())) {
-            updateWrapper.set(UserLoveRequest::getBodyHeight,new BigDecimal(requestSetDto.getBodyHeight()));
+            updateWrapper.set(UserLoveRequest::getBodyHeight,requestSetDto.getBodyHeight());
         }
         if (StringUtils.isNotBlank(requestSetDto.getBodyWeight())) {
-            updateWrapper.set(UserLoveRequest::getBodyWeight,new BigDecimal(requestSetDto.getBodyWeight()));
-        }
-        if (requestSetDto.getDistanceRelation() != null) {
-            updateWrapper.set(UserLoveRequest::getDistanceRelation,new BigDecimal(requestSetDto.getDistanceRelation()));
+            updateWrapper.set(UserLoveRequest::getBodyWeight,requestSetDto.getBodyWeight());
         }
         if (requestSetDto.getMarita() != null) {
-            updateWrapper.set(UserLoveRequest::getMaritalStatus,requestSetDto.getMarita());
+            updateWrapper.set(UserLoveRequest::getMarita,requestSetDto.getMarita());
         }
         if (StringUtils.isNotBlank(requestSetDto.getC1())) {
             updateWrapper.set(UserLoveRequest::getC1,new BigDecimal(requestSetDto.getC1()));
@@ -82,6 +78,7 @@ public class UserLoveRequestServiceImpl extends ServiceImpl<UserLoveRequestMappe
         if (StringUtils.isNotBlank(requestSetDto.getC3())) {
             updateWrapper.set(UserLoveRequest::getC3,new BigDecimal(requestSetDto.getC3()));
         }
+        updateWrapper.set(UserLoveRequest::getUpdatedTime, LocalDateTime.now());
         this.update(updateWrapper);
     }
 }

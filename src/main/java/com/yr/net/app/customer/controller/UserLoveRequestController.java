@@ -46,7 +46,9 @@ public class UserLoveRequestController {
     @ResponseBody
     @Log("征友要求编辑")
     public RestResult detailEdit(@RequestBody @Valid UserLoveRequestSetDto requestDto){
-        userLoveRequestService.setLoveRequest(AppUtil.getCurrentUserId(),requestDto);
+        String userId = AppUtil.getCurrentUserId();
+        requestDto.setUserId(userId);
+        userLoveRequestService.setLoveRequest(userId,requestDto);
         return RestResult.ok();
     }
 

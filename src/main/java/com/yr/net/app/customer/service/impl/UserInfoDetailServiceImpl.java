@@ -13,11 +13,19 @@ import com.yr.net.app.tools.AppUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author dengbp
  */
 @Service
 public class UserInfoDetailServiceImpl extends ServiceImpl<UserInfoDetailMapper, UserInfoDetail> implements IUserInfoDetailService {
+
+    @Override
+    public UserInfoDetail findByUserId(String userId) throws AppException {
+        List<UserInfoDetail> list = this.list(new LambdaQueryWrapper<UserInfoDetail>().eq(UserInfoDetail::getUserId,userId));
+        return list.isEmpty()?null:list.get(0);
+    }
 
     @Override
     public UserInfoDetail findUserDetail(UserBaseInfoRequestDto requestDto) throws AppException {

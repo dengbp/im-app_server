@@ -30,6 +30,7 @@ public class UserBaseInfoResponseDto implements Serializable {
     /** 所在城市 */
     private String  nowLife;
 
+    /** 年龄 */
     private int age;
 
     /** 用户头像  */
