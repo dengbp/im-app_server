@@ -2,6 +2,7 @@ package com.yr.net.app.moments.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.moments.dto.AddMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsRespDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.entity.UserMoments;
@@ -17,6 +18,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author dengbp
  */
 public interface IUserMomentsService extends IService<UserMoments> {
+
+    /**
+     * Description 发布动态
+     * @param addMomentDto
+     * @throws AppException
+     * @return void
+     * @Author dengbp
+     * @Date 1:57 PM 2/24/21
+     **/
+
+    void add(AddMomentDto addMomentDto)throws AppException;
 
     /**
      * Description todo

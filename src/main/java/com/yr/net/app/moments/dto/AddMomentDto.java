@@ -1,59 +1,64 @@
 package com.yr.net.app.moments.dto;
 
-import com.yr.net.app.common.entity.QueryRequestPage;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * @author dengbp
  * @ClassName LicenseQeuryDto
- * @Description 增加评论
+ * @Description 发布动态
  * @date 2019-11-28 10:27
  */
 @Data
 public class AddMomentDto implements Serializable {
 
-    /** 评论ID */
-    private Long id;
+    /**
+     * 经度
+     */
+    @NotNull(message = "longitude 不能为空")
+    private String longitude;
 
     /**
-     * 被评论的主题id或评论id
+     * 纬度
      */
-    private Long commentId;
+    @NotNull(message = "latitude 不能为空")
+    private String latitude;
 
     /**
-     * 评论内容
+     * 多媒体访问url（文件上传成功后返回的id）
      */
-    private String commentContent;
+    private String url;
 
     /**
-     * 评论地址
+     * 配文、我的秀言
      */
-    private String commentAddr;
+    private String showWord;
+
 
     /**
-     * 状态 0:正常；1：已删除
+     * 关联多媒体id（文件上传成功后返回的id）
      */
-    private Integer state;
+    private Long multimediaId;
+
 
     /**
-     * 被评论的类型 0：对主题评论；1：对评论内容评论
+     * 是否收费 0:免费:1收费
      */
-    private Integer type;
+    @NotNull
+    private Integer isFree;
 
     /**
-     * 评论者id
+     * 解锁值
      */
-    private String userId;
+    private BigDecimal price;
+
     /**
-     * 评论者昵称
-     */
-    private String userName;
-
-    /** 评论者头像  */
-    private String icon;
-
+     * 对应缩略图、视频第一帧
+     **/
+    private String previewUrl;
 
 }

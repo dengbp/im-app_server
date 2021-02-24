@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
-import com.yr.net.app.moments.dto.AddMomentDto;
+import com.yr.net.app.moments.dto.AddMomentAreaDto;
 import com.yr.net.app.moments.entity.CommentArea;
 import com.yr.net.app.moments.mapper.CommentAreaMapper;
 import com.yr.net.app.moments.service.ICommentAreaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yr.net.app.moments.service.IUserMomentsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CommentAreaServiceImpl extends ServiceImpl<CommentAreaMapper, CommentArea> implements ICommentAreaService {
 
     @Override
-    public void add(AddMomentDto dto) throws AppException {
+    public void add(AddMomentAreaDto dto) throws AppException {
         CommentArea commentArea = new CommentArea();
         BeanUtils.copyProperties(dto,commentArea);
         commentArea.setCommentTime(LocalDateTime.now());
@@ -36,12 +35,12 @@ public class CommentAreaServiceImpl extends ServiceImpl<CommentAreaMapper, Comme
     }
 
     @Override
-    public void delete(AddMomentDto dto) throws AppException {
+    public void delete(AddMomentAreaDto dto) throws AppException {
         this.update(new LambdaUpdateWrapper<CommentArea>().set(CommentArea::getState,CommentArea.DELETE).eq(CommentArea::getId,dto.getId()));
     }
 
     @Override
-    public List<CommentArea> list(AddMomentDto dto) throws AppException {
+    public List<CommentArea> list(AddMomentAreaDto dto) throws AppException {
         return this.list(new LambdaQueryWrapper<CommentArea>().eq(CommentArea::getState,CommentArea.NORMAL).eq(CommentArea::getCommentId,dto.getCommentId()).eq(CommentArea::getType,dto.getType()));
     }
 
@@ -49,7 +48,7 @@ public class CommentAreaServiceImpl extends ServiceImpl<CommentAreaMapper, Comme
     public Map<Long, AtomicInteger> getCommentTotal(CommentAreaQueryBo queryBo,Integer type) throws AppException {
 
         LambdaQueryWrapper<CommentArea> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(CommentArea::getState,0).eq(CommentArea::getType,type);
+        queryWrapper.eq(CommentArea::getState,CommentArea.NORMAL).eq(CommentArea::getType,type);
         if (StringUtils.isNotBlank(queryBo.getMomentsIds())) {
             queryWrapper.in(CommentArea::getCommentId,queryBo.getMomentsIds());
         }

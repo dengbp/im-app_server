@@ -6,6 +6,7 @@ import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.log.dto.OperationReqDto;
 import com.yr.net.app.log.service.IUserTrackService;
+import com.yr.net.app.moments.dto.AddMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.service.IUserMomentsService;
 import com.yr.net.app.tools.AppUtil;
@@ -31,6 +32,15 @@ public class UserMomentsController {
     @Resource
     private IUserTrackService userTrackService;
 
+    @PostMapping("/add")
+    @ControllerEndpoint(operation = "发布动态", exceptionMessage = "发布动态失败")
+    @ResponseBody
+    @Log("发布动态接口")
+    public RestResult add(@RequestBody  @Valid AddMomentDto momentDto){
+        userMomentsService.add(momentDto);
+        return RestResult.ok();
+    }
+
     @PostMapping("/list")
     @ControllerEndpoint(operation = "用户动态", exceptionMessage = "用户动态失败")
     @ResponseBody
@@ -38,6 +48,8 @@ public class UserMomentsController {
     public RestResult mottoEdit(@RequestBody  @Valid UserMomentsReqDto reqDto){
         return RestResult.ok().setResult(userMomentsService.findUserMoments(reqDto));
     }
+
+
 
     @PostMapping("/fans")
     @ControllerEndpoint(operation = "用户粉丝量", exceptionMessage = "用户粉丝量查询失败")

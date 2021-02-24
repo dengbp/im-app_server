@@ -2,7 +2,7 @@ package com.yr.net.app.moments.service;
 
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
-import com.yr.net.app.moments.dto.AddMomentDto;
+import com.yr.net.app.moments.dto.AddMomentAreaDto;
 import com.yr.net.app.moments.entity.CommentArea;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,7 +23,7 @@ public interface ICommentAreaService extends IService<CommentArea> {
      * @Author dengbp
      * @Date 11:50 AM 2/24/21
      **/
-    void add(AddMomentDto dto)throws AppException;
+    void add(AddMomentAreaDto dto)throws AppException;
 
 
     /**
@@ -34,7 +34,7 @@ public interface ICommentAreaService extends IService<CommentArea> {
      * @Author dengbp
      * @Date 11:50 AM 2/24/21
      **/
-    void delete(AddMomentDto dto)throws AppException;
+    void delete(AddMomentAreaDto dto)throws AppException;
 
     /**
      * Description 评论列表内容
@@ -44,7 +44,7 @@ public interface ICommentAreaService extends IService<CommentArea> {
      * @Author dengbp
      * @Date 11:51 AM 2/24/21
      **/
-    List<CommentArea> list(AddMomentDto dto)throws AppException;
+    List<CommentArea> list(AddMomentAreaDto dto)throws AppException;
 
     /**
      * Description 获取评论数量

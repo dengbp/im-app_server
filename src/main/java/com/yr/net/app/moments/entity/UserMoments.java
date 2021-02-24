@@ -22,6 +22,9 @@ public class UserMoments implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static Integer NORMAL = 0;
+    public static Integer DELETE = 1;
+
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
     /**
@@ -72,25 +75,6 @@ public class UserMoments implements Serializable {
      */
     private Integer state;
 
-    /**
-     * 创建人
-     */
-    private String createdBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createdTime;
-
-    /**
-     * 更新人
-     */
-    private String updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedTime;
 
     /**
      * 对应缩略图、视频第一帧

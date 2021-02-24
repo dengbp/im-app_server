@@ -4,8 +4,7 @@ package com.yr.net.app.moments.controller;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
-import com.yr.net.app.moments.dto.AddMomentDto;
-import com.yr.net.app.moments.dto.MomentsLikeReqDto;
+import com.yr.net.app.moments.dto.AddMomentAreaDto;
 import com.yr.net.app.moments.entity.CommentArea;
 import com.yr.net.app.moments.service.ICommentAreaService;
 import com.yr.net.app.tools.AppUtil;
@@ -31,7 +30,7 @@ public class CommentAreaController {
     @ControllerEndpoint(operation = "追加评论", exceptionMessage = "追加评论失败")
     @ResponseBody
     @Log("追加评论接口")
-    public RestResult add(@RequestBody @Valid AddMomentDto addMomentDto){
+    public RestResult add(@RequestBody @Valid AddMomentAreaDto addMomentDto){
         if (StringUtils.isBlank(addMomentDto.getCommentContent())){
             return RestResult.error("评论内容不能为空");
         }
@@ -60,7 +59,7 @@ public class CommentAreaController {
     @ControllerEndpoint(operation = "删除评论", exceptionMessage = "删除评论评论失败")
     @ResponseBody
     @Log("删除评论接口")
-    public RestResult delete(@RequestBody @Valid AddMomentDto addMomentDto){
+    public RestResult delete(@RequestBody @Valid AddMomentAreaDto addMomentDto){
         if (addMomentDto.getId()==null){
             return RestResult.error("删除的评论ID不能为空");
         }
@@ -74,7 +73,7 @@ public class CommentAreaController {
     @ControllerEndpoint(operation = "删除评论", exceptionMessage = "删除评论评论失败")
     @ResponseBody
     @Log("删除评论接口")
-    public RestResult list(@RequestBody @Valid AddMomentDto addMomentDto){
+    public RestResult list(@RequestBody @Valid AddMomentAreaDto addMomentDto){
         if (addMomentDto.getCommentId()==null){
             return RestResult.error("被评论的主题id或评论id不能为空");
         }

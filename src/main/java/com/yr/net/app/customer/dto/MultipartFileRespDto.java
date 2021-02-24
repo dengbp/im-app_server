@@ -13,4 +13,8 @@ public class MultipartFileRespDto {
 
     private Long id;
     private String fileUrl;
+    /**
+     * 对应缩略图、视频第一帧
+     **/
+    private String previewUrl;
 }

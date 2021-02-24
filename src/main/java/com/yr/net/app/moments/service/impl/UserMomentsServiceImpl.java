@@ -10,6 +10,7 @@ import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
 import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import com.yr.net.app.moments.bo.CommentsLikeQueryBo;
+import com.yr.net.app.moments.dto.AddMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsRespDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.entity.Multimedia;
@@ -20,6 +21,8 @@ import com.yr.net.app.moments.service.ILikeService;
 import com.yr.net.app.moments.service.IMultimediaService;
 import com.yr.net.app.moments.service.IUserMomentsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yr.net.app.pojo.BaiduMapPositionResponse;
+import com.yr.net.app.tools.AddressByCoordUtil;
 import com.yr.net.app.tools.AppUtil;
 import com.yr.net.app.tools.SortUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +54,24 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     private static Integer COMMENT_TYPE = 0;
 
     @Override
+    public void add(AddMomentDto addMomentDto) throws AppException {
+        UserMoments moment = new UserMoments();
+        BeanUtils.copyProperties(addMomentDto,moment);
+        BaiduMapPositionResponse response = AddressByCoordUtil.getAdd(addMomentDto.getLatitude().toString(),addMomentDto.getLongitude().toString());
+        if (response != null){
+            moment.setPublicAddr(response.getCity()+response.getDistrict());
+        }
+        moment.setPublicTime(LocalDateTime.now());
+        moment.setUserId(AppUtil.getCurrentUserId());
+        moment.setState(UserMoments.NORMAL);
+    }
+
+    @Override
     public List<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto) throws AppException {
         Page<UserMoments> page = new Page<>();
         SortUtil.handlePageSort(reqDto, page, "CREATED_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserMoments> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserMoments::getState,0);
+        wrapper.eq(UserMoments::getState,UserMoments.NORMAL);
         String userId = StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId();
         wrapper.eq(UserMoments::getUserId,userId);
         IPage<UserMoments> infoIPage = this.baseMapper.selectPage(page, wrapper);

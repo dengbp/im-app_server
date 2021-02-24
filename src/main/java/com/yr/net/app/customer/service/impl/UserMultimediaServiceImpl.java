@@ -59,6 +59,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
             MultipartFileRespDto respDto = new MultipartFileRespDto();
             respDto.setId(userMultimedia.getId());
             respDto.setFileUrl(userMultimedia.getUrl());
+            respDto.setPreviewUrl(userMultimedia.getPreviewUrl());
             return respDto;
         } catch (Exception e) {
             log.error("上传失败",e);
