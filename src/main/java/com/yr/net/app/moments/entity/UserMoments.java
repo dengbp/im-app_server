@@ -52,7 +52,7 @@ public class UserMoments implements Serializable {
     private LocalDateTime publicTime;
 
     /**
-     * 发布地址
+     * 发布地址(city+district组成)
      */
     private String publicAddr;
 
@@ -91,6 +91,11 @@ public class UserMoments implements Serializable {
      * 更新时间
      */
     private LocalDateTime updatedTime;
+
+    /**
+     * 对应缩略图、视频第一帧
+     **/
+    private String previewUrl;
 
 
 }

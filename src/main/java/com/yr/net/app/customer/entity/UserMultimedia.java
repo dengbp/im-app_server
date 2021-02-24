@@ -30,6 +30,11 @@ public class UserMultimedia implements Serializable {
     private String userId;
 
     /**
+     * 主题id或评论id
+     */
+    private Long commentId;
+
+    /**
      * 原上传的多媒体名称
      */
     private String multimediaName;
@@ -84,6 +89,9 @@ public class UserMultimedia implements Serializable {
     /**
      * 多媒体类型 0：图片；1：视频
      */
+    private Integer mulType;
+
+    /**  主题或评论类型 0：主题；1：评论内容 */
     private Integer type;
 
     /**

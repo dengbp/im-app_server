@@ -1,29 +1,21 @@
-package com.yr.net.app.moments.entity;
+package com.yr.net.app.moments.dto;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.yr.net.app.common.entity.QueryRequestPage;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
- * 评论信息
- *
  * @author dengbp
+ * @ClassName LicenseQeuryDto
+ * @Description 增加评论
+ * @date 2019-11-28 10:27
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class CommentArea implements Serializable {
+public class AddMomentDto implements Serializable {
 
-    public static Integer NORMAL = 0;
-    public static Integer DELETE = 1;
-
-    private static final long serialVersionUID = 1L;
-
-    @TableId
+    /** 评论ID */
     private Long id;
 
     /**
@@ -35,11 +27,6 @@ public class CommentArea implements Serializable {
      * 评论内容
      */
     private String commentContent;
-
-    /**
-     * 评论时间
-     */
-    private LocalDateTime commentTime;
 
     /**
      * 评论地址

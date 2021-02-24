@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
- * Description 用户动态
+ * Description 用户动态˙控制器
  * @Author dengbp
  * @Date 20:40 2020-12-17
  **/

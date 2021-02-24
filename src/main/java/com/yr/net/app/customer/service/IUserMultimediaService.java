@@ -5,6 +5,7 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.*;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -86,5 +87,17 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      **/
 
     Integer getAlbumCount(String userId)throws AppException;
+
+    /**
+     * Description 动态主题或评论查找多媒体信息
+     * @param commentMultiQueryBo
+     * @param type 多媒体使用场景类型 0：主题；1：评论内容
+     * @throws AppException
+     * @return java.util.List<com.yr.net.app.moments.entity.UserMultimedia>
+     * @Author dengbp
+     * @Date 13:28 2020-12-18
+     **/
+
+    List<UserMultimedia> findByComment(CommentMultiQueryBo commentMultiQueryBo,Integer type)throws AppException;
 
 }

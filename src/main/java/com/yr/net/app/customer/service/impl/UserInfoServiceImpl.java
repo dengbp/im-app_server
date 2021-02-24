@@ -9,10 +9,7 @@ import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
-import com.yr.net.app.customer.dto.NearUserResponseDto;
-import com.yr.net.app.customer.dto.OnlineRequestDto;
-import com.yr.net.app.customer.dto.UserBaseInfoRequestDto;
-import com.yr.net.app.customer.dto.UserBaseInfoResponseDto;
+import com.yr.net.app.customer.dto.*;
 import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.manager.UserManager;
 import com.yr.net.app.customer.mapper.UserInfoMapper;
@@ -83,8 +80,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return null;
     }
 
+    @Override
+    public void updateByUserId(AddBaseInfoRequestDto baseInfo) throws AppException {
+        this.update(new LambdaUpdateWrapper<UserInfo>().set(UserInfo::getUserName,baseInfo.getUserName()).
+                set(UserInfo::getSex,baseInfo.getSex()).set(UserInfo::getBodyWeight,baseInfo.getBodyWeight()).
+                set(UserInfo::getBodyHeight,baseInfo.getBodyHeight()).set(UserInfo::getBirthday,baseInfo.getBirthday()).
+                eq(UserInfo::getUserId, baseInfo.getUserId()));
+    }
+
     /**
-     * Description 取附近的人参加：
+     * Description 取附近的人参考：
      * @see com.yr.net.app.NearBySearchTest
      * @param userId
  * @param position

@@ -1,5 +1,6 @@
 package com.yr.net.app.moments.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -20,6 +21,12 @@ public class Like implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
+    private Long id;
+    /**
+     * 发布用户id
+     */
+    private String publicUserId;
     /**
      * 点赞主题id或评论id
      */
@@ -28,7 +35,7 @@ public class Like implements Serializable {
     /**
      * 点赞用户id
      */
-    private Integer likeUserId;
+    private String likeUserId;
 
     /**
      * 点赞时间
@@ -49,26 +56,5 @@ public class Like implements Serializable {
      * 点赞状态 0：取消赞；   1：有效赞
      */
     private Integer state;
-
-    /**
-     * 创建人
-     */
-    private String createdBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createdTime;
-
-    /**
-     * 更新人
-     */
-    private String updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedTime;
-
 
 }

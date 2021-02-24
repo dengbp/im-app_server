@@ -148,4 +148,8 @@ public class DateUtil {
         }
         return age;
     }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(getAge("20230223",DateUtil.YYYY_MM_DD_PATTERN));
+    }
 }

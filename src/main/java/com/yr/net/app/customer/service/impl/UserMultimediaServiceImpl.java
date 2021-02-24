@@ -11,6 +11,7 @@ import com.yr.net.app.customer.dto.*;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.yr.net.app.customer.mapper.UserMultimediaMapper;
 import com.yr.net.app.customer.service.IUserMultimediaService;
+import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import com.yr.net.app.moments.entity.UserMomentsSub;
 import com.yr.net.app.moments.service.IUserMomentsService;
 import com.yr.net.app.tools.*;
@@ -85,7 +86,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         Page<UserMultimedia> queryPage = new Page<>();
         LambdaQueryWrapper<UserMultimedia> queryWrapper = new LambdaQueryWrapper();
         if (-1 != requestDto.getType().intValue()) {
-            queryWrapper.eq(UserMultimedia::getType,requestDto.getType());
+            queryWrapper.eq(UserMultimedia::getMulType,requestDto.getType());
         }
         SortUtil.handlePageSort(requestDto,queryPage, "CREATED_TIME", AppConstant.ORDER_DESC, false);
         return search(queryPage,queryWrapper);
@@ -109,7 +110,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         Page<UserMultimedia> queryPage = new Page<>();
         LambdaQueryWrapper<UserMultimedia> queryWrapper = new LambdaQueryWrapper();
         if (-1 != requestDto.getType().intValue()) {
-            queryWrapper.eq(UserMultimedia::getType,requestDto.getType());
+            queryWrapper.eq(UserMultimedia::getMulType,requestDto.getType());
         }
         SortUtil.handlePageSort(requestDto,queryPage,  false);
         String userId = StringUtils.isBlank(requestDto.getUserId())?AppUtil.getCurrentUserId():requestDto.getUserId();
@@ -126,8 +127,19 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     public Integer getAlbumCount(String userId) throws AppException {
         userId = StringUtils.isBlank(userId)?AppUtil.getCurrentUserId():userId;
         LambdaQueryWrapper<UserMultimedia> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.eq(UserMultimedia::getUserId,userId).eq(UserMultimedia::getBeUsed,0).eq(UserMultimedia::getType,0);
+        queryWrapper.eq(UserMultimedia::getUserId,userId).eq(UserMultimedia::getBeUsed,0).eq(UserMultimedia::getMulType,0);
         return this.count(queryWrapper);
+    }
+
+    @Override
+    public List<UserMultimedia> findByComment(CommentMultiQueryBo commentMultiQueryBo,Integer type) throws AppException {
+        LambdaQueryWrapper<UserMultimedia> queryWrapper = new LambdaQueryWrapper<>();
+        /** 动态类型多媒体 */
+        queryWrapper.eq(UserMultimedia::getBeUsed,1).eq(UserMultimedia::getType,type);
+        if (StringUtils.isNotBlank(commentMultiQueryBo.getMomentsIds())) {
+            queryWrapper.in(UserMultimedia::getCommentId,commentMultiQueryBo.getMomentsIds());
+        }
+        return this.list(queryWrapper);
     }
 
 

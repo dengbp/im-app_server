@@ -35,7 +35,7 @@ public class UserMomentsRespDto {
     private LocalDateTime publicTime;
 
     /**
-     * 发布地址
+     * 发布地址(city+district组成)
      */
     private String publicAddr;
 
@@ -54,10 +54,6 @@ public class UserMomentsRespDto {
      */
     private Integer likeTotal;
 
-    /**
-     * 浏览量
-     */
-    private Integer viewTotal;
 
     /**
      * 评论量
@@ -68,6 +64,12 @@ public class UserMomentsRespDto {
      * 多媒体访问url
      */
     private String url;
+
+
+    /**
+     * 对应缩略图或视频第一帧
+     **/
+    private String previewUrl;
 
 
 

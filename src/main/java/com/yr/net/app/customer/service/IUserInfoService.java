@@ -3,10 +3,7 @@ package com.yr.net.app.customer.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.common.exception.AppException;
-import com.yr.net.app.customer.dto.NearUserResponseDto;
-import com.yr.net.app.customer.dto.OnlineRequestDto;
-import com.yr.net.app.customer.dto.UserBaseInfoRequestDto;
-import com.yr.net.app.customer.dto.UserBaseInfoResponseDto;
+import com.yr.net.app.customer.dto.*;
 import com.yr.net.app.customer.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yr.net.app.pojo.Position;
@@ -41,6 +38,16 @@ public interface IUserInfoService extends IService<UserInfo> {
       **/
 
     UserInfo getByUserId(String userId)throws AppException;
+
+    /**
+     * Description 完善基本信息
+     * @param baseInfo
+     * @throws AppException AppException
+     * @return void
+     * @Author dengbp
+     * @Date 12:57 PM 2/23/21
+     **/
+    void updateByUserId(AddBaseInfoRequestDto baseInfo)throws AppException;
 
     /**
      * Description 找当前用户的附近人

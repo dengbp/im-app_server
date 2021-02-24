@@ -15,6 +15,7 @@ import com.yr.net.app.customer.service.IUserCoordinateService;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.pojo.Position;
 import com.yr.net.app.tools.AppUtil;
+import com.yr.net.app.tools.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,24 +73,17 @@ public class UserInfoController {
     }
 
 
-    @PostMapping("addBaseInfo")
-    @ControllerEndpoint(operation = "完善基本信息", exceptionMessage = "完善基本信息失败")
-    @ResponseBody
-    @Log("完善基本信息")
-    public RestResult addMoreInfo(@RequestBody @Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
-        UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(baseInfoRequestDto,userInfo);
-        return RestResult.ok().setResult(userInfoService.save(userInfo));
-    }
-
     @PostMapping("base_add")
     @ControllerEndpoint(operation = "第一次个人信息完善", exceptionMessage = "第一次个人信息完善失败")
     @ResponseBody
     @Log("第一次个人信息完善")
     public RestResult baseAdd(@RequestBody @Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
-        UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(baseInfoRequestDto,userInfo);
-        return RestResult.ok().setResult(userInfoService.save(userInfo));
+        if (baseInfoRequestDto.getBirthday()==null || baseInfoRequestDto.getBirthday() > Integer.parseInt(DateUtil.current_yyyyMMdd())){
+            return RestResult.error("出生日期不能为空或大于当前时间");
+        }
+        baseInfoRequestDto.setUserId(AppUtil.getCurrentUserId());
+        userInfoService.updateByUserId(baseInfoRequestDto);
+        return RestResult.ok();
     }
 
     @RequestMapping("icon/setting")
