@@ -60,8 +60,8 @@ public class UserMultimediaController {
     @PostMapping("/mutSet")
     @ResponseBody
     @ControllerEndpoint(operation = "用户多媒体信息", exceptionMessage = "用户多媒体信息失败")
-    @Log("用户多媒体信息")
-    public RestResult upload(@RequestBody @Valid MultipartInfoRequestDto requestDto){
+    @Log("动态发布信息")
+    public RestResult mutSet(@RequestBody @Valid MultipartInfoRequestDto requestDto){
         CoordinateRequestDto coordinate = new CoordinateRequestDto();
         coordinate.setLatitude(requestDto.getLatitude());
         coordinate.setLongitude(requestDto.getLongitude());

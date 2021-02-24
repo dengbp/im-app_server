@@ -20,10 +20,10 @@ public class UserMomentsSub extends UserMoments{
         userMoment.setMultimediaId(multimedia.getId());
         userMoment.setUrl(userMoment.getUrl());
         userMoment.setUserId(AppUtil.getCurrentUserId());
-        userMoment.setCreatedTime(LocalDateTime.now());
-        userMoment.setPublicTime(userMoment.getCreatedTime());
+        userMoment.setPublicTime(LocalDateTime.now());
         userMoment.setPublicAddr(multimedia.getAddr());
         userMoment.setIsFree(isFree);
+        userMoment.setPreviewUrl(multimedia.getPreviewUrl());
         if (StringUtils.isNotBlank(price)){
             userMoment.setPrice(new BigDecimal(price));
         }
