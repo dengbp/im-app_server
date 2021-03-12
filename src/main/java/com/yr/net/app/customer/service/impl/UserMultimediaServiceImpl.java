@@ -12,8 +12,10 @@ import com.yr.net.app.customer.entity.UserMultimedia;
 import com.yr.net.app.customer.mapper.UserMultimediaMapper;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.moments.bo.CommentMultiQueryBo;
+import com.yr.net.app.moments.entity.UserMoments;
 import com.yr.net.app.moments.entity.UserMomentsSub;
 import com.yr.net.app.moments.service.IUserMomentsService;
+import com.yr.net.app.pojo.BaiduMapPositionResponse;
 import com.yr.net.app.tools.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -68,17 +70,22 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     }
 
     @Override
-    public void updateMulInfo(String ids, Integer using,int type, int isFree, String price, CoordinateRequestDto coordinate, String showWord) throws AppException {
+    public void updateMulInfo(String ids, Integer using,int mulType, int isFree, String price, CoordinateRequestDto coordinate, String showWord) throws AppException {
+        BaiduMapPositionResponse positionResponse = AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude());
+        String addr = positionResponse==null?"地址异常":positionResponse.getFormattedAddress();
+        UserMoments moment = null;
+        if (using==1){
+            moment = UserMomentsSub.buildUserMoment(addr,isFree,price,showWord);
+            userMomentsService.saveOrUpdate(moment);
+        }
+        UserMoments finalMoment = moment;
         Arrays.asList(ids.split(",")).forEach(id->{
-            UserMultimedia userMultimedia = this.setUserMulInfo(Long.parseLong(id.trim()),AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude()).getFormattedAddress());
+            /** 如果是用于动态 */
+            UserMultimedia userMultimedia = this.setUserMulInfo(Long.parseLong(id.trim()),addr, finalMoment ==null?null: finalMoment.getId(),using,mulType);
             if (using != null){
                 userMultimedia.setBeUsed(using);
             }
             this.updateById(userMultimedia);
-            /** 如果是用于动态 */
-            if (using==1){
-                userMomentsService.save(UserMomentsSub.buildUserMoment(this.getById(Long.parseLong(id.trim())),isFree,price,showWord));
-            }
         });
     }
 
@@ -165,10 +172,17 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     }
 
 
-    private UserMultimedia setUserMulInfo(Long mulId,String addr){
+    private UserMultimedia setUserMulInfo(Long mulId,String addr,Long commentId,Integer using,Integer mulType){
         UserMultimedia userMultimedia = new UserMultimedia();
         userMultimedia.setId(mulId);
         userMultimedia.setAddr(addr);
+        if (commentId != null){
+            userMultimedia.setCommentId(commentId);
+        }
+        userMultimedia.setType(UserMultimedia.THEME);
+        userMultimedia.setBeUsed(using);
+        userMultimedia.setMulType(mulType);
+        userMultimedia.setUserId(AppUtil.getCurrentUserId());
         return userMultimedia;
     }
 }

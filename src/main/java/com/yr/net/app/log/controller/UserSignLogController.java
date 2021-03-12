@@ -25,7 +25,7 @@ public class UserSignLogController {
     @Resource
     private IUserSignLogService userSignLogService;
 
-    @PostMapping("/list")
+    @PostMapping("list")
     @ControllerEndpoint(operation = "登录记录查询", exceptionMessage = "登录记录查询失败")
     @ResponseBody
     @Log("登录记录查询接口")

@@ -20,14 +20,17 @@ public class OperationReportDto implements Serializable {
     private String userId;
 
     /**
-     * 被操作(浏览用户信息；用户动态；点赞；关注；拉黑等)对象id
+     * 被操作内容对应的(浏览用户信息；用户动态；点赞；关注等)用户id
      */
     @NotNull
     private String byOperatorId;
 
     /**
-     * 操作类型 0：查看用户信息；1：用户动态；2:点赞；3：关注；4：拉黑;.....
+     * 操作类型(传0) 0：浏览用户信息；1：用户动态；2:主题点赞；3：主题取消点赞 4:评论内容点赞；5：评论内容取消点赞  6：关注；.....
      */
     @NotNull
     private Integer operatorType;
+
+    /** 动态或评论id(动态才需要传) */
+    private Long momentId;
 }

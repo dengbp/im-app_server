@@ -32,7 +32,12 @@ public class UserTrack implements Serializable {
     private String userName;
 
     /**
-     * 被操作(浏览用户信息；用户动态；点赞；关注；拉黑等)对象id
+     * 浏览用户头像
+     */
+    private String userIcon;
+
+    /**
+     * 被操作(浏览用户信息；用户动态；点赞；关注；拉黑等)用户对象id
      */
     private String byOperatorId;
 

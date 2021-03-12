@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author dengbp
@@ -60,17 +61,50 @@ public class UserMomentsRespDto {
      */
     private Integer commentTotal;
 
+
+
     /**
-     * 多媒体访问url
+     * 发布者昵称
      */
-    private String url;
+    private String userName;
 
+    /** 发布者头像  */
+    private String icon;
 
     /**
-     * 对应缩略图或视频第一帧
-     **/
-    private String previewUrl;
+     * 发布者性别，1男2女
+     */
+    private Integer sex;
+
+    private List<ImagesBean> imagesBean;
+
+    private VideoBean videoBean;
 
 
+    @Data
+    public static class ImagesBean {
+        /**
+         * 多媒体访问url
+         */
+        private String url;
+
+
+        /**
+         * 对应缩略图或视频第一帧
+         **/
+        private String previewUrl;
+    }
+
+    @Data
+    public static class VideoBean {
+        /**
+         * 视频第一帧
+         **/
+        private String previewUrl;
+        /**
+         * 视频访问url
+         */
+        private String url;
+    }
 
 }

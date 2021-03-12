@@ -32,7 +32,7 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      * Description 用户多媒体信息
  * @param ids	 多媒体id,多个逗号分开
      * @param using 用处:0个人资料里的相册(或视频),1个人动态
- * @param type	 多媒体类型 0：图片；1：视频
+ * @param mulType	 多媒体类型 0：图片；1：视频
  * @param isFree	是否收费 0:免费:1收费
  * @param price
  * @param coordinate
@@ -43,7 +43,7 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      * @Date 00:42 2020-11-25
      **/
 
-    void updateMulInfo(String ids,Integer using, int type, int isFree, String price, CoordinateRequestDto coordinate,String showWord)throws AppException;
+    void updateMulInfo(String ids,Integer using, int mulType, int isFree, String price, CoordinateRequestDto coordinate,String showWord)throws AppException;
 
     /**
      * Description 视频列表
@@ -99,5 +99,6 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
      **/
 
     List<UserMultimedia> findByComment(CommentMultiQueryBo commentMultiQueryBo,Integer type)throws AppException;
+
 
 }

@@ -50,4 +50,11 @@ public class UserBaseInfoResponseDto implements Serializable {
      * 解锁值
      */
     private BigDecimal price;
+
+    /**
+     * 性别，1男2女
+     */
+    private Integer sex;
+
 }
+

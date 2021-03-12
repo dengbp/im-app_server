@@ -15,6 +15,11 @@ import java.io.Serializable;
 @Data
 public class MomentsLikeReqDto implements Serializable {
 
+    public static Integer COMMENT=1;
+    public static Integer THEME=0;
+
+    public static Integer LIKE=1;
+    public static Integer UNLIKE=0;
 
     /** 发布动态或评论用户 */
     @NotNull
@@ -29,7 +34,7 @@ public class MomentsLikeReqDto implements Serializable {
     private Integer type;
 
     /**
-     * 点赞状态 0：取消赞；   1：有效赞
+     * 点赞状态 0：取消赞；   1：点赞
      */
     @NotNull
     private Integer state;

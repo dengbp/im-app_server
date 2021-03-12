@@ -24,7 +24,7 @@ public class LikeController {
     @Resource
     private ILikeService likeService;
 
-    @PostMapping("/add")
+    @PostMapping("/add-deprecated")
     @ControllerEndpoint(operation = "动态点赞", exceptionMessage = "动态点赞失败")
     @ResponseBody
     @Log("动态点赞接口")

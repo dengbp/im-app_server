@@ -6,13 +6,19 @@ import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.log.dto.OperationReportDto;
 import com.yr.net.app.log.dto.OperationReqDto;
+import com.yr.net.app.log.enums.OperationType;
+import com.yr.net.app.log.enums.OperationType.*;
 import com.yr.net.app.log.service.IUserTrackService;
+import com.yr.net.app.moments.dto.MomentsLikeReqDto;
+import com.yr.net.app.moments.service.ILikeService;
 import com.yr.net.app.tools.AppUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+
+import static com.yr.net.app.log.enums.OperationType.THEME_LIKE;
 
 /**
  * 用户轨迹控制器
@@ -24,6 +30,8 @@ public class UserTrackController {
 
     @Resource
     private IUserTrackService userTrackService;
+    @Resource
+    private ILikeService likeService;
 
     @PostMapping("operation")
     @ControllerEndpoint(operation = "谁看过谁相关信息接口", exceptionMessage = "谁看过谁接口失败")
@@ -42,7 +50,33 @@ public class UserTrackController {
             reqDto.setUserId(AppUtil.getCurrentUserId());
         }
         userTrackService.saveTrack(reqDto);
+        OperationType oType = OperationType.getByCode(reqDto.getOperatorType());
+        switch (oType){
+            case THEME_LIKE:
+                saveLike(reqDto,MomentsLikeReqDto.THEME,MomentsLikeReqDto.LIKE);
+                break;
+            case THEME_UNLIKE:
+                saveLike(reqDto,MomentsLikeReqDto.THEME,MomentsLikeReqDto.UNLIKE);
+                break;
+            case COMMENT_LIKE:
+                saveLike(reqDto,MomentsLikeReqDto.COMMENT,MomentsLikeReqDto.LIKE);
+                break;
+            case COMMENT_UNLIKE:
+                saveLike(reqDto,MomentsLikeReqDto.COMMENT,MomentsLikeReqDto.UNLIKE);
+                break;
+            default:
+                break;
+        }
         return RestResult.ok();
+    }
+
+    private void saveLike(OperationReportDto reqDto,Integer operationType,Integer state){
+        MomentsLikeReqDto like = new MomentsLikeReqDto();
+        like.setMomentId(reqDto.getMomentId());
+        like.setPublicUserId(reqDto.getByOperatorId());
+        like.setState(state);
+        like.setType(operationType);
+        likeService.add(like);
     }
 
 }

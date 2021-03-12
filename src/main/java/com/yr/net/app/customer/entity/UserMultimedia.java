@@ -22,6 +22,12 @@ public class UserMultimedia implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static Integer COMMENT=1;
+    public static Integer THEME=0;
+
+    public static Integer IMG =0;
+    public static Integer VIDEO =1;
+
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
     /**

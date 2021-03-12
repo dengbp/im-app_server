@@ -39,17 +39,6 @@ public class UserMoments implements Serializable {
 
 
     /**
-     * 关联多媒体id
-     */
-    private Long multimediaId;
-
-
-    /**
-     * 多媒体访问url
-     */
-    private String url;
-
-    /**
      * 发布时间
      */
     private LocalDateTime publicTime;
@@ -74,12 +63,5 @@ public class UserMoments implements Serializable {
      * 状态 0：正常；1：已删除
      */
     private Integer state;
-
-
-    /**
-     * 对应缩略图、视频第一帧
-     **/
-    private String previewUrl;
-
 
 }

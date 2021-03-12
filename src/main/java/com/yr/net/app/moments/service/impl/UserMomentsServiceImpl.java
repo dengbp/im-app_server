@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserMultimedia;
+import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.customer.service.IUserMultimediaService;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
 import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import com.yr.net.app.moments.bo.CommentsLikeQueryBo;
 import com.yr.net.app.moments.dto.AddMomentDto;
+import com.yr.net.app.moments.dto.UserMomentsRespDto.*;
 import com.yr.net.app.moments.dto.UserMomentsRespDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.entity.Multimedia;
@@ -46,6 +49,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserMoments> implements IUserMomentsService {
 
     @Autowired
+    IUserInfoService userInfoService;
+    @Autowired
     private IUserMultimediaService userMultimediaService;
     @Autowired
     private ILikeService likeService;
@@ -69,53 +74,76 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     @Override
     public List<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto) throws AppException {
         Page<UserMoments> page = new Page<>();
-        SortUtil.handlePageSort(reqDto, page, "CREATED_TIME", AppConstant.ORDER_DESC, false);
+        SortUtil.handlePageSort(reqDto, page, "PUBLIC_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserMoments> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserMoments::getState,UserMoments.NORMAL);
         String userId = StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId();
         wrapper.eq(UserMoments::getUserId,userId);
         IPage<UserMoments> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserMomentsRespDto> userInfoResponses = new ArrayList<>();
-        this.assembly(infoIPage.getRecords(), userInfoResponses);
-        Page<UserMomentsRespDto> result = new Page();
-        result.setRecords(userInfoResponses);
-        result.setSize(infoIPage.getSize());
-        result.setTotal(infoIPage.getTotal());
-        result.setCurrent(infoIPage.getCurrent());
-        return result.getRecords();
+        assembly(infoIPage.getRecords(), userInfoResponses);
+        return userInfoResponses;
     }
 
     private String queryCondition(List<UserMoments> source,List<UserMomentsRespDto> userMomentsResp){
-        StringBuffer sb = new StringBuffer();
-        if (source != null) {
-            source.forEach(e->{
-                sb.append(e.getId()).append(",");
-                UserMomentsRespDto respDto = new UserMomentsRespDto();
-                BeanUtils.copyProperties(e,respDto);
-                respDto.setPublicTheme(e.getShowWord());
-                userMomentsResp.add(respDto);
-            });
+        if (source.isEmpty()) {
+            return "";
         }
-        return sb.substring(0,sb.lastIndexOf(","));
+        StringBuffer sb = new StringBuffer();
+        source.forEach(e->{
+            sb.append(e.getId()).append(",");
+            UserMomentsRespDto respDto = new UserMomentsRespDto();
+            UserInfo user = userInfoService.getByUserId(e.getUserId());
+            respDto.setUserName(user.getUserName());
+            respDto.setIcon(user.getIcon());
+            respDto.setSex(user.getSex());
+            List<UserMultimedia>  multimedia = userMultimediaService.findByComment(new CommentMultiQueryBo(e.getId().toString()) ,UserMultimedia.THEME);
+            if (multimedia != null){
+                List<UserMomentsRespDto.ImagesBean> imagesBeans = new ArrayList<>();
+                multimedia.forEach(m->{
+                    if (m.getMulType().equals(UserMultimedia.IMG)){
+                        ImagesBean i = new UserMomentsRespDto.ImagesBean();
+                        i.setUrl(m.getUrl());
+                        i.setPreviewUrl(m.getPreviewUrl());
+                        imagesBeans.add(i);
+                    }
+                    if(m.getMulType().equals(UserMultimedia.VIDEO)){
+                        VideoBean videoBeans = new VideoBean();
+                        videoBeans.setUrl(m.getUrl());
+                        videoBeans.setPreviewUrl(m.getPreviewUrl());
+                        respDto.setVideoBean(videoBeans);
+                    }
+                });
+                respDto.setImagesBean(imagesBeans);
+            }
+            BeanUtils.copyProperties(e,respDto);
+            respDto.setPublicTheme(e.getShowWord());
+            userMomentsResp.add(respDto);
+        });
+        return sb.length()>0?sb.substring(0,sb.lastIndexOf(",")):"";
     }
 
     private void assembly(List<UserMoments> source, List<UserMomentsRespDto> userMomentsResp) {
+        if (source.isEmpty()){
+            return;
+        }
         /** 组装动态id **/
         String queryCondition = this.queryCondition(source, userMomentsResp);
-        /** 取动态的评论和点赞数量 **/
-        if (StringUtils.isNotBlank(queryCondition)) {
-            Map<Long, AtomicInteger> commentTotal = commentAreaService.getCommentTotal(new CommentAreaQueryBo(queryCondition), COMMENT_TYPE);
-            Map<Long, AtomicInteger> likeTotal = likeService.getCommentLikeTotal(new CommentsLikeQueryBo(queryCondition), COMMENT_TYPE);
-            userMomentsResp.forEach(res -> {
-                res.setCommentTotal(0);
-                res.setLikeTotal(0);
-                if (commentTotal.containsKey(res.getId())) {
-                    res.setCommentTotal(commentTotal.get(res.getId()).get());
-                }
-                if (likeTotal.containsKey(res.getId())) {
-                    res.setLikeTotal(likeTotal.get(res.getId()).get());
-                }
-            });
+        if (StringUtils.isBlank(queryCondition)){
+            return;
         }
+        /** 取动态的评论和点赞数量 **/
+        Map<Long, AtomicInteger> commentTotal = commentAreaService.getCommentTotal(new CommentAreaQueryBo(queryCondition), COMMENT_TYPE);
+        Map<Long, AtomicInteger> likeTotal = likeService.getCommentLikeTotal(new CommentsLikeQueryBo(queryCondition), COMMENT_TYPE);
+        userMomentsResp.forEach(res -> {
+            res.setCommentTotal(0);
+            res.setLikeTotal(0);
+            if (commentTotal.containsKey(res.getId())) {
+                res.setCommentTotal(commentTotal.get(res.getId()).get());
+            }
+            if (likeTotal.containsKey(res.getId())) {
+                res.setLikeTotal(likeTotal.get(res.getId()).get());
+            }
+        });
     }
 }

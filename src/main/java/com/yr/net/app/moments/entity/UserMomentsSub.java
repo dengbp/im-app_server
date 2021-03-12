@@ -15,15 +15,12 @@ import java.time.LocalDateTime;
  */
 public class UserMomentsSub extends UserMoments{
 
-    public static UserMoments buildUserMoment(UserMultimedia multimedia, int isFree, String price, String showWord){
+    public static UserMoments buildUserMoment(String addr,int isFree, String price, String showWord){
         UserMoments userMoment = new UserMoments();
-        userMoment.setMultimediaId(multimedia.getId());
-        userMoment.setUrl(userMoment.getUrl());
         userMoment.setUserId(AppUtil.getCurrentUserId());
         userMoment.setPublicTime(LocalDateTime.now());
-        userMoment.setPublicAddr(multimedia.getAddr());
+        userMoment.setPublicAddr(addr);
         userMoment.setIsFree(isFree);
-        userMoment.setPreviewUrl(multimedia.getPreviewUrl());
         if (StringUtils.isNotBlank(price)){
             userMoment.setPrice(new BigDecimal(price));
         }
