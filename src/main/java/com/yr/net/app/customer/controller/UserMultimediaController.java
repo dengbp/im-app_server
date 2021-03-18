@@ -54,7 +54,8 @@ public class UserMultimediaController {
      * @Author dengbp
      * @Date 23:59 2020-11-24
      **/
-    @PostMapping("/mutSet")
+
+    @RequestMapping(value="/mutSet", method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     @ControllerEndpoint(operation = "用户多媒体信息", exceptionMessage = "用户多媒体信息失败")
     @Log("动态发布信息")

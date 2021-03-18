@@ -1,6 +1,8 @@
 package com.yr.net.app.customer.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
@@ -9,6 +11,7 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.dto.AddBaseInfoRequestDto;
 import com.yr.net.app.customer.dto.OnlineRequestDto;
 import com.yr.net.app.customer.dto.UserBaseInfoRequestDto;
+import com.yr.net.app.customer.dto.UserBaseInfoResponseDto;
 import com.yr.net.app.customer.entity.UserCoordinate;
 import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.service.IUserCoordinateService;
@@ -44,7 +47,9 @@ public class UserInfoController {
     @ResponseBody
     @Log("查询用户基本信息")
     public RestResult getOnlineUsers(@RequestBody @Valid UserBaseInfoRequestDto requestDto)throws AppException{
-        return RestResult.ok().setResult(userInfoService.getUserInfo(requestDto));
+        UserBaseInfoResponseDto responseDto = userInfoService.getUserInfo(requestDto);
+        log.info("用户基本信息:{}", JSONObject.toJSONString(responseDto));
+        return RestResult.ok().setResult(responseDto);
     }
 
 
