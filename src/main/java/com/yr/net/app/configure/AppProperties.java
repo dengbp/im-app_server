@@ -22,6 +22,7 @@ public class AppProperties {
     private String admin_url;
     private String admin_secret;
     private boolean use_random_name;
+    /** 从配置读到乱码 要设置 */
     private String welcome_for_new_user;
     private String welcome_for_back_user;
     private boolean new_user_robot_friend;

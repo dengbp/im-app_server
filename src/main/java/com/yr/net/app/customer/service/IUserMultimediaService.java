@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface IUserMultimediaService extends IService<UserMultimedia> {
 
+    String FILE_TYPE = "3gp,avi,mp4,flv,kux,mpeg";
+
     /**
      * Description 用户多媒体
      * @param file

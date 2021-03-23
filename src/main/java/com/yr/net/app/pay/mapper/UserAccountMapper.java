@@ -1,6 +1,6 @@
-package com.yr.net.app.customer.mapper;
+package com.yr.net.app.pay.mapper;
 
-import com.yr.net.app.customer.entity.UserAccount;
+import com.yr.net.app.pay.entity.UserAccount;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

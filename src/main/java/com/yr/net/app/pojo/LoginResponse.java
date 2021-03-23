@@ -12,6 +12,10 @@ public class LoginResponse {
     /** 0是新用户，1不是 */
     private int isNewUser;
 
+    public static int NEW_USER = 0;
+
+    public static int NOT_NEW_USER = 1;
+
     public String getUserId() {
         return userId;
     }

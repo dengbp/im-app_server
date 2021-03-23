@@ -18,7 +18,7 @@ public class ImgCompressUtil {
 
     /**
      * 强制压缩/放大图片到固定的大小
-     * @param fileName 压缩文件("c:\\1.png")
+     * @param fileName 文件路径
      * @param compressPercent 压缩比例(压缩为原来一半传0.5)
      * @return
      */
@@ -42,7 +42,7 @@ public class ImgCompressUtil {
     /**
      *
      * @param file 文件全路径
-     * @param img
+     * @param img 缩略图
      */
     public static void writeToFile(String file,BufferedImage img){
         try {

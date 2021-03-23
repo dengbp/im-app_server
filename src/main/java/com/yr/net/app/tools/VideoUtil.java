@@ -16,15 +16,24 @@ public class VideoUtil {
 
     public static void main(String[] args) throws Exception {
 
-        // randomGrabberFFmpegImage("http://101.132.110.90/group1/M00/00/05/rBN4LFq8p5SAJT0wA5k4vpHKf7Q325.mp4", "D:\\test", "test2");
-        randomGrabberFFmpegImage("D:\\test2.mp4", "D:\\test", "test2");
-        //randomGrabberFFmpegImage("C:/Users\\Administrator\\Desktop\\VID_20171229_162251.mp4", "G:\\test", "111");
+        randomGrabberFFmpegImage("/Users/dengbp/Movies/1568023588910627.mp4", "/Users/dengbp/Downloads", "test2");
     }
 
-    public static void randomGrabberFFmpegImage(String filePath, String targerFilePath, String targetFileName)
+
+    /**
+     * Description 截取视频封面
+     * @param sourceFilePath 源视频绝对路径
+ * @param targetFilePath 封面路径
+ * @param targetFileName 封面文件名不含后缀
+     * @return void
+     * @Author dengbp
+     * @Date 1:11 PM 3/22/21
+     **/
+
+    public static void randomGrabberFFmpegImage(String sourceFilePath, String targetFilePath, String targetFileName)
             throws Exception {
         //创建视频帧抓取工具
-        FFmpegFrameGrabber ff = FFmpegFrameGrabber.createDefault(filePath);
+        FFmpegFrameGrabber ff = FFmpegFrameGrabber.createDefault(sourceFilePath);
         ff.start();
         //获取旋转角度信息（90度）
         String rotate =ff.getVideoMetadata("rotate");
@@ -45,7 +54,7 @@ public class VideoUtil {
                     f =converter.convert(rotate(src, Integer.valueOf(rotate)));
                 }
                 //输出第几帧图片
-                doExecuteFrame(f,targerFilePath,targetFileName+i+i);
+                doExecuteFrame(f,targetFilePath,targetFileName+i+i);
             }
             i++;
         }
@@ -55,14 +64,14 @@ public class VideoUtil {
     /*
      * 旋转角度的
      */
-    public static IplImage rotate(IplImage src, int angle) {
+    private static IplImage rotate(IplImage src, int angle) {
         IplImage img = IplImage.create(src.height(), src.width(), src.depth(), src.nChannels());
         opencv_core.cvTranspose(src, img);
         opencv_core.cvFlip(img, img, angle);
         return img;
     }
 
-    public static void doExecuteFrame(Frame f, String targerFilePath, String targetFileName) {
+    private static void doExecuteFrame(Frame f, String targerFilePath, String targetFileName) {
 
         if (null ==f ||null ==f.image) {
             return;

@@ -154,6 +154,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserBaseInfoResponseDto responseDto = new UserBaseInfoResponseDto();
         if (userInfo != null) {
             BeanUtils.copyProperties(userInfo,responseDto);
+            responseDto.setBodyHeight(userInfo.getBodyHeight().multiply(new BigDecimal("100")).intValue());
+
         }
         try {
             responseDto.setAge(DateUtil.getAge(userInfo.getBirthday().toString(),DateUtil.YYYY_MM_DD_PATTERN));

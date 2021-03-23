@@ -63,6 +63,9 @@ public class UserMultimediaController {
         CoordinateRequestDto coordinate = new CoordinateRequestDto();
         coordinate.setLatitude(requestDto.getLatitude());
         coordinate.setLongitude(requestDto.getLongitude());
+        if(Arrays.asList(requestDto.getMulIds().split(",")).isEmpty()){
+            return RestResult.error("动态id[mulIds]不能为空");
+        }
         userMultimediaService.updateMulInfo(requestDto.getMulIds(),requestDto.getUsing(),Integer.parseInt(requestDto.getType()),Integer.parseInt(requestDto.getIsFree()),requestDto.getPrice(),coordinate,requestDto.getShowWord());
         return RestResult.ok();
     }

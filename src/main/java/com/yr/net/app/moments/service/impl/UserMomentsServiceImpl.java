@@ -77,8 +77,11 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         SortUtil.handlePageSort(reqDto, page, "PUBLIC_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserMoments> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserMoments::getState,UserMoments.NORMAL);
-        String userId = StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId();
-        wrapper.eq(UserMoments::getUserId,userId);
+        if (StringUtils.isNotBlank(reqDto.getUserId())){
+            wrapper.eq(UserMoments::getUserId,reqDto.getUserId());
+        }
+        /** 这里需要用户的爱好信息、活动轨迹查动态信息 */
+        String userId = AppUtil.getCurrentUserId();
         IPage<UserMoments> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserMomentsRespDto> userInfoResponses = new ArrayList<>();
         assembly(infoIPage.getRecords(), userInfoResponses);
@@ -94,6 +97,9 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             sb.append(e.getId()).append(",");
             UserMomentsRespDto respDto = new UserMomentsRespDto();
             UserInfo user = userInfoService.getByUserId(e.getUserId());
+            if (user == null){
+                return;
+            }
             respDto.setUserName(user.getUserName());
             respDto.setIcon(user.getIcon());
             respDto.setSex(user.getSex());

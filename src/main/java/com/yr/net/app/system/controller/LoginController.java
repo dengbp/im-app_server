@@ -1,5 +1,6 @@
 package com.yr.net.app.system.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mysql.cj.util.StringUtils;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.system.service.Service;
@@ -53,7 +54,10 @@ public class LoginController {
 
     @PostMapping(value = "/login", produces = "application/json;charset=UTF-8")
     public Object login(@RequestBody LoginRequest request) {
-        return mService.login(request.getMobile(), request.getCode(), request.getClientId(), request.getPlatform() == null ? 0 : request.getPlatform());
+        RestResult restResult = mService.login(request.getMobile(), request.getCode(), request.getClientId(), request.getPlatform() == null ? 0 : request.getPlatform());
+        log.info("返回用户信息：{}", JSONObject.toJSONString(restResult.getResult()));
+        return restResult;
+
     }
 
 

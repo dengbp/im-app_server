@@ -241,9 +241,12 @@ public class ServiceImpl implements Service {
             LoginResponse response = new LoginResponse();
             response.setUserId(user.getUserId());
             response.setToken(tokenResult.getResult().getToken());
-            response.setRegister(isNewUser);
             UserInfo userInfo = userInfoService.getByUserId(user.getUserId());
-            response.setIsNewUser(1);
+            if (userInfo != null){
+                isNewUser = false;
+                response.setIsNewUser(LoginResponse.NOT_NEW_USER);
+            }
+            response.setRegister(isNewUser);
             if (userInfoDetailService.findByUserId(user.getUserId()) == null) {
                 UserInfoDetail userInfoDetail = new UserInfoDetail();
                 userInfoDetail.setUserId(user.getUserId());
@@ -251,7 +254,7 @@ public class ServiceImpl implements Service {
                 userInfoDetailService.save(userInfoDetail);
             }
             if (isNewUser) {
-                response.setIsNewUser(0);
+                response.setIsNewUser(LoginResponse.NEW_USER);
                 if (userInfo == null) {
                     userInfo = new UserInfo();
                     this.userConvert(user,userInfo);

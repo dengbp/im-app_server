@@ -122,7 +122,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         }
         SortUtil.handlePageSort(requestDto,queryPage,  false);
         String userId = StringUtils.isBlank(requestDto.getUserId())?AppUtil.getCurrentUserId():requestDto.getUserId();
-        queryWrapper.eq(UserMultimedia::getUserId,userId);
+        queryWrapper.eq(UserMultimedia::getUserId,userId).eq(UserMultimedia::getBeUsed,requestDto.getUserId());
         return search(queryPage,queryWrapper);
     }
 
@@ -151,7 +151,7 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     }
 
 
-    private UserMultimedia setUserMul(MultipartFile file,String path,String storeName){
+    private UserMultimedia setUserMul(MultipartFile file,String path,String storeName) throws Exception {
         String originName = file.getOriginalFilename();
         String extName = originName.substring(originName.lastIndexOf(".") + 1);
         UserMultimedia userMultimedia = new UserMultimedia();
@@ -165,9 +165,16 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         userMultimedia.setPath(path);
         userMultimedia.setMultimediaName(originName);
         userMultimedia.setStoreName(storeName);
-        String preFileName = storeName.substring(0,storeName.lastIndexOf("."))+"_small.png";
-        ImgCompressUtil.writeToFile(appProperties.getMultimedia_path()+preFileName, ImgCompressUtil.resize(userMultimedia.getPath(),0.25));
-        userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+preFileName);
+        String addName = storeName.substring(0,storeName.lastIndexOf("."));
+        /** 视频处理 */
+        if(FILE_TYPE.contains(extName)){
+            VideoUtil.randomGrabberFFmpegImage(path,appProperties.getMultimedia_path(),addName);
+            userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+addName+".jpg");
+        }else {
+            String preFileName = addName+"_small.png";
+            ImgCompressUtil.writeToFile(appProperties.getMultimedia_path()+preFileName, ImgCompressUtil.resize(userMultimedia.getPath(),0.25));
+            userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+preFileName);
+        }
         return userMultimedia;
     }
 
