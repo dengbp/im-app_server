@@ -33,6 +33,7 @@ public class UserMultimediaController {
     /**
      * Description 用户多媒体上传接口
      * @param file 文件
+     * @param relationId 关联源文件id,视频封面使用
      * @return com.yr.net.app.base.dto.RestResult
      * @Author dengbp
      * @Date 23:59 2020-11-24
@@ -41,11 +42,11 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "用户多媒体上传", exceptionMessage = "用户多媒体上传失败")
     @Log("用户多媒体上传")
-    public RestResult upload(@RequestParam("file") MultipartFile file)throws IOException {
+    public RestResult upload(@RequestParam("file") MultipartFile file,@RequestPart(value="relationId",required=false) String relationId)throws IOException {
         if (file == null) {
             return RestResult.error("上传失败，文件为空");
         }
-        return RestResult.ok().setResult( userMultimediaService.saveFile(file));
+        return RestResult.ok().setResult( userMultimediaService.saveFile(file,relationId));
     }
 
     /**

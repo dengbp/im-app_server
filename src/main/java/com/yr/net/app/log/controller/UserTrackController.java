@@ -9,6 +9,7 @@ import com.yr.net.app.log.dto.OperationReqDto;
 import com.yr.net.app.log.enums.OperationType;
 import com.yr.net.app.log.enums.OperationType.*;
 import com.yr.net.app.log.service.IUserTrackService;
+import com.yr.net.app.message.service.IUserRelationService;
 import com.yr.net.app.moments.dto.MomentsLikeReqDto;
 import com.yr.net.app.moments.service.ILikeService;
 import com.yr.net.app.tools.AppUtil;
@@ -32,6 +33,8 @@ public class UserTrackController {
     private IUserTrackService userTrackService;
     @Resource
     private ILikeService likeService;
+    @Resource
+    private IUserRelationService userRelationService;
 
     @PostMapping("operation")
     @ControllerEndpoint(operation = "谁看过谁相关信息接口", exceptionMessage = "谁看过谁接口失败")
@@ -63,6 +66,12 @@ public class UserTrackController {
                 break;
             case COMMENT_UNLIKE:
                 saveLike(reqDto,MomentsLikeReqDto.COMMENT,MomentsLikeReqDto.UNLIKE);
+                break;
+            case FOLLOW:
+                userRelationService.follow(reqDto.transformTo(reqDto));
+                break;
+            case UN_FOLLOW:
+                userRelationService.follow(reqDto.transformTo(reqDto));
                 break;
             default:
                 break;

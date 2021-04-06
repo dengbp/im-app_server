@@ -1,5 +1,6 @@
 package com.yr.net.app.log.dto;
 
+import com.yr.net.app.message.controller.dto.FollowReqDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -26,11 +27,18 @@ public class OperationReportDto implements Serializable {
     private String byOperatorId;
 
     /**
-     * 操作类型(传0) 0：浏览用户信息；1：用户动态；2:主题点赞；3：主题取消点赞 4:评论内容点赞；5：评论内容取消点赞  6：关注；.....
+     * 操作类型(传0) 0：浏览用户信息；1：用户动态；2:主题点赞；3：主题取消点赞 4:评论内容点赞；5：评论内容取消点赞  6：关注；7取消关注.....
      */
     @NotNull
     private Integer operatorType;
 
     /** 动态或评论id(动态才需要传) */
     private Long momentId;
+
+    public FollowReqDto transformTo(OperationReportDto reportDto){
+        FollowReqDto followReqDto = new FollowReqDto();
+        followReqDto.setRelationId(reportDto.getByOperatorId());
+        followReqDto.setState(reportDto.getOperatorType()==6?FollowReqDto.FOLLOW:FollowReqDto.UN_FOLLOW);
+        return followReqDto;
+    }
 }

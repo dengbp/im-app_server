@@ -1,29 +1,35 @@
 package com.yr.net.app.moments.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.customer.service.IUserMultimediaService;
+import com.yr.net.app.log.service.IUserExchangeLogService;
+import com.yr.net.app.message.entity.UserRelation;
+import com.yr.net.app.message.service.IUserRelationService;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
 import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import com.yr.net.app.moments.bo.CommentsLikeQueryBo;
 import com.yr.net.app.moments.dto.AddMomentDto;
-import com.yr.net.app.moments.dto.UserMomentsRespDto.*;
-import com.yr.net.app.moments.dto.UserMomentsRespDto;
+import com.yr.net.app.moments.dto.CommentRespDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
-import com.yr.net.app.moments.entity.Multimedia;
+import com.yr.net.app.moments.dto.UserMomentsRespDto;
+import com.yr.net.app.moments.dto.UserMomentsRespDto.ImagesBean;
+import com.yr.net.app.moments.dto.UserMomentsRespDto.VideoBean;
+import com.yr.net.app.moments.entity.CommentArea;
+import com.yr.net.app.moments.entity.Like;
 import com.yr.net.app.moments.entity.UserMoments;
 import com.yr.net.app.moments.mapper.UserMomentsMapper;
 import com.yr.net.app.moments.service.ICommentAreaService;
 import com.yr.net.app.moments.service.ILikeService;
-import com.yr.net.app.moments.service.IMultimediaService;
 import com.yr.net.app.moments.service.IUserMomentsService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.pojo.BaiduMapPositionResponse;
 import com.yr.net.app.tools.AddressByCoordUtil;
 import com.yr.net.app.tools.AppUtil;
@@ -56,7 +62,12 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     private ILikeService likeService;
     @Autowired
     private ICommentAreaService commentAreaService;
+    @Autowired
+    private IUserRelationService userRelationService;
+
     private static Integer COMMENT_TYPE = 0;
+    @Autowired
+    private IUserExchangeLogService userExchangeLogService;
 
     @Override
     public void add(AddMomentDto addMomentDto) throws AppException {
@@ -71,11 +82,18 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         moment.setState(UserMoments.NORMAL);
     }
 
+    public void delete(Long id) throws AppException {
+        this.update(new LambdaUpdateWrapper<UserMoments>().set(UserMoments::getState,UserMoments.DELETE).eq(UserMoments::getId,id));
+    }
+
     @Override
     public List<UserMomentsRespDto> findUserMoments(UserMomentsReqDto reqDto) throws AppException {
         Page<UserMoments> page = new Page<>();
         SortUtil.handlePageSort(reqDto, page, "PUBLIC_TIME", AppConstant.ORDER_DESC, false);
         LambdaQueryWrapper<UserMoments> wrapper = new LambdaQueryWrapper<>();
+        if (reqDto.getMomentId() != null){
+            wrapper.eq(UserMoments::getId,reqDto.getMomentId());
+        }
         wrapper.eq(UserMoments::getState,UserMoments.NORMAL);
         if (StringUtils.isNotBlank(reqDto.getUserId())){
             wrapper.eq(UserMoments::getUserId,reqDto.getUserId());
@@ -144,12 +162,28 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         userMomentsResp.forEach(res -> {
             res.setCommentTotal(0);
             res.setLikeTotal(0);
+            setComments(res);
+            Like like = likeService.getByMomentAndUser(res.getId(),AppUtil.getCurrentUserId());
+            res.setLike(like==null?0:like.getState());
+            UserRelation relation = userRelationService.getFollowState(AppUtil.getCurrentUserId(),res.getUserId());
+            res.setFollow(relation==null?0:relation.getState());
             if (commentTotal.containsKey(res.getId())) {
                 res.setCommentTotal(commentTotal.get(res.getId()).get());
             }
             if (likeTotal.containsKey(res.getId())) {
                 res.setLikeTotal(likeTotal.get(res.getId()).get());
             }
+            res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId()));
         });
+    }
+
+    private void setComments(UserMomentsRespDto comment){
+        List<CommentArea>  commentAreas = commentAreaService.getByMomentId(comment.getId(),0,50);
+        if (commentAreas.isEmpty()){
+            return;
+        }
+        List<CommentRespDto> commentRespDtos = new ArrayList<>();
+        commentAreas.forEach(a-> commentRespDtos.add(CommentRespDto.assembly(a,comment.getUserId(),comment.getUserName())));
+        comment.setCommentRespDtos(commentRespDtos);
     }
 }

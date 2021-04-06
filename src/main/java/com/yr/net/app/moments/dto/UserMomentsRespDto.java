@@ -80,6 +80,30 @@ public class UserMomentsRespDto {
 
     private VideoBean videoBean;
 
+    /** 0未关注，1已关注  */
+    private Integer follow;
+    /** 0未点赞或已取消点赞，1已点赞 （已点赞的不能继续点赞，再点就是变成取消点赞，未点赞或已取消点赞情况下，再点又是变成点赞） */
+    private Integer like;
+    /** 是否已付款费0已付，1未付款 */
+    private Integer purview;
+
+    /** 默认自带前5条评论  */
+    private List<CommentRespDto> commentRespDtos;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Data
     public static class ImagesBean {

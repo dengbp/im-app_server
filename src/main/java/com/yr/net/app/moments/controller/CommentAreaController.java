@@ -70,15 +70,12 @@ public class CommentAreaController {
 
 
     @PostMapping("/list")
-    @ControllerEndpoint(operation = "删除评论", exceptionMessage = "删除评论评论失败")
+    @ControllerEndpoint(operation = "评论查询", exceptionMessage = "评论查询失败")
     @ResponseBody
-    @Log("删除评论接口")
+    @Log("评论查询接口")
     public RestResult list(@RequestBody @Valid AddMomentAreaDto addMomentDto){
         if (addMomentDto.getCommentId()==null){
             return RestResult.error("被评论的主题id或评论id不能为空");
-        }
-        if (addMomentDto.getType()==null){
-            return RestResult.error("被评论的类型不能为空");
         }
         return RestResult.ok().setResult(commentAreaService.list(addMomentDto));
     }

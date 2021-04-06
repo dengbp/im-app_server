@@ -1,10 +1,13 @@
 package com.yr.net.app.tools;
+import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacpp.avutil;
+import  org.bytedeco.javacpp.helper.opencv_core.*;
 
 import javax.imageio.ImageIO;
 
@@ -12,11 +15,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
+@Slf4j
 public class VideoUtil {
 
     public static void main(String[] args) throws Exception {
 
-        randomGrabberFFmpegImage("/Users/dengbp/Movies/1568023588910627.mp4", "/Users/dengbp/Downloads", "test2");
+        randomGrabberFFmpegImage("/Users/dengbp/Movies/1568023588910627.mp4", "/Users/dengbp/Downloads", Math.random()+"");
     }
 
 
@@ -88,6 +93,25 @@ public class VideoUtil {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * 获取视频时长，单位为秒
+     * @param file
+     * @return 时长（s）
+     */
+    public static Long getVideoTime(File file){
+        Long times = 0L;
+        try {
+            FFmpegFrameGrabber ff = new FFmpegFrameGrabber(file);
+            ff.start();
+            times = ff.getLengthInTime()/(1000*1000);
+            ff.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return times;
     }
 
 }

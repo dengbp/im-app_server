@@ -21,13 +21,14 @@ public interface IUserMultimediaService extends IService<UserMultimedia> {
     /**
      * Description 用户多媒体
      * @param file
+     * @param relationId 关联源文件id,视频封面使用
      * @throws AppException
      * @return MultipartFileRespDto
      * @Author dengbp
      * @Date 00:42 2020-11-25
      **/
 
-    MultipartFileRespDto saveFile(MultipartFile file)throws AppException;
+    MultipartFileRespDto saveFile(MultipartFile file,String relationId)throws AppException;
 
 
     /**

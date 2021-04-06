@@ -31,6 +31,17 @@ public interface ILikeService extends IService<Like> {
     Map<Long, AtomicInteger> getCommentLikeTotal(CommentsLikeQueryBo queryBo,Integer type)throws AppException;
 
     /**
+     * Description 取点赞状态
+     * @param commentId
+ * @param userId
+     * @throws AppException
+     * @return com.yr.net.app.moments.entity.Like
+     * @Author dengbp
+     * @Date 1:27 AM 3/29/21
+     **/
+    Like getByMomentAndUser(Long commentId,String userId)throws AppException;
+
+    /**
      * Description 评论count统计
      * @param source
      * @param result

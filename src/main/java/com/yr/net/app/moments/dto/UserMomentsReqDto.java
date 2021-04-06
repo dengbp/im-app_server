@@ -14,5 +14,7 @@ public class UserMomentsReqDto extends QueryRequestPage {
 
     private String userId;
 
+    private Long momentId;
+
 
 }

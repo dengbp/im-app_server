@@ -21,7 +21,17 @@ public class CommentArea implements Serializable {
     public static Integer NORMAL = 0;
     public static Integer DELETE = 1;
 
+
+    //对原主题评论
+    public final static int COMMENT_TYPE_SINGLE = 0;
+    //回复评论
+    public final static int COMMENT_TYPE_REPLY = 1;
+
     private static final long serialVersionUID = 1L;
+
+
+
+
 
     @TableId
     private Long id;
@@ -52,7 +62,7 @@ public class CommentArea implements Serializable {
     private Integer state;
 
     /**
-     * 被评论的类型 0：对主题评论；1：对评论内容评论
+     * 评论的类型 0：对主题评论；1：对评论内容评论
      */
     private Integer type;
 

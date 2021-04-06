@@ -25,7 +25,7 @@ public class MultipartInfoRequestDto implements Serializable {
      */
     @NotNull(message = "latitude 不能为空")
     private String latitude;
-    @NotNull
+
     private String mulIds;
 
     /** 用处:0个人资料里的相册(或视频),1个人动态 */

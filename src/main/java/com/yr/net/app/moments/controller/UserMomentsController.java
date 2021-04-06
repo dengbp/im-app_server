@@ -1,6 +1,7 @@
 package com.yr.net.app.moments.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
@@ -40,6 +41,19 @@ public class UserMomentsController {
         userMomentsService.add(momentDto);
         return RestResult.ok();
     }
+
+    @PostMapping("/delete")
+    @ControllerEndpoint(operation = "用户动态", exceptionMessage = "用户动态失败")
+    @ResponseBody
+    @Log("用户动态")
+    public RestResult delete(@RequestBody JSONObject jsonParam){
+        if (jsonParam.get("id") == null){
+            return RestResult.error("id不能为空");
+        }
+        userMomentsService.delete(jsonParam.getLong("id"));
+        return RestResult.ok();
+    }
+
 
     @PostMapping("/list")
     @ControllerEndpoint(operation = "用户动态", exceptionMessage = "用户动态失败")

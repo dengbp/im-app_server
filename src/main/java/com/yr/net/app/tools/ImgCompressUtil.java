@@ -40,11 +40,11 @@ public class ImgCompressUtil {
     }
 
     /**
-     *
+     *  保存缩略图
      * @param file 文件全路径
      * @param img 缩略图
      */
-    public static void writeToFile(String file,BufferedImage img){
+    public static void saveThumbnail(String file,BufferedImage img){
         try {
             File destFile = new File(file);
             FileOutputStream out = new FileOutputStream(destFile);
@@ -64,6 +64,6 @@ public class ImgCompressUtil {
         ImgCompressUtil.writeToFile(fileName+"_middle.png", bufferedImage);*/
 
         BufferedImage img = ImgCompressUtil.resize(fileName, 0.25);
-        ImgCompressUtil.writeToFile(fileName+"_small.png", img);
+        ImgCompressUtil.saveThumbnail(fileName+"_small.png", img);
     }
 }

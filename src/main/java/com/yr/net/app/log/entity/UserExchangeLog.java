@@ -24,6 +24,8 @@ public class UserExchangeLog implements Serializable {
      */
     private String flowCode;
 
+    public static Integer INCOME_TYPE = 1;
+    public static Integer PAY_TYPE = 0;
     /**
      * 交易类型 0支付1：收入
      */
@@ -32,13 +34,16 @@ public class UserExchangeLog implements Serializable {
     /**
      * 交易用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 交易时间
      */
     private LocalDateTime exchangeTime;
 
+
+    public static Integer SUCCESS = 0;
+    public static Integer FAIL = 1;
     /**
      * 交易状态 0成功1失败
      */
@@ -55,8 +60,11 @@ public class UserExchangeLog implements Serializable {
     private String exchangeItem;
 
     /**
-     * 交易项目类型 0:平台会员；1：用户相册、用户信息项目；2：用户动态项目
+     * 交易项目类型 0:用户联系方式；1：用户相册、用户信息项目；2：用户动态项目
      */
+    public static Integer USER_INFO = 1;
+    public static Integer MOMENT = 2;
+
     private Integer exchangeItemType;
 
     /**

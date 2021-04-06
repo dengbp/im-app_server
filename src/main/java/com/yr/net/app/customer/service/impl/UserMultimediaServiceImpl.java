@@ -1,6 +1,7 @@
 package com.yr.net.app.customer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -44,8 +45,9 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     @Resource
     private IUserMomentsService userMomentsService;
 
+
     @Override
-    public MultipartFileRespDto saveFile(MultipartFile file) throws AppException {
+    public MultipartFileRespDto saveFile(MultipartFile file, String relationId) throws AppException {
         String originName = file.getOriginalFilename();
         log.info("begin upload file[{}]",originName);
         String path = FileUtil.getFilePath(appProperties,originName);
@@ -55,13 +57,17 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         }
         try {
             file.transferTo(dest);
-            UserMultimedia userMultimedia = this.setUserMul(file,path,path.substring(path.lastIndexOf("/")+1));
-            this.save(userMultimedia);
+            UserMultimedia userMultimedia = this.setUserMul(file, relationId,path,path.substring(path.lastIndexOf("/")+1));
             log.info("upload file[{}]success",originName);
             MultipartFileRespDto respDto = new MultipartFileRespDto();
-            respDto.setId(userMultimedia.getId());
-            respDto.setFileUrl(userMultimedia.getUrl());
-            respDto.setPreviewUrl(userMultimedia.getPreviewUrl());
+            if(StringUtils.isBlank(relationId)){
+                this.save(userMultimedia);
+            }
+            if (userMultimedia != null){
+                respDto.setId(userMultimedia.getId());
+                respDto.setFileUrl(userMultimedia.getUrl());
+                respDto.setPreviewUrl(userMultimedia.getPreviewUrl());
+            }
             return respDto;
         } catch (Exception e) {
             log.error("上传失败",e);
@@ -74,9 +80,13 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         BaiduMapPositionResponse positionResponse = AddressByCoordUtil.getAdd(coordinate.getLatitude(),coordinate.getLongitude());
         String addr = positionResponse==null?"地址异常":positionResponse.getFormattedAddress();
         UserMoments moment = null;
+        //用处:0个人资料里的相册(或视频),1个人动态
         if (using==1){
             moment = UserMomentsSub.buildUserMoment(addr,isFree,price,showWord);
             userMomentsService.saveOrUpdate(moment);
+        }
+        if (StringUtils.isBlank(ids)){
+            return;
         }
         UserMoments finalMoment = moment;
         Arrays.asList(ids.split(",")).forEach(id->{
@@ -151,9 +161,17 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
     }
 
 
-    private UserMultimedia setUserMul(MultipartFile file,String path,String storeName) throws Exception {
+    private UserMultimedia setUserMul(MultipartFile file,String relationId,String path,String storeName) throws Exception {
         String originName = file.getOriginalFilename();
         String extName = originName.substring(originName.lastIndexOf(".") + 1);
+        String addName = storeName.substring(0,storeName.lastIndexOf("."));
+        if(StringUtils.isNotBlank(relationId)){
+            /** 视频处理(centos环境下暂无法使用) */
+            /* VideoUtil.randomGrabberFFmpegImage(path,appProperties.getMultimedia_path(),addName);*/
+            this.update(new LambdaUpdateWrapper<UserMultimedia>().eq(UserMultimedia::getId,Long.parseLong(relationId)).set(UserMultimedia::getPreviewUrl,appProperties.getMultimedia_url()+"/"+addName+"."+extName));
+            return this.getById(Long.parseLong(relationId));
+        }
+
         UserMultimedia userMultimedia = new UserMultimedia();
         userMultimedia.setUserId(AppUtil.getCurrentUserId());
         userMultimedia.setCreatedTime(LocalDateTime.now());
@@ -165,15 +183,12 @@ public class UserMultimediaServiceImpl extends ServiceImpl<UserMultimediaMapper,
         userMultimedia.setPath(path);
         userMultimedia.setMultimediaName(originName);
         userMultimedia.setStoreName(storeName);
-        String addName = storeName.substring(0,storeName.lastIndexOf("."));
-        /** 视频处理 */
-        if(FILE_TYPE.contains(extName)){
-            VideoUtil.randomGrabberFFmpegImage(path,appProperties.getMultimedia_path(),addName);
-            userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+addName+".jpg");
-        }else {
-            String preFileName = addName+"_small.png";
-            ImgCompressUtil.writeToFile(appProperties.getMultimedia_path()+preFileName, ImgCompressUtil.resize(userMultimedia.getPath(),0.25));
-            userMultimedia.setPreviewUrl(appProperties.getMultimedia_url()+"/"+preFileName);
+        /** 非视频处理 */
+        if (!FILE_TYPE.contains(extName)) {
+            /** 图片上传的时候要创建缩略图并存储 */
+            String preFileName = addName + "_small.png";
+            ImgCompressUtil.saveThumbnail(appProperties.getMultimedia_path() + preFileName, ImgCompressUtil.resize(userMultimedia.getPath(), 0.25));
+            userMultimedia.setPreviewUrl(appProperties.getMultimedia_url() + "/" + preFileName);
         }
         return userMultimedia;
     }

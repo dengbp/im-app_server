@@ -15,7 +15,8 @@ public enum OperationType {
     THEME_UNLIKE(3,"主题取消点赞"),
     COMMENT_LIKE(4,"评论内容点赞"),
     COMMENT_UNLIKE(5,"评论内容取消点赞"),
-    FOLLOW(6,"关注");
+    FOLLOW(6,"关注"),
+    UN_FOLLOW(7,"取消关注");
 
 
 

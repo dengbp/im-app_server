@@ -31,6 +31,16 @@ public interface IUserMomentsService extends IService<UserMoments> {
     void add(AddMomentDto addMomentDto)throws AppException;
 
     /**
+     * Description 删除动态
+     * @param id 发布的动态id
+     * @throws AppException
+     * @return void
+     * @Author dengbp
+     * @Date 6:16 PM 3/30/21
+     **/
+    void delete(Long id) throws AppException;
+
+    /**
      * Description todo
      * @param reqDto
      * @throws AppException
