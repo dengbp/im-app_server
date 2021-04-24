@@ -2,7 +2,9 @@ package com.yr.net.app.moments.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.moments.dto.AddMomentDto;
+import com.yr.net.app.moments.dto.AddSimpleMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsRespDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.entity.UserMoments;
@@ -29,6 +31,17 @@ public interface IUserMomentsService extends IService<UserMoments> {
      **/
 
     void add(AddMomentDto addMomentDto)throws AppException;
+
+    /**
+     * Description 发布动态
+     * @param addMomentDto
+     * @throws AppException
+     * @return void
+     * @Author dengbp
+     * @Date 1:57 PM 2/24/21
+     **/
+    void add(AddSimpleMomentDto addMomentDto)throws AppException;
+
 
     /**
      * Description 删除动态

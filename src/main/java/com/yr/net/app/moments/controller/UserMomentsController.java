@@ -8,6 +8,7 @@ import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.log.dto.OperationReqDto;
 import com.yr.net.app.log.service.IUserTrackService;
 import com.yr.net.app.moments.dto.AddMomentDto;
+import com.yr.net.app.moments.dto.AddSimpleMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
 import com.yr.net.app.moments.service.IUserMomentsService;
 import com.yr.net.app.tools.AppUtil;
@@ -38,6 +39,15 @@ public class UserMomentsController {
     @ResponseBody
     @Log("发布动态接口")
     public RestResult add(@RequestBody  @Valid AddMomentDto momentDto){
+        userMomentsService.add(momentDto);
+        return RestResult.ok();
+    }
+
+    @PostMapping("/sync")
+    @ControllerEndpoint(operation = "发布动态数据同步", exceptionMessage = "发布动态数据同步失败")
+    @ResponseBody
+    @Log("发布动态数据同步接口")
+    public RestResult sync(@RequestBody AddSimpleMomentDto momentDto){
         userMomentsService.add(momentDto);
         return RestResult.ok();
     }

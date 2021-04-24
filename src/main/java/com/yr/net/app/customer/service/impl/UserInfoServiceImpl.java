@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private AppProperties appProperties;
     @Autowired
     private IZodiacInfoService zodiacInfoService;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @Override
     public List<UserBaseInfoResponseDto> findOnline(OnlineRequestDto query) throws AppException {
@@ -164,5 +168,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             throw  new AppException("获取年龄异常");
         }
         return responseDto;
+    }
+
+    @Override
+    public UserInfo getRandOne() {
+        return userInfoMapper.randOne();
     }
 }

@@ -11,16 +11,15 @@ import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserMultimedia;
 import com.yr.net.app.customer.service.IUserInfoService;
 import com.yr.net.app.customer.service.IUserMultimediaService;
+import com.yr.net.app.log.entity.UserSignLog;
 import com.yr.net.app.log.service.IUserExchangeLogService;
+import com.yr.net.app.log.service.IUserSignLogService;
 import com.yr.net.app.message.entity.UserRelation;
 import com.yr.net.app.message.service.IUserRelationService;
 import com.yr.net.app.moments.bo.CommentAreaQueryBo;
 import com.yr.net.app.moments.bo.CommentMultiQueryBo;
 import com.yr.net.app.moments.bo.CommentsLikeQueryBo;
-import com.yr.net.app.moments.dto.AddMomentDto;
-import com.yr.net.app.moments.dto.CommentRespDto;
-import com.yr.net.app.moments.dto.UserMomentsReqDto;
-import com.yr.net.app.moments.dto.UserMomentsRespDto;
+import com.yr.net.app.moments.dto.*;
 import com.yr.net.app.moments.dto.UserMomentsRespDto.ImagesBean;
 import com.yr.net.app.moments.dto.UserMomentsRespDto.VideoBean;
 import com.yr.net.app.moments.entity.CommentArea;
@@ -40,6 +39,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,18 +68,57 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     private static Integer COMMENT_TYPE = 0;
     @Autowired
     private IUserExchangeLogService userExchangeLogService;
+    @Resource
+    private IUserSignLogService userSignLogService;
+    @Resource
+    private UserMomentsMapper userMomentsMapper;
 
     @Override
     public void add(AddMomentDto addMomentDto) throws AppException {
         UserMoments moment = new UserMoments();
         BeanUtils.copyProperties(addMomentDto,moment);
-        BaiduMapPositionResponse response = AddressByCoordUtil.getAdd(addMomentDto.getLatitude().toString(),addMomentDto.getLongitude().toString());
+        BaiduMapPositionResponse response = AddressByCoordUtil.getAdd(addMomentDto.getLatitude(),addMomentDto.getLongitude());
         if (response != null){
             moment.setPublicAddr(response.getCity()+response.getDistrict());
         }
         moment.setPublicTime(LocalDateTime.now());
         moment.setUserId(AppUtil.getCurrentUserId());
         moment.setState(UserMoments.NORMAL);
+        save(moment);
+    }
+
+    @Override
+    public void add(AddSimpleMomentDto addMomentDto) throws AppException {
+        UserInfo user = userInfoService.getRandOne();
+        LocalDateTime now = LocalDateTime.now();
+        UserMoments moment = new UserMoments();
+        moment.setUserId(user.getUserId());
+        moment.setState(UserMoments.NORMAL);
+        moment.setPublicTime(now);
+        List<UserSignLog> logs = userSignLogService.searchByUserId(user.getUserId());
+        moment.setPublicAddr(user.getNowLife());
+        if (!logs.isEmpty()){
+            moment.setPublicAddr(logs.get(0).getSignAddr());
+        }
+        moment.setIsFree(0);
+        moment.setShowWord(addMomentDto.getShowWord());
+        userMomentsMapper.insert(moment);
+        UserMultimedia userMultimedia = new UserMultimedia();
+        userMultimedia.setUserId(user.getUserId());
+        userMultimedia.setCreatedTime(now);
+        userMultimedia.setState(0);
+        userMultimedia.setFileSize(0L);
+        userMultimedia.setFormat("mp4");
+        userMultimedia.setUrl(addMomentDto.getUrl());
+        userMultimedia.setUploadTime(now);
+        userMultimedia.setPreviewUrl(addMomentDto.getPreviewUrl());
+        userMultimedia.setMulType(1);
+        userMultimedia.setBeUsed(1);
+        userMultimedia.setCommentId(moment.getId());
+        userMultimedia.setCreatedTime(now);
+        userMultimedia.setCreatedBy(user.getUserName());
+        userMultimedia.setType(0);
+        userMultimediaService.save(userMultimedia);
     }
 
     public void delete(Long id) throws AppException {

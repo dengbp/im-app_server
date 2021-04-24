@@ -36,6 +36,7 @@ public class ShiroConfig {
 
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainDefinitionMap.put("/send_code", "anon");
+        filterChainDefinitionMap.put("/moments/user-moments/sync", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/pc_session", "anon");
         filterChainDefinitionMap.put("/amr2mp3", "anon");

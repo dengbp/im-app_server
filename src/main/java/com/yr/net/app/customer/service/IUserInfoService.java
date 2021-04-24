@@ -79,4 +79,7 @@ public interface IUserInfoService extends IService<UserInfo> {
      * @Date 00:28 2020-12-05
      **/
     UserBaseInfoResponseDto getUserInfo(UserBaseInfoRequestDto requestDto)throws AppException;
+
+    UserInfo getRandOne();
+
 }
