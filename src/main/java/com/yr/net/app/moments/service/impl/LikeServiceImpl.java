@@ -52,12 +52,11 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements IL
 
     @Override
     public Map<Long, AtomicInteger> getCommentLikeTotal(CommentsLikeQueryBo queryBo,Integer type) throws AppException {
-        LambdaQueryWrapper<Like> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Like::getState,1).eq(Like::getType,type);
+        LambdaQueryWrapper<Like> queryWrapper = new LambdaQueryWrapper<Like>().eq(Like::getState,1).eq(Like::getType,type);
         if (StringUtils.isNotBlank(queryBo.getMomentsIds())) {
             queryWrapper.in(Like::getCommentId,queryBo.getMomentsIds());
         }
-        Map<Long, AtomicInteger> result = new HashMap<>(32);
+        Map<Long, AtomicInteger> result = new HashMap<>(1);
         total(this.list(queryWrapper),result);
         return result;
     }
