@@ -33,4 +33,5 @@ public class AppProperties {
     private String[] autoOpenBrowserEnv = {};
     private String multimedia_url;
     private String multimedia_path;
+    private WxProperties wx = new WxProperties();
 }

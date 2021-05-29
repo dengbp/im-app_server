@@ -201,7 +201,8 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         userMomentsResp.forEach(res -> {
             res.setCommentTotal(0);
             res.setLikeTotal(0);
-            setComments(res);
+            res.setCommentRespDtos(new ArrayList<>());
+            setComments(res,res.getId(),0);
             Like like = likeService.getByMomentAndUser(res.getId(),AppUtil.getCurrentUserId());
             res.setLike(like==null?0:like.getState());
             UserRelation relation = userRelationService.getFollowState(AppUtil.getCurrentUserId(),res.getUserId());
@@ -216,13 +217,15 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         });
     }
 
-    private void setComments(UserMomentsRespDto comment){
-        List<CommentArea>  commentAreas = commentAreaService.getByMomentId(comment.getId(),0,50);
+    private void setComments(UserMomentsRespDto comment, Long id,Integer type){
+        List<CommentArea>  commentAreas = commentAreaService.getByMomentId(id,type,50);
         if (commentAreas.isEmpty()){
             return;
         }
-        List<CommentRespDto> commentRespDtos = new ArrayList<>();
-        commentAreas.forEach(a-> commentRespDtos.add(CommentRespDto.assembly(a,comment.getUserId(),comment.getUserName())));
-        comment.setCommentRespDtos(commentRespDtos);
+        commentAreas.forEach(a-> {
+            comment.getCommentRespDtos().add(CommentRespDto.assembly(a,comment.getUserId(),comment.getUserName()));
+            //取评论的回复内容
+           /* this.setComments(comment,a.getId(),1);*/
+        });
     }
 }
