@@ -1,6 +1,7 @@
 package com.yr.net.app.customer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,9 +49,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public List<UserBaseInfoResponseDto> findOnline(OnlineRequestDto query) throws AppException {
 
         Page<UserInfo> page = new Page<>();
-        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         page.setCurrent(query.getPageNum());
         page.setSize(query.getPageSize());
+        wrapper.eq("sex",getGen());
+        wrapper.orderByDesc("RAND()");
         IPage<UserInfo> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserBaseInfoResponseDto> userInfoResponses = new ArrayList<>();
         infoIPage.getRecords().forEach(e->{
@@ -92,6 +95,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 eq(UserInfo::getUserId, baseInfo.getUserId()));
     }
 
+    private int getGen(){
+        int gen = 1;
+        if (AppUtil.getCurrentUser() != null){
+            gen = AppUtil.getCurrentUser().getSex()==1?2:1;
+        }
+        return gen;
+    }
+
     /**
      * Description 取附近的人参考：
      * @see com.yr.net.app.NearBySearchTest
@@ -105,9 +116,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public List<NearUserResponseDto> findNear(QueryRequestPage requestPage, String userId, Position position) throws AppException {
         Page<UserInfo> page = new Page<>();
-        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         page.setCurrent(requestPage.getPageNum());
         page.setSize(requestPage.getPageSize());
+        wrapper.eq("sex",getGen());
+        wrapper.orderByDesc("RAND()");
         IPage<UserInfo> list = this.baseMapper.selectPage(page, wrapper);
         List<NearUserResponseDto> responses = new ArrayList<>();
         list.getRecords().forEach(userInfo -> {

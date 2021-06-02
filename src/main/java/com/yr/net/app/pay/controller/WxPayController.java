@@ -38,7 +38,7 @@ public class WxPayController {
     @ControllerEndpoint(operation = "微信App支付", exceptionMessage = "微信App支付失败")
     @ResponseBody
     @Log("微信App支付接口")
-    public RestResult appPay(@RequestBody PayReqDto pay) {
+    public RestResult appPay(@RequestBody PayReqDto pay) throws Exception {
         log.info("开始执行下单...");
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         return RestResult.ok().setResult((wxPayService.appPay(request, pay)));

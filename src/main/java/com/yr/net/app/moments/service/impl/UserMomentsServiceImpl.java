@@ -32,6 +32,7 @@ import com.yr.net.app.moments.service.IUserMomentsService;
 import com.yr.net.app.pojo.BaiduMapPositionResponse;
 import com.yr.net.app.tools.AddressByCoordUtil;
 import com.yr.net.app.tools.AppUtil;
+import com.yr.net.app.tools.RandomUtil;
 import com.yr.net.app.tools.SortUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -89,6 +91,12 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
 
     @Override
     public void add(AddSimpleMomentDto addMomentDto) throws AppException {
+        String title = addMomentDto.getShowWord();
+        if (StringUtils.isNotBlank(title)){
+            if (count(new LambdaQueryWrapper<UserMoments>().eq(UserMoments::getShowWord,title))>0){
+                return;
+            }
+        }
         UserInfo user = userInfoService.getRandOne();
         LocalDateTime now = LocalDateTime.now();
         UserMoments moment = new UserMoments();
@@ -101,7 +109,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             moment.setPublicAddr(logs.get(0).getSignAddr());
         }
         moment.setIsFree(0);
-        moment.setShowWord(addMomentDto.getShowWord());
+        moment.setShowWord(title);
         userMomentsMapper.insert(moment);
         UserMultimedia userMultimedia = new UserMultimedia();
         userMultimedia.setUserId(user.getUserId());
@@ -119,7 +127,29 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         userMultimedia.setCreatedBy(user.getUserName());
         userMultimedia.setType(0);
         userMultimediaService.save(userMultimedia);
+        addLike(moment.getId(),moment.getUserId());
     }
+
+    /**
+     * Description 伪造点赞
+     * @param
+     * @return void
+     * @Author dengbp
+     * @Date 1:02 PM 6/1/21
+     **/
+
+    private void addLike(Long momentId,String publicUser){
+
+        for (int i = 0; i< RandomUtil.getRandom(); i++){
+            MomentsLikeReqDto likeReqDto = new MomentsLikeReqDto();
+            likeReqDto.setType(MomentsLikeReqDto.THEME);
+            likeReqDto.setState(MomentsLikeReqDto.LIKE);
+            likeReqDto.setMomentId(momentId);
+            likeReqDto.setPublicUserId(publicUser);
+            likeService.add(likeReqDto);
+        }
+    }
+
 
     public void delete(Long id) throws AppException {
         this.update(new LambdaUpdateWrapper<UserMoments>().set(UserMoments::getState,UserMoments.DELETE).eq(UserMoments::getId,id));

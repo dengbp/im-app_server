@@ -67,4 +67,19 @@ public class RandomUtil {
         }
     }
 
+
+    private static int max = 482;
+    private static int min = 12;
+    /**
+     * Description 指定范围内取随机数
+     * @param
+     * @return int
+     * @Author dengbp
+     * @Date 1:15 PM 6/1/21
+     **/
+    public static int getRandom(){
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
+    }
+
 }

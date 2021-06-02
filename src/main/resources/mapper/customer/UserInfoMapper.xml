@@ -2,8 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yr.net.app.customer.mapper.UserInfoMapper">
 
-    <select id="randOne" resultType="com.yr.net.app.customer.entity.UserInfo">
+    <select id="randOne2" resultType="com.yr.net.app.customer.entity.UserInfo">
         SELECT * FROM user_info WHERE id >= ((SELECT MAX(id) FROM user_info)-(SELECT MIN(id) FROM user_info)) * RAND() + (SELECT MIN(id) FROM user_info)  LIMIT 1
+    </select>
+
+    <select id="randOne" resultType="com.yr.net.app.customer.entity.UserInfo">
+        SELECT * FROM user_info  ORDER BY RAND() LIMIT 1
     </select>
 
 </mapper>

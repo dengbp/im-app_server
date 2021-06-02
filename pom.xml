@@ -298,6 +298,19 @@
 			<version>2.9.2</version>
 		</dependency>
 
+	<!--	<dependency>
+			<groupId>com.github.wechatpay-apiv3</groupId>
+			<artifactId>wechatpay-apache-httpclient</artifactId>
+			<version>0.2.2</version>
+		</dependency>-->
+
+		<!-- 微信支付 -->
+		<dependency>
+			<groupId>com.github.wxpay</groupId>
+			<artifactId>wxpay-sdk</artifactId>
+			<version>0.0.3</version>
+		</dependency>
+
 
 		<!-- 图形计算  -->
 		<!-- https://mvnrepository.com/artifact/org.locationtech.spatial4j/spatial4j -->
@@ -512,7 +525,7 @@
 				<profileActive>dev</profileActive>
 			</properties>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 		</profile>
 		<profile>
@@ -530,7 +543,7 @@
 				<profileActive>prod</profileActive>
 			</properties>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
 	</profiles>

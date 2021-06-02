@@ -54,4 +54,5 @@ public class WxProperties {
     /*证书路径*/
     private String certificate_path;
 
+
 }

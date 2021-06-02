@@ -8,6 +8,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
+    /** 随机取数据 */
     UserInfo randOne();
+
+    UserInfo randOne2();
 
 }
