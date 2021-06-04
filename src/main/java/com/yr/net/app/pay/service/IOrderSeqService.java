@@ -9,7 +9,7 @@ import com.yr.net.app.pay.entity.OrderSeq;
 public interface IOrderSeqService extends IService<OrderSeq> {
 
     /**
-     * Description todo
+     * Description 递增序列
      * @param
      * @return long
      * @Author dengbp

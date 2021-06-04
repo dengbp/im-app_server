@@ -24,16 +24,19 @@ public class UserAccount implements Serializable {
     private String userId;
 
     /**
-     * 剩余财富，单位分
+     * 剩余财富(余额)，单位分
      */
-    private BigDecimal balance;
+    private Integer balance;
 
     /**
      * 用户头像
      */
     private String icon;
 
-
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 登录/显示用户名(关联im-server的展示昵称)
@@ -41,13 +44,17 @@ public class UserAccount implements Serializable {
     private String userName;
 
     /**
-     * 充值时间,格式:yyyymmddHHMMSS
+     * 第一次充值时间,格式:yyyymmddHHMMSS
      */
     private Long createTime;
 
+    /**
+     * 充值/支付/提现时间,格式:yyyymmddHHMMSS
+     */
+    private Long updateTime;
 
     /**
-     * 状态 0正常1：挂失2：过期
+     * 状态 0正常1：禁用
      */
     public static Integer NORMAL = 0;
     private Integer state;

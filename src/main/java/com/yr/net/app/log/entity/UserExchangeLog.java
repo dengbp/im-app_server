@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Table;
+
 /**
  * 用户交易日志
  *
@@ -15,12 +17,13 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@Table(name = "user_exchange_log")
 public class UserExchangeLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 交易流水 支付方和接收方要同个流水号
+     * 交易流水
      */
     private String flowCode;
 
@@ -32,9 +35,14 @@ public class UserExchangeLog implements Serializable {
     private Integer exchangeType;
 
     /**
-     * 交易用户id
+     * 支付用户id
      */
-    private String userId;
+    private String payUserId;
+
+    /**
+     * 支付用户id
+     */
+    private String receiveUserId;
 
     /**
      * 交易时间
@@ -42,8 +50,8 @@ public class UserExchangeLog implements Serializable {
     private LocalDateTime exchangeTime;
 
 
-    public static Integer SUCCESS = 0;
-    public static Integer FAIL = 1;
+    public static transient  Integer SUCCESS = 0;
+    public static  transient Integer FAIL = 1;
     /**
      * 交易状态 0成功1失败
      */
@@ -60,10 +68,11 @@ public class UserExchangeLog implements Serializable {
     private String exchangeItem;
 
     /**
-     * 交易项目类型 0:用户联系方式；1：用户相册、用户信息项目；2：用户动态项目
+     * 交易项目类型 0:用户基本信息(用户信息表)；1：用户相册(用户相册表)；2：用户动态项目(动态表)；3：用户活动轨迹
      */
-    public static Integer USER_INFO = 1;
-    public static Integer MOMENT = 2;
+    public static transient Integer USER_INFO = 0;
+    public static transient Integer ALBUM = 1;
+    public static transient Integer MOMENT = 2;
 
     private Integer exchangeItemType;
 
@@ -81,16 +90,6 @@ public class UserExchangeLog implements Serializable {
      * 创建时间
      */
     private LocalDateTime createdTime;
-
-    /**
-     * 更新人
-     */
-    private String updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedTime;
 
 
 }

@@ -32,7 +32,7 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements IL
     @Override
     public void add(MomentsLikeReqDto dto) throws AppException {
         Like like = new Like();
-        like.setLikeUserId(AppUtil.getCurrentUserId());
+        like.setLikeUserId(StringUtils.isBlank(dto.getLikeUserId())?AppUtil.getCurrentUserId():dto.getLikeUserId());
         like.setPublicUserId(dto.getPublicUserId());
         like.setCommentId(dto.getMomentId());
         like.setType(dto.getType());
@@ -53,10 +53,10 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements IL
     @Override
     public Map<Long, AtomicInteger> getCommentLikeTotal(CommentsLikeQueryBo queryBo,Integer type) throws AppException {
         LambdaQueryWrapper<Like> queryWrapper = new LambdaQueryWrapper<Like>().eq(Like::getState,1).eq(Like::getType,type);
-        if (StringUtils.isNotBlank(queryBo.getMomentsIds())) {
+        if (queryBo.getMomentsIds()!=null && !queryBo.getMomentsIds().isEmpty()) {
             queryWrapper.in(Like::getCommentId,queryBo.getMomentsIds());
         }
-        Map<Long, AtomicInteger> result = new HashMap<>(1);
+        Map<Long, AtomicInteger> result = new HashMap<>();
         total(this.list(queryWrapper),result);
         return result;
     }

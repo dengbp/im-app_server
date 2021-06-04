@@ -31,6 +31,7 @@ public class RandomUtil {
     }
 
 
+
     /**
      * 生成32位随机数字
      *
@@ -69,7 +70,7 @@ public class RandomUtil {
 
 
     private static int max = 482;
-    private static int min = 12;
+    private static int min = 100;
     /**
      * Description 指定范围内取随机数
      * @param

@@ -1,10 +1,9 @@
 package com.yr.net.app.log.service;
 
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.log.entity.UserExchangeLog;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * @author dengbp
@@ -23,5 +22,15 @@ public interface IUserExchangeLogService extends IService<UserExchangeLog> {
 
 
     int findMomentPayByUser(Long momentId,String userId)throws AppException;
+
+    /**
+     * Description 用户交易记录
+     * @param reqDto
+     * @throws AppException
+     * @return void
+     * @Author dengbp
+     * @Date 8:31 PM 6/2/21
+     **/
+    void insert(ExchangeLogReqDto reqDto)throws AppException;
 
 }

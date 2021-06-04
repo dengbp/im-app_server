@@ -72,6 +72,7 @@ public class TransactionalConfig {
         attributesMap.put("modify*", required);
         attributesMap.put("edit*", required);
         attributesMap.put("insert*", required);
+        attributesMap.put("pay*", required);
         attributesMap.put("delete*", required);
         attributesMap.put("do*", required);
         attributesMap.put("create*", required);

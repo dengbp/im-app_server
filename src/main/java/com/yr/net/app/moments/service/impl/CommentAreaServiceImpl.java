@@ -86,7 +86,7 @@ public class CommentAreaServiceImpl extends ServiceImpl<CommentAreaMapper, Comme
 
         LambdaQueryWrapper<CommentArea> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(CommentArea::getState,CommentArea.NORMAL).eq(CommentArea::getType,type);
-        if (StringUtils.isNotBlank(queryBo.getMomentsIds())) {
+        if (queryBo.getMomentsIds()!=null && !queryBo.getMomentsIds().isEmpty()) {
             queryWrapper.in(CommentArea::getCommentId,queryBo.getMomentsIds());
         }
         List<CommentArea> list = this.list(queryWrapper);

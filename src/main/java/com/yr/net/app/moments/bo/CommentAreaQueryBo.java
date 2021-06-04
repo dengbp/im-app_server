@@ -2,6 +2,8 @@ package com.yr.net.app.moments.bo;
 
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * @author dengbp
  * @ClassName CommentAreaQueryBo
@@ -12,9 +14,9 @@ import lombok.Data;
 public class CommentAreaQueryBo {
 
     /** 多个逗号分开 **/
-    private final String momentsIds;
+    private final Set<Long> momentsIds;
 
-    public CommentAreaQueryBo(String momentsIds) {
+    public CommentAreaQueryBo(Set<Long> momentsIds) {
         this.momentsIds = momentsIds;
     }
 }

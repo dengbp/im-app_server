@@ -187,4 +187,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public UserInfo getRandOne() {
         return userInfoMapper.randOne();
     }
+
+    @Override
+    public UserInfo getOneNotEp(String userId) {
+        return userInfoMapper.randOneNotEq(userId);
+    }
 }

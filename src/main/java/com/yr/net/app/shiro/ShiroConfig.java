@@ -38,6 +38,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/send_code", "anon");
         filterChainDefinitionMap.put("/moments/user-moments/sync", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/api/wx/pay/notify", "anon");
         filterChainDefinitionMap.put("/pc_session", "anon");
         filterChainDefinitionMap.put("/amr2mp3", "anon");
 

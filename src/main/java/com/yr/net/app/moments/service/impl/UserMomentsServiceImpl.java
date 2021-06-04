@@ -42,10 +42,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -138,14 +135,16 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
      * @Date 1:02 PM 6/1/21
      **/
 
-    private void addLike(Long momentId,String publicUser){
+    private void addLike(Long momentId,String publicUserId){
 
         for (int i = 0; i< RandomUtil.getRandom(); i++){
             MomentsLikeReqDto likeReqDto = new MomentsLikeReqDto();
             likeReqDto.setType(MomentsLikeReqDto.THEME);
             likeReqDto.setState(MomentsLikeReqDto.LIKE);
             likeReqDto.setMomentId(momentId);
-            likeReqDto.setPublicUserId(publicUser);
+            likeReqDto.setPublicUserId(publicUserId);
+            UserInfo userInfo = userInfoService.getOneNotEp(publicUserId);
+            likeReqDto.setLikeUserId(userInfo.getUserId());
             likeService.add(likeReqDto);
         }
     }
@@ -175,13 +174,13 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         return userInfoResponses;
     }
 
-    private String queryCondition(List<UserMoments> source,List<UserMomentsRespDto> userMomentsResp){
+    private Set<Long> queryCondition(List<UserMoments> source,List<UserMomentsRespDto> userMomentsResp){
+        Set<Long> set = new HashSet<>();
         if (source.isEmpty()) {
-            return "";
+            return set;
         }
-        StringBuffer sb = new StringBuffer();
         source.forEach(e->{
-            sb.append(e.getId()).append(",");
+            set.add(e.getId());
             UserMomentsRespDto respDto = new UserMomentsRespDto();
             UserInfo user = userInfoService.getByUserId(e.getUserId());
             if (user == null){
@@ -213,7 +212,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             respDto.setPublicTheme(e.getShowWord());
             userMomentsResp.add(respDto);
         });
-        return sb.length()>0?sb.substring(0,sb.lastIndexOf(",")):"";
+        return set;
     }
 
     private void assembly(List<UserMoments> source, List<UserMomentsRespDto> userMomentsResp) {
@@ -221,8 +220,8 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             return;
         }
         /** 组装动态id **/
-        String queryCondition = this.queryCondition(source, userMomentsResp);
-        if (StringUtils.isBlank(queryCondition)){
+        Set<Long> queryCondition = this.queryCondition(source, userMomentsResp);
+        if (queryCondition.isEmpty()){
             return;
         }
         /** 取动态的评论和点赞数量 **/

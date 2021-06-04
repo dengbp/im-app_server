@@ -10,4 +10,10 @@
         SELECT * FROM user_info  ORDER BY RAND() LIMIT 1
     </select>
 
+    <select id="randOneNotEq" resultType="com.yr.net.app.customer.entity.UserInfo">
+        SELECT * FROM user_info  where user_id <![CDATA[ <> ]]> #{likeUser} ORDER BY RAND() LIMIT 1
+    </select>
+
+
+
 </mapper>

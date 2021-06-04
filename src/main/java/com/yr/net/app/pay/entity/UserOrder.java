@@ -44,8 +44,11 @@ public class UserOrder implements Serializable {
         @TableField("out_Trade_No")
     private String outTradeNo;
 
-        /** 交易状态，0:待定支付，1：已支付，2：交易失败 */
+        /** 交易状态，0:待定支付，1：已支付(成功)，2：交易失败 */
         private Integer status;
+
+        public static transient Integer PAYED = 1;
+        public static transient Integer PAY_FAIL = 2;
 
     /** 用户ip */
         @TableField("create_Ip")
@@ -54,6 +57,11 @@ public class UserOrder implements Serializable {
     /** 创建时间 */
         @TableField("create_Time")
     private LocalDate createTime;
+
+
+    /** 更新时间 */
+    @TableField("update_Time")
+    private LocalDate updateTime;
 
     /** 支付时间 */
         @TableField("pay_Time")

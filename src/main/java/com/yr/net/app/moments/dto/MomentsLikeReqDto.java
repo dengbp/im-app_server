@@ -39,4 +39,7 @@ public class MomentsLikeReqDto implements Serializable {
     @NotNull
     private Integer state;
 
+    /** 点赞用户id */
+    private String likeUserId;
+
 }

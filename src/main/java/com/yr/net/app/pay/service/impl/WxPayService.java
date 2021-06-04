@@ -1,8 +1,8 @@
 package com.yr.net.app.pay.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.wxpay.sdk.WXPay;
-import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
@@ -13,7 +13,8 @@ import com.yr.net.app.pay.entity.OrderBill;
 import com.yr.net.app.pay.entity.UserOrder;
 import com.yr.net.app.pay.service.IOrderBillService;
 import com.yr.net.app.pay.service.IOrderSeqService;
-import com.yr.net.app.pay.service.IOrderService;
+import com.yr.net.app.pay.service.IUserAccountService;
+import com.yr.net.app.pay.service.IUserOrderService;
 import com.yr.net.app.tools.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +40,7 @@ import java.util.Map;
 public class WxPayService {
 
     @Resource
-    private IOrderService orderService;
+    private IUserOrderService userOrderService;
 
     @Autowired
     IUserInfoService userInfoService;
@@ -54,10 +56,12 @@ public class WxPayService {
 
     @Resource
     private WxConfig wxConfig;
+    @Resource
+    private IUserAccountService userAccountService;
 
 
     public List<UserOrder> query()throws AppException{
-        return orderService.list(new LambdaQueryWrapper<UserOrder>().eq(UserOrder::getUserId,AppUtil.getCurrentUserId()));
+        return userOrderService.list(new LambdaQueryWrapper<UserOrder>().eq(UserOrder::getUserId,AppUtil.getCurrentUserId()).eq(UserOrder::getStatus,1));
     }
 
     /**
@@ -66,7 +70,7 @@ public class WxPayService {
      * @param request
      * @param payReqDto
      */
-    public Map<String, String> appPay(HttpServletRequest request, PayReqDto payReqDto) throws Exception {
+    public Map<String, String> wxPay(HttpServletRequest request, PayReqDto payReqDto) throws Exception {
         log.info("开始调微信统一下单接口");
         // 封装参数返回App端
         Map<String, String> result = new HashMap<>();
@@ -78,25 +82,13 @@ public class WxPayService {
         UserOrder order = UserOrder.createOrder(DateUtil.current_yyyyMMddHHmmss().concat(orderSeqService.getSeq()+""),spbill_create_ip,payReqDto);
         WXPay wxpay = new WXPay(wxConfig);
         Map<String, String> params = new HashMap<>();
-        // 商品描述
         params.put("body", "App-webChat-pay");
-        // 商户订单号
         params.put("out_trade_no", order.getOutTradeNo());
-        //params.put("sign_type", "MD5");
-        // 总金额(分)
         params.put("total_fee", order.getTotalFee().toString());
-        // 终端IP
         params.put("spbill_create_ip", spbill_create_ip);
         // 通知地址
         params.put("notify_url", appProperties.getWx().getNotify_url());
-        // 交易类型:JS_API=公众号支付、NATIVE=扫码支付、APP=app支付
         params.put("trade_type", "APP");
-       /* *//** 签名 *//*
-        String sign = PaymentUtils.sign(params, appProperties.getWx().getApi_key());
-        params.put("sign", sign);
-        String xmlData = PaymentUtils.mapToXml(params);
-        log.info("请求入参:{}",xmlData);
-        */
         Map<String, String> wxOrderResult = wxpay.unifiedOrder(params);
         if("FAIL".equals(wxOrderResult.get("return_code"))){
             log.error(wxOrderResult.get("return_msg"));
@@ -106,10 +98,7 @@ public class WxPayService {
             log.error("微信支付下单成功后，返回的prepay_id为空");
             throw new RuntimeException("微信支付下单成功后，返回的prepay_id为空");
         }
-       /* String wxRetXmlData = HttpUtil.sendPostXml(appProperties.getWx().getCreate_order_url(), xmlData, null);
-        Map wxRetMapData = PaymentUtils.xmlToMap(wxRetXmlData);*/
         log.info("调微信统一下单返回结果: {}", wxOrderResult);
-
         result.put("appid", appProperties.getWx().getApp_id());
         result.put("partnerid", appProperties.getWx().getMch_id());
         result.put("prepayid", wxOrderResult.get("prepay_id"));
@@ -119,8 +108,8 @@ public class WxPayService {
         /** 对返回给App端的数据进行签名 */
         String signature = WXPayUtil.generateSignature(result, appProperties.getWx().getApi_key());
         result.put("sign", signature);
-        //result.put("sign", PaymentUtils.sign(result, appProperties.getWx().getApi_key()));
-        orderService.save(order);
+        userOrderService.save(order);
+        userAccountService.updateByUserId(order.getUserId(),order.getTotalFee());
         return result;
     }
 
@@ -162,10 +151,17 @@ public class WxPayService {
      */
     public void notify(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String wxRetXml = PaymentUtils.getRequestData(request);
-        log.info("微信回调：{}",wxRetXml);
+        if (StringUtils.isBlank(wxRetXml)){
+            log.warn("微信支付回调参数为空异常");
+            return;
+        }
+        log.info("微信支付回调：{}",wxRetXml);
         Map<String, String> wxRetMap = PaymentUtils.xmlToMap(wxRetXml);
-
-        // 当返回的return_code为SUCCESS则回调成功
+        String outTradeNo = wxRetMap.get("out_trade_no");
+        // 保存回调记录
+        orderBillService.save(new OrderBill(wxRetXml,0,outTradeNo,LocalDate.now()));
+        int payState = UserOrder.PAY_FAIL;
+        // 当返回的return_code为SUCCESS则回调成功、更新订单
         if ("SUCCESS".equalsIgnoreCase(wxRetMap.get("return_code"))) {
             // 通知微信收到回调
             String resXml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
@@ -173,13 +169,13 @@ public class WxPayService {
             out.write(resXml.getBytes());
             out.flush();
             out.close();
-
-            // TODO 保存订单流水 具体细节待实现
-            orderBillService.save(new OrderBill());
-
+            payState = UserOrder.PAYED;
             log.info("notify success");
         } else {
             log.error("notify failed");
+        }
+        if (StringUtils.isNotBlank(outTradeNo)){
+            userOrderService.update(new LambdaUpdateWrapper<UserOrder>().set(UserOrder::getStatus,payState).set(UserOrder::getPayTime, LocalDate.now()).set(UserOrder::getUpdateTime, LocalDate.now()).eq(UserOrder::getOutTradeNo,outTradeNo));
         }
     }
 

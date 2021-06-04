@@ -31,6 +31,11 @@ public class UserMomentsRespDto {
     private String publicTheme;
 
     /**
+     * 发布主题如果含url是否支持打开：1支持：0不支持
+     */
+    private Integer canUseLink;
+
+    /**
      * 发布时间
      */
     private LocalDateTime publicTime;

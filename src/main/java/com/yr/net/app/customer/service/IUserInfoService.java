@@ -82,4 +82,13 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     UserInfo getRandOne();
 
+    /**
+     * Description 不等于随机取用户
+     * @param userId
+     * @return com.yr.net.app.customer.entity.UserInfo
+     * @Author dengbp
+     * @Date 1:35 PM 6/2/21
+     **/
+    UserInfo getOneNotEp(String userId);
+
 }

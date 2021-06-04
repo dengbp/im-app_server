@@ -2,13 +2,13 @@ package com.yr.net.app.log.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.log.entity.UserExchangeLog;
 import com.yr.net.app.log.mapper.UserExchangeLogMapper;
 import com.yr.net.app.log.service.IUserExchangeLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yr.net.app.tools.RandomUtil;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author dengbp
@@ -28,7 +28,7 @@ public class UserExchangeLogServiceImpl extends ServiceImpl<UserExchangeLogMappe
      **/
     @Override
     public int findMomentPayByUser(Long momentId, String userId) throws AppException {
-        if (this.count(new LambdaQueryWrapper<UserExchangeLog>().eq(UserExchangeLog::getUserId,userId)
+        if (this.count(new LambdaQueryWrapper<UserExchangeLog>().eq(UserExchangeLog::getPayUserId,userId)
                 .eq(UserExchangeLog::getExchangeType,UserExchangeLog.PAY_TYPE).eq(UserExchangeLog::getExchangeState,UserExchangeLog.SUCCESS)
                 .eq(UserExchangeLog::getItemId,momentId).eq(UserExchangeLog::getExchangeItemType,UserExchangeLog.MOMENT))
         >0){
@@ -36,4 +36,13 @@ public class UserExchangeLogServiceImpl extends ServiceImpl<UserExchangeLogMappe
         }
         return 1;
     }
+
+    @Override
+    public void insert(ExchangeLogReqDto reqDto) throws AppException {
+        UserExchangeLog log = reqDto.buildEntity();
+        log.setFlowCode(RandomUtil.randomStr(32));
+        save(log);
+    }
+
+
 }
