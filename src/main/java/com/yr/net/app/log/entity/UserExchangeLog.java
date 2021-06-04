@@ -67,12 +67,6 @@ public class UserExchangeLog implements Serializable {
      */
     private String exchangeItem;
 
-    /**
-     * 交易项目类型 0:用户基本信息(用户信息表)；1：用户相册(用户相册表)；2：用户动态项目(动态表)；3：用户活动轨迹
-     */
-    public static transient Integer USER_INFO = 0;
-    public static transient Integer ALBUM = 1;
-    public static transient Integer MOMENT = 2;
 
     private Integer exchangeItemType;
 

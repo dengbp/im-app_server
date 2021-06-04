@@ -12,9 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
- * 登录轨迹控制器
+ * 登录轨迹控制器(由原来登录轨迹改成活动轨迹)
  * @author dengbp
  */
 @RestController
@@ -29,8 +30,8 @@ public class UserSignLogController {
     @ControllerEndpoint(operation = "登录记录查询", exceptionMessage = "登录记录查询失败")
     @ResponseBody
     @Log("登录记录查询接口")
-    public RestResult list(@RequestBody SignLogReqDto reqDto){
-        return RestResult.ok().setResult(userSignLogService.searchByUserId(StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId()));
+    public RestResult list(@RequestBody @Valid SignLogReqDto reqDto){
+        return RestResult.ok().setResult(userSignLogService.searchByUserId(reqDto.getItemId(),reqDto.getUserId()));
     }
 
 }

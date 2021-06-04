@@ -2,6 +2,7 @@ package com.yr.net.app.log.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.pay.controller.enums.ExchangeItem;
 import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.log.entity.UserExchangeLog;
 import com.yr.net.app.log.mapper.UserExchangeLogMapper;
@@ -27,10 +28,10 @@ public class UserExchangeLogServiceImpl extends ServiceImpl<UserExchangeLogMappe
      * @Date 10:50 PM 4/1/21
      **/
     @Override
-    public int findMomentPayByUser(Long momentId, String userId) throws AppException {
+    public int findMomentPayByUser(Long momentId, String userId, ExchangeItem type) throws AppException {
         if (this.count(new LambdaQueryWrapper<UserExchangeLog>().eq(UserExchangeLog::getPayUserId,userId)
                 .eq(UserExchangeLog::getExchangeType,UserExchangeLog.PAY_TYPE).eq(UserExchangeLog::getExchangeState,UserExchangeLog.SUCCESS)
-                .eq(UserExchangeLog::getItemId,momentId).eq(UserExchangeLog::getExchangeItemType,UserExchangeLog.MOMENT))
+                .eq(UserExchangeLog::getItemId,momentId).eq(UserExchangeLog::getExchangeItemType, type.getType()))
         >0){
             return  0;
         }

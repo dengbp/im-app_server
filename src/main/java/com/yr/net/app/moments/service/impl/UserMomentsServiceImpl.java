@@ -29,6 +29,7 @@ import com.yr.net.app.moments.mapper.UserMomentsMapper;
 import com.yr.net.app.moments.service.ICommentAreaService;
 import com.yr.net.app.moments.service.ILikeService;
 import com.yr.net.app.moments.service.IUserMomentsService;
+import com.yr.net.app.pay.controller.enums.ExchangeItem;
 import com.yr.net.app.pojo.BaiduMapPositionResponse;
 import com.yr.net.app.tools.AddressByCoordUtil;
 import com.yr.net.app.tools.AppUtil;
@@ -100,10 +101,10 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         moment.setUserId(user.getUserId());
         moment.setState(UserMoments.NORMAL);
         moment.setPublicTime(now);
-        List<UserSignLog> logs = userSignLogService.searchByUserId(user.getUserId());
         moment.setPublicAddr(user.getNowLife());
-        if (!logs.isEmpty()){
-            moment.setPublicAddr(logs.get(0).getSignAddr());
+        UserSignLog log = userSignLogService.searchByUserId(user.getUserId());
+        if (log != null){
+            moment.setPublicAddr(log.getSignAddr());
         }
         moment.setIsFree(0);
         moment.setShowWord(title);
@@ -242,7 +243,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             if (likeTotal.containsKey(res.getId())) {
                 res.setLikeTotal(likeTotal.get(res.getId()).get());
             }
-            res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId()));
+            res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId(), ExchangeItem.moment));
         });
     }
 

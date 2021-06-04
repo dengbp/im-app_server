@@ -1,6 +1,7 @@
 package com.yr.net.app.log.service;
 
 import com.yr.net.app.common.exception.AppException;
+import com.yr.net.app.pay.controller.enums.ExchangeItem;
 import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.log.entity.UserExchangeLog;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -12,8 +13,9 @@ public interface IUserExchangeLogService extends IService<UserExchangeLog> {
 
     /**
      * Description 查询动态支付类型数据
-     * @param momentId
- * @param userId
+     * @param itemId 项目id
+     * @param userId 当前要查看的用户id(支付方id)
+     * @param type 支付项目类型
      * @throws AppException
      * @return int 是否已付款费0已付，1未付款
      * @Author dengbp
@@ -21,7 +23,7 @@ public interface IUserExchangeLogService extends IService<UserExchangeLog> {
      **/
 
 
-    int findMomentPayByUser(Long momentId,String userId)throws AppException;
+    int findMomentPayByUser(Long itemId, String userId, ExchangeItem type)throws AppException;
 
     /**
      * Description 用户交易记录
