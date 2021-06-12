@@ -28,8 +28,8 @@ public class UserExchangeLogServiceImpl extends ServiceImpl<UserExchangeLogMappe
      * @Date 10:50 PM 4/1/21
      **/
     @Override
-    public int findMomentPayByUser(Long momentId, String userId, ExchangeItem type) throws AppException {
-        if (this.count(new LambdaQueryWrapper<UserExchangeLog>().eq(UserExchangeLog::getPayUserId,userId)
+    public int findMomentPayByUser(Long momentId, String userId, String byViewUserId,ExchangeItem type) throws AppException {
+        if (this.count(new LambdaQueryWrapper<UserExchangeLog>().eq(UserExchangeLog::getPayUserId,userId).eq(UserExchangeLog::getReceiveUserId,byViewUserId)
                 .eq(UserExchangeLog::getExchangeType,UserExchangeLog.PAY_TYPE).eq(UserExchangeLog::getExchangeState,UserExchangeLog.SUCCESS)
                 .eq(UserExchangeLog::getItemId,momentId).eq(UserExchangeLog::getExchangeItemType, type.getType()))
         >0){

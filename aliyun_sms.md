@@ -7,7 +7,7 @@
     ```$xslt
     alisms.accessKeyId=LTXXXXXXXXXXXXtW
     alisms.accessSecret=4pXXXXXXXXXXXXXXXXXXXXXXXXXXXXyU
-    alisms.signName=野火IM
+    alisms.signName=深圳伊人网
     alisms.templateCode=SMS_170000000
     ```
 4. 修改默认使用阿里云短信，在```application.properites```文件中修改```sms.vendor```为***2***

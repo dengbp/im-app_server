@@ -172,6 +172,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         IPage<UserMoments> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserMomentsRespDto> userInfoResponses = new ArrayList<>();
         assembly(infoIPage.getRecords(), userInfoResponses);
+        log.info("本次返回社区动态条数：{}",userInfoResponses.size());
         return userInfoResponses;
     }
 
@@ -180,6 +181,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         if (source.isEmpty()) {
             return set;
         }
+        log.info("数据库记录数:{}",source.size());
         source.forEach(e->{
             set.add(e.getId());
             UserMomentsRespDto respDto = new UserMomentsRespDto();
@@ -243,7 +245,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             if (likeTotal.containsKey(res.getId())) {
                 res.setLikeTotal(likeTotal.get(res.getId()).get());
             }
-            res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId(), ExchangeItem.moment));
+            res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId(),res.getUserId(), ExchangeItem.moment));
         });
     }
 

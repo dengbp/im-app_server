@@ -15,6 +15,7 @@ public interface IUserExchangeLogService extends IService<UserExchangeLog> {
      * Description 查询动态支付类型数据
      * @param itemId 项目id
      * @param userId 当前要查看的用户id(支付方id)
+     * @param byViewUserId 被查看的用户id
      * @param type 支付项目类型
      * @throws AppException
      * @return int 是否已付款费0已付，1未付款
@@ -23,7 +24,7 @@ public interface IUserExchangeLogService extends IService<UserExchangeLog> {
      **/
 
 
-    int findMomentPayByUser(Long itemId, String userId, ExchangeItem type)throws AppException;
+    int findMomentPayByUser(Long itemId, String userId, String byViewUserId, ExchangeItem type)throws AppException;
 
     /**
      * Description 用户交易记录

@@ -44,6 +44,13 @@ public class DateUtil {
         return simpleDateFormat.format(date);
     }
 
+    public static String getDateFormat(LocalDateTime date, String dateFormatType) {
+        Date dateTmp = Date.from( date.atZone( ZoneId.systemDefault()).toInstant());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormatType, Locale.CHINA);
+        return simpleDateFormat.format(dateTmp);
+    }
+
+
     public static String formatCSTTime(String date, String format) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(CST_TIME_PATTERN, Locale.US);
         Date usDate = simpleDateFormat.parse(date);

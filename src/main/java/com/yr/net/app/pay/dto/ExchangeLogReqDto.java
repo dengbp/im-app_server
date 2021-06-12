@@ -26,7 +26,7 @@ public class ExchangeLogReqDto implements Serializable {
     private int amount;
 
     /**
-     * 交易项目类型 0:用户基本信息(用户信息表)；1：用户相册(用户相册表)；2：用户动态项目(动态表)；3：用户活动轨迹
+     * 交易项目类型 0:用户基本信息(用户信息表)；1：用户相册(用户相册表)；2：用户动态项目(动态表)；3：用户活动轨迹;4:充值
      */
     @NotNull
     private Integer itemType;
@@ -43,24 +43,29 @@ public class ExchangeLogReqDto implements Serializable {
     @NotNull
     private String receiveUser;
 
+    /** 交易类型 0支付1：收入 */
+    private Integer payType;
+
+    private String payUserId;
+
 
 
     public UserExchangeLog buildEntity() {
         UserExchangeLog log = new UserExchangeLog();
-        log.setCreatedBy(AppUtil.getCurrentUserId());
+        log.setCreatedBy(payUserId);
         log.setCreatedTime(LocalDateTime.now());
-        log.setExchangeAmount(new BigDecimal(amount));
+        log.setExchangeAmount(amount);
         log.setExchangeItem("undefined");
         ExchangeItem item = ExchangeItem.getByType(itemType);
-        if (item == null) {
+        if (item != null) {
             log.setExchangeItem(item.getDesc());
         }
         log.setExchangeItemType(itemType);
         log.setExchangeState(UserExchangeLog.SUCCESS);
         log.setExchangeTime(LocalDateTime.now());
         log.setItemId(itemId);
-        log.setExchangeType(UserExchangeLog.PAY_TYPE);
-        log.setPayUserId(AppUtil.getCurrentUserId());
+        log.setExchangeType(payType);
+        log.setPayUserId(payUserId);
         log.setReceiveUserId(receiveUser);
         return log;
     }

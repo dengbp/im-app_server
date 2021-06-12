@@ -12,7 +12,8 @@ public enum ExchangeItem {
     info(0,"用户信息"),
     album(1,"用户相册"),
     moment(2,"用户动态"),
-    track(3,"用户活动轨迹");
+    track(3,"用户活动轨迹"),
+    recharge(4,"充值");
 
     private int type;
     private String  desc;

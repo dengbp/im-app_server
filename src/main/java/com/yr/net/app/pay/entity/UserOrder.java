@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /**
  *
- *
+ *用户充值记录
  * @author dengbp
  */
 @Data
@@ -29,7 +29,7 @@ public class UserOrder implements Serializable {
     @TableId("order_Id")
     private Long orderId;
 
-    /** 用户id*/
+    /** 充值用户id*/
    @TableField("user_Id")
     private String userId;
 

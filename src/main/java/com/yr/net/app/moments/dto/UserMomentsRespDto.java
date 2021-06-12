@@ -17,11 +17,11 @@ import java.util.List;
 public class UserMomentsRespDto {
 
     /**
-     * 用户动态id
+     * 发布用户动态id
      **/
     private Long id;
     /**
-     * 用户id
+     *发布 用户id
      */
     private String userId;
 

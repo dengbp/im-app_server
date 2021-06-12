@@ -10,6 +10,7 @@ import com.yr.net.app.log.service.IUserSignLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.pay.controller.enums.ExchangeItem;
 import com.yr.net.app.tools.AppUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,11 @@ public class UserSignLogServiceImpl extends ServiceImpl<UserSignLogMapper, UserS
         UserSignTrackResp resp = new UserSignTrackResp();
         List<UserSignLog> logs =  this.list(new LambdaQueryWrapper<UserSignLog>().eq(UserSignLog::getUserId,userId).last("limit 0 , 50"));
         resp.setSignLogs(logs);
-        resp.setPurview(userExchangeLogService.findMomentPayByUser(itemId, AppUtil.getCurrentUserId(), ExchangeItem.track));
+        resp.setPurview(0);
+        /** 非自己看自己 */
+        if(!StringUtils.equals(userId,AppUtil.getCurrentUserId())){
+            resp.setPurview(userExchangeLogService.findMomentPayByUser(itemId, AppUtil.getCurrentUserId(),userId, ExchangeItem.track));
+        }
         return resp;
     }
 

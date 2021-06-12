@@ -14,8 +14,8 @@ public interface IUserSignLogService extends IService<UserSignLog> {
 
     /**
      * Description 用户登录记录查询
-     * @param userId 被查看的用户id
      * @param itemId 项目id
+     * @param userId 被查看的用户id
      * @return UserSignTrackResp
      * @throws AppException
      * @Author dengbp

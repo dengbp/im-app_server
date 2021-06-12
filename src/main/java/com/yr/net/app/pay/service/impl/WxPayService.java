@@ -8,6 +8,10 @@ import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
 import com.yr.net.app.configure.WxConfig;
 import com.yr.net.app.customer.service.IUserInfoService;
+import com.yr.net.app.log.entity.UserExchangeLog;
+import com.yr.net.app.log.service.IUserExchangeLogService;
+import com.yr.net.app.pay.controller.enums.ExchangeItem;
+import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.pay.dto.PayReqDto;
 import com.yr.net.app.pay.entity.OrderBill;
 import com.yr.net.app.pay.entity.UserOrder;
@@ -27,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +64,20 @@ public class WxPayService {
     @Resource
     private IUserAccountService userAccountService;
 
+    @Resource
+    private IUserExchangeLogService userExchangeLogService;
 
+
+    /**
+     * Description 充值记录查询
+     * @return java.util.List<com.yr.net.app.pay.entity.UserOrder>
+     * @throws AppException
+     * @Author dengbp
+     * @Date 7:56 PM 6/10/21
+     **/
     public List<UserOrder> query()throws AppException{
-        return userOrderService.list(new LambdaQueryWrapper<UserOrder>().eq(UserOrder::getUserId,AppUtil.getCurrentUserId()).eq(UserOrder::getStatus,1));
+        List<UserOrder> r = userOrderService.list(new LambdaQueryWrapper<UserOrder>().eq(UserOrder::getUserId,AppUtil.getCurrentUserId()).eq(UserOrder::getStatus,1));
+        return r==null?new ArrayList<>() : r;
     }
 
     /**
@@ -109,7 +125,6 @@ public class WxPayService {
         String signature = WXPayUtil.generateSignature(result, appProperties.getWx().getApi_key());
         result.put("sign", signature);
         userOrderService.save(order);
-        userAccountService.updateByUserId(order.getUserId(),order.getTotalFee());
         return result;
     }
 
@@ -175,8 +190,23 @@ public class WxPayService {
             log.error("notify failed");
         }
         if (StringUtils.isNotBlank(outTradeNo)){
-            userOrderService.update(new LambdaUpdateWrapper<UserOrder>().set(UserOrder::getStatus,payState).set(UserOrder::getPayTime, LocalDate.now()).set(UserOrder::getUpdateTime, LocalDate.now()).eq(UserOrder::getOutTradeNo,outTradeNo));
+            if (userOrderService.update(new LambdaUpdateWrapper<UserOrder>().set(UserOrder::getStatus,payState).set(UserOrder::getPayTime, LocalDate.now()).set(UserOrder::getUpdateTime, LocalDate.now()).eq(UserOrder::getOutTradeNo,outTradeNo))){
+                UserOrder userOrder = userOrderService.getOne(new LambdaQueryWrapper<UserOrder>().eq(UserOrder::getOutTradeNo,outTradeNo));
+                userAccountService.updateByUserId(userOrder.getUserId(),userOrder.getTotalFee());
+                transacLog(userOrder);
+            }
         }
+    }
+
+    private void transacLog(UserOrder order){
+        ExchangeLogReqDto reqDto = new ExchangeLogReqDto();
+        reqDto.setAmount(order.getTotalFee());
+        reqDto.setItemType(ExchangeItem.recharge.getType());
+        reqDto.setItemId(order.getOrderId());
+        reqDto.setReceiveUser(order.getUserId());
+        reqDto.setPayType(UserExchangeLog.INCOME_TYPE);
+        reqDto.setPayUserId(order.getUserId());
+        userExchangeLogService.insert(reqDto);
     }
 
     /**

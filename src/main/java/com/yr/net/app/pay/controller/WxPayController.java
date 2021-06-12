@@ -3,6 +3,7 @@ package com.yr.net.app.pay.controller;
 import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
+import com.yr.net.app.log.service.IUserExchangeLogService;
 import com.yr.net.app.pay.dto.ExchangeLogReqDto;
 import com.yr.net.app.pay.dto.PayReqDto;
 import com.yr.net.app.pay.service.IUserAccountService;
@@ -54,7 +55,6 @@ public class WxPayController {
     @ResponseBody
     @Log("充值记录查询接口")
     public RestResult query() {
-        log.info("充值记录查询...");
         return RestResult.ok().setResult((wxPayService.query()));
     }
 

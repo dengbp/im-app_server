@@ -40,7 +40,7 @@ public class UserExchangeLog implements Serializable {
     private String payUserId;
 
     /**
-     * 支付用户id
+     * 收款用户id
      */
     private String receiveUserId;
 
@@ -58,9 +58,9 @@ public class UserExchangeLog implements Serializable {
     private Integer exchangeState;
 
     /**
-     * 交易金额
+     * 交易金额 单位分
      */
-    private BigDecimal exchangeAmount;
+    private Integer exchangeAmount;
 
     /**
      * 交易项目
@@ -68,6 +68,9 @@ public class UserExchangeLog implements Serializable {
     private String exchangeItem;
 
 
+    /**
+     * 交易项目类型 0:用户基本信息；1：用户相册；2：用户动态项目;3:用户活动轨迹;4:充值
+     */
     private Integer exchangeItemType;
 
     /**

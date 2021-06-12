@@ -27,9 +27,9 @@ public class UserSignLogController {
     private IUserSignLogService userSignLogService;
 
     @PostMapping("list")
-    @ControllerEndpoint(operation = "登录记录查询", exceptionMessage = "登录记录查询失败")
+    @ControllerEndpoint(operation = "登录记录(活动轨迹)查询", exceptionMessage = "登录记录(活动轨迹)查询失败")
     @ResponseBody
-    @Log("登录记录查询接口")
+    @Log("登录记录(活动轨迹)查询接口")
     public RestResult list(@RequestBody @Valid SignLogReqDto reqDto){
         return RestResult.ok().setResult(userSignLogService.searchByUserId(reqDto.getItemId(),reqDto.getUserId()));
     }
