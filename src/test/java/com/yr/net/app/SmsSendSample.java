@@ -37,7 +37,7 @@ public class SmsSendSample {
 
     public static void main(String[] args_) throws Exception {
         java.util.List<String> args = java.util.Arrays.asList(args_);
-        com.aliyun.dysmsapi20170525.Client client = SmsSendSample.createClient("LTAI5t7qRg3qvN9hpqSaPPga", "jENv12H4sU1PJz0QfrdC0XHYbbjSfL");
+        com.aliyun.dysmsapi20170525.Client client = SmsSendSample.createClient("xxxxx", "xxxx");
         SendSmsRequest sendSmsRequest = new SendSmsRequest();
         sendSmsRequest.setPhoneNumbers("13530051353");
         sendSmsRequest.setTemplateCode("123456");
