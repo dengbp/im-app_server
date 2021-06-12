@@ -10,7 +10,7 @@
 产品介绍页:http://tongliao.goddesses.net.cn/tongliao/
 
 二、screenshot
-![image](https://user-images.githubusercontent.com/9836343/121783032-34dd5c80-cbdf-11eb-8d20-4e52bc70b6a2.png)
+![image](https://user-images.githubusercontent.com/9836343/121783392-e8931c00-cbe0-11eb-9d7a-3efde8c6906a.png)
 ![image](https://user-images.githubusercontent.com/9836343/121783053-4d4d7700-cbdf-11eb-8104-b94c7a5e3ab0.png)
 ![image](https://user-images.githubusercontent.com/9836343/121783086-60f8dd80-cbdf-11eb-9299-2d8b72dc424b.png)
 ![image](https://user-images.githubusercontent.com/9836343/121783108-71a95380-cbdf-11eb-90ea-fcd2a8ef9f07.png)
