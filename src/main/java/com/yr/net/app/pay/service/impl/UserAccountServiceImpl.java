@@ -53,8 +53,8 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     @Override
     public List<ExchangeLogRespDto> transacLog() throws AppException {
         List<UserExchangeLog> logs = userExchangeLogService.list(new LambdaQueryWrapper<UserExchangeLog>()
-                .eq(UserExchangeLog::getPayUserId,AppUtil.getCurrentUserId())
                 .eq(UserExchangeLog::getExchangeState,UserExchangeLog.SUCCESS)
+                .and(p->p.eq(UserExchangeLog::getPayUserId,AppUtil.getCurrentUserId()).or(r->r.eq(UserExchangeLog::getReceiveUserId,AppUtil.getCurrentUserId())))
                 .orderByDesc(UserExchangeLog::getExchangeTime));
         if (logs == null){
             return new ArrayList<>();
@@ -71,7 +71,8 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
             respDto.setTime(DateUtil.getDateFormat(l.getExchangeTime(),DateUtil.FULL_TIME_SPLIT_PATTERN));
             respDto.setItemName(l.getExchangeItem());
             if (l.getExchangeItemType() != ExchangeItem.recharge.getType()){
-                respDto.setItemName(l.getExchangeItem() + "(收款用户：" + l.getReceiveUserId() + ")");
+                UserInfo userInfo = userInfoService.getByUserId(l.getReceiveUserId());
+                respDto.setItemName(l.getExchangeItem() + "(收款用户：" + userInfo==null?l.getReceiveUserId():userInfo.getUserName() + ")");
             }
             respDtos.add(respDto);
         });

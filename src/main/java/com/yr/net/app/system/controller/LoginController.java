@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Description todo
+ * Description 注册/登录控制器
  * @return
  * @Author dengbp
  * @Date 13:06 2020-11-10
@@ -124,7 +124,7 @@ public class LoginController {
     }
 
     /*
-    修改野火账户
+    修改账户
     */
     @CrossOrigin
     @PostMapping(value = "/change_name", produces = "application/json;charset=UTF-8")
@@ -167,23 +167,4 @@ public class LoginController {
     public Object uploadFiles(@RequestParam("file") MultipartFile file, @PathVariable("userId") String userId) throws IOException {
         return mService.saveUserLogs(userId, file);
     }
-
-    /*
-    物联网相关接口
-     */
-    @PostMapping(value = "/things/add_device")
-    public Object addDevice(@RequestBody InputCreateDevice createDevice) {
-        return mService.addDevice(createDevice);
-    }
-
-    @PostMapping(value = "/things/list_device")
-    public Object getDeviceList() {
-        return mService.getDeviceList();
-    }
-
-    @PostMapping(value = "/things/del_device")
-    public Object delDevice(@RequestBody InputCreateDevice createDevice) {
-        return mService.delDevice(createDevice);
-    }
-
 }
