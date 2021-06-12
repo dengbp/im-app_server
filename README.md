@@ -10,20 +10,4 @@
 产品介绍页:http://tongliao.goddesses.net.cn/tongliao/
 
 二、screenshot
-![image](https://user-images.githubusercontent.com/9836343/121783392-e8931c00-cbe0-11eb-9d7a-3efde8c6906a.png)
-![image](https://user-images.githubusercontent.com/9836343/121783053-4d4d7700-cbdf-11eb-8104-b94c7a5e3ab0.png)
-![image](https://user-images.githubusercontent.com/9836343/121783086-60f8dd80-cbdf-11eb-9299-2d8b72dc424b.png)
-![image](https://user-images.githubusercontent.com/9836343/121783108-71a95380-cbdf-11eb-90ea-fcd2a8ef9f07.png)
-![image](https://user-images.githubusercontent.com/9836343/121783120-81c13300-cbdf-11eb-98d8-6b4fa7346f86.png)
-![image](https://user-images.githubusercontent.com/9836343/121783130-8f76b880-cbdf-11eb-9ac2-9f744359614d.png)
-![image](https://user-images.githubusercontent.com/9836343/121783141-9ef60180-cbdf-11eb-85b2-eda00c6443a0.png)
-![image](https://user-images.githubusercontent.com/9836343/121783147-addcb400-cbdf-11eb-8e16-14002d394763.png)
-![image](https://user-images.githubusercontent.com/9836343/121783161-bdf49380-cbdf-11eb-80da-0dab34679784.png)
-![image](https://user-images.githubusercontent.com/9836343/121783166-cb118280-cbdf-11eb-9883-6efd79e450df.png)
-![image](https://user-images.githubusercontent.com/9836343/121783175-da90cb80-cbdf-11eb-858d-6f8aa9d30c18.png)
-![image](https://user-images.githubusercontent.com/9836343/121783221-f2684f80-cbdf-11eb-937f-f2fd84f1f71d.png)
-![image](https://user-images.githubusercontent.com/9836343/121783230-014f0200-cbe0-11eb-927c-14bd4ae88667.png)
-![image](https://user-images.githubusercontent.com/9836343/121783269-3196a080-cbe0-11eb-8928-7566483e2aa3.png)
-![image](https://user-images.githubusercontent.com/9836343/121783282-3e1af900-cbe0-11eb-9971-f78fa4f48a03.png)
-![image](https://user-images.githubusercontent.com/9836343/121783299-5559e680-cbe0-11eb-975c-6942078aa278.png)
-![image](https://user-images.githubusercontent.com/9836343/121783310-6c003d80-cbe0-11eb-8db1-3c812916c54f.png)
+![app产品图](https://user-images.githubusercontent.com/9836343/121784304-cfd93500-cbe5-11eb-8272-137de3e5380a.png)
