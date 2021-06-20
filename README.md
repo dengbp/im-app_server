@@ -9,5 +9,9 @@
 
 产品介绍页:http://tongliao.goddesses.net.cn/tongliao/
 
-二、screenshot
+二、系统架构
+
+待续...
+
+三、screenshot
 ![app产品图](https://user-images.githubusercontent.com/9836343/121784304-cfd93500-cbe5-11eb-8272-137de3e5380a.png)
