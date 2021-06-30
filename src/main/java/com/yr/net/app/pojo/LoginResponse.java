@@ -11,6 +11,10 @@ public class LoginResponse {
     private String portrait;
     /** 0是新用户，1不是 */
     private int isNewUser;
+     /** 1:待完善。0：已完善 */
+     private int initInfo = 1;
+
+     private String  sessionId;
 
     public static int NEW_USER = 0;
 

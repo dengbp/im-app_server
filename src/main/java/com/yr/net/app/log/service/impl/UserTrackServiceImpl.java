@@ -95,14 +95,4 @@ public class UserTrackServiceImpl extends ServiceImpl<UserTrackMapper, UserTrack
         }
         this.save(track);
     }
-
-    @Override
-    public Integer getFans(String userId) throws AppException {
-        return 0;
-    }
-
-    @Override
-    public Integer getFollows(String userId) throws AppException {
-        return 0;
-    }
 }

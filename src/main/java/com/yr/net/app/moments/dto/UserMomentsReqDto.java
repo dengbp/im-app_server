@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class UserMomentsReqDto extends QueryRequestPage {
 
+    /** 被查看的用户id */
     private String userId;
 
     private Long momentId;

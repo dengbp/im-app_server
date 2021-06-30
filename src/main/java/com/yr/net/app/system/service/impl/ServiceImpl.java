@@ -1,15 +1,21 @@
 package com.yr.net.app.system.service.impl;
 
 
+import cn.wildfirechat.common.ErrorCode;
+import cn.wildfirechat.pojos.*;
+import cn.wildfirechat.proto.ProtoConstants;
+import cn.wildfirechat.sdk.ChatConfig;
+import cn.wildfirechat.sdk.MessageAdmin;
+import cn.wildfirechat.sdk.RelationAdmin;
+import cn.wildfirechat.sdk.UserAdmin;
+import cn.wildfirechat.sdk.model.IMResult;
+import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.common.constant.SexConstant;
 import com.yr.net.app.configure.AppProperties;
-import com.yr.net.app.base.dto.RestResult;
 import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.entity.UserInfoDetail;
 import com.yr.net.app.customer.service.IUserInfoDetailService;
 import com.yr.net.app.customer.service.IUserInfoService;
-import com.yr.net.app.log.entity.UserSignLog;
-import com.yr.net.app.log.service.IUserSignLogService;
 import com.yr.net.app.model.PCSession;
 import com.yr.net.app.pojo.*;
 import com.yr.net.app.shiro.AuthDataSource;
@@ -20,11 +26,6 @@ import com.yr.net.app.tools.DateUtil;
 import com.yr.net.app.tools.RateLimiter;
 import com.yr.net.app.tools.ShortUUIDGenerator;
 import com.yr.net.app.tools.Utils;
-import cn.wildfirechat.common.ErrorCode;
-import cn.wildfirechat.pojos.*;
-import cn.wildfirechat.proto.ProtoConstants;
-import cn.wildfirechat.sdk.*;
-import cn.wildfirechat.sdk.model.IMResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -185,6 +186,8 @@ public class ServiceImpl implements Service {
             //如果用户信息不存在，创建用户
             InputOutputUserInfo user;
             boolean isNewUser = false;
+            /** 1:待完善。0：已完善 */
+            int initInfo = 1;
             if (userResult.getErrorCode() == ErrorCode.ERROR_CODE_NOT_EXIST) {
                 LOG.info("User not exist, try to create");
 
@@ -239,12 +242,18 @@ public class ServiceImpl implements Service {
 
             //返回用户id，token和是否新建
             LoginResponse response = new LoginResponse();
+            response.setInitInfo(initInfo);
             response.setUserId(user.getUserId());
             response.setToken(tokenResult.getResult().getToken());
+            response.setSessionId(subject.getSession().getId().toString());
             UserInfo userInfo = userInfoService.getByUserId(user.getUserId());
             if (userInfo != null){
                 isNewUser = false;
                 response.setIsNewUser(LoginResponse.NOT_NEW_USER);
+                if(userInfo.getSex()!=null && userInfo.getBirthday()!=null && userInfo.getBodyHeight()!=null && userInfo.getBodyWeight()!=null){
+                    initInfo = 0;
+                    response.setInitInfo(initInfo);
+                }
             }
             response.setRegister(isNewUser);
             if (userInfoDetailService.findByUserId(user.getUserId()) == null) {
@@ -278,6 +287,7 @@ public class ServiceImpl implements Service {
             }
 
             subject.getSession().setAttribute("userInfo", userInfo);
+            LOG.info("登录成功返回报文：{}", com.alibaba.fastjson.JSONObject.toJSONString(response));
             return RestResult.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

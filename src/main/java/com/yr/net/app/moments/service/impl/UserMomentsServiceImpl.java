@@ -29,6 +29,7 @@ import com.yr.net.app.moments.mapper.UserMomentsMapper;
 import com.yr.net.app.moments.service.ICommentAreaService;
 import com.yr.net.app.moments.service.ILikeService;
 import com.yr.net.app.moments.service.IUserMomentsService;
+import com.yr.net.app.moments.service.IViewService;
 import com.yr.net.app.pay.controller.enums.ExchangeItem;
 import com.yr.net.app.pojo.BaiduMapPositionResponse;
 import com.yr.net.app.tools.AddressByCoordUtil;
@@ -72,6 +73,9 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     private IUserSignLogService userSignLogService;
     @Resource
     private UserMomentsMapper userMomentsMapper;
+    @Resource
+    private IViewService viewService;
+
 
     @Override
     public void add(AddMomentDto addMomentDto) throws AppException {
@@ -176,6 +180,18 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         return userInfoResponses;
     }
 
+    /**
+     * Description 计数浏览量
+     * @param respDto
+     * @throws AppException
+     * @return void
+     * @Author dengbp
+     * @Date 1:19 PM 6/24/21
+     **/
+    private void addView(UserMomentsRespDto respDto)throws AppException {
+        viewService.add(new MomentsViewReqDto(respDto.getUserId(),respDto.getId(),AppUtil.getCurrentUserId()));
+    }
+
     private Set<Long> queryCondition(List<UserMoments> source,List<UserMomentsRespDto> userMomentsResp){
         Set<Long> set = new HashSet<>();
         if (source.isEmpty()) {
@@ -233,6 +249,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
         userMomentsResp.forEach(res -> {
             res.setCommentTotal(0);
             res.setLikeTotal(0);
+            res.setViewTotal(0);
             res.setCommentRespDtos(new ArrayList<>());
             setComments(res,res.getId(),0);
             Like like = likeService.getByMomentAndUser(res.getId(),AppUtil.getCurrentUserId());
@@ -245,7 +262,10 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
             if (likeTotal.containsKey(res.getId())) {
                 res.setLikeTotal(likeTotal.get(res.getId()).get());
             }
+            int i = viewService.viewCount(res.getId());
+            res.setViewTotal(i);
             res.setPurview(userExchangeLogService.findMomentPayByUser(res.getId(),AppUtil.getCurrentUserId(),res.getUserId(), ExchangeItem.moment));
+            this.addView(res);
         });
     }
 

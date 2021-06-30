@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.base.service.IZodiacInfoService;
-import com.yr.net.app.common.entity.AppConstant;
 import com.yr.net.app.common.entity.QueryRequestPage;
 import com.yr.net.app.common.exception.AppException;
 import com.yr.net.app.configure.AppProperties;
@@ -15,9 +15,11 @@ import com.yr.net.app.customer.entity.UserInfo;
 import com.yr.net.app.customer.manager.UserManager;
 import com.yr.net.app.customer.mapper.UserInfoMapper;
 import com.yr.net.app.customer.service.IUserInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yr.net.app.pojo.Position;
-import com.yr.net.app.tools.*;
+import com.yr.net.app.tools.AppUtil;
+import com.yr.net.app.tools.DateUtil;
+import com.yr.net.app.tools.FileUtil;
+import com.yr.net.app.tools.ZodiacUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +38,7 @@ import java.util.List;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
     @Autowired
-    private UserManager userManager;
-    @Autowired
     private AppProperties appProperties;
-    @Autowired
-    private IZodiacInfoService zodiacInfoService;
 
     @Resource
     private UserInfoMapper userInfoMapper;
@@ -52,7 +50,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         page.setCurrent(query.getPageNum());
         page.setSize(query.getPageSize());
-        wrapper.eq("sex",getGen());
+        wrapper.ne("sex",AppUtil.getCurrentUser().getSex());
         wrapper.orderByDesc("RAND()");
         IPage<UserInfo> infoIPage = this.baseMapper.selectPage(page, wrapper);
         List<UserBaseInfoResponseDto> userInfoResponses = new ArrayList<>();
@@ -119,7 +117,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         page.setCurrent(requestPage.getPageNum());
         page.setSize(requestPage.getPageSize());
-        wrapper.eq("sex",getGen());
+        wrapper.ne("sex",AppUtil.getCurrentUser().getSex());
         wrapper.orderByDesc("RAND()");
         IPage<UserInfo> list = this.baseMapper.selectPage(page, wrapper);
         List<NearUserResponseDto> responses = new ArrayList<>();
@@ -176,6 +174,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         try {
             responseDto.setAge(DateUtil.getAge(userInfo.getBirthday().toString(),DateUtil.YYYY_MM_DD_PATTERN));
+            responseDto.setZodiac(UserInfo.getZodiac(userInfo));
         } catch (Exception e) {
             e.printStackTrace();
             throw  new AppException("获取年龄异常");

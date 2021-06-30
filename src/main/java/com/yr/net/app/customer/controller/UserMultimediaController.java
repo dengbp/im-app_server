@@ -88,8 +88,8 @@ public class UserMultimediaController {
     @ResponseBody
     @ControllerEndpoint(operation = "用户相册里的相片数接口", exceptionMessage = "用户相册里的相片数查询失败")
     @Log("用户相册里的相片数接口")
-    public RestResult albumCount(@RequestBody  String userId){
-        return RestResult.ok().setResult(userMultimediaService.getAlbumCount(userId));
+    public RestResult albumCount(@RequestBody  AlbumRequestDto requestDto){
+        return RestResult.ok().setResult(userMultimediaService.getAlbumCount(requestDto.getUserId()));
     }
 
 

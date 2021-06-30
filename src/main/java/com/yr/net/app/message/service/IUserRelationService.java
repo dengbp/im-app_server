@@ -50,4 +50,24 @@ public interface IUserRelationService extends IService<UserRelation> {
 
      UserRelation getFollowState(String userId,String relationId)throws AppException;
 
+    /**
+     * Description 取粉丝量
+     * @param userId
+     * @throws AppException
+     * @return java.lang.Integer
+     * @Author dengbp
+     * @Date 1:35 PM 2/22/21
+     **/
+    Integer getFans(String userId)throws AppException;
+
+    /**
+     * Description 取关注量
+     * @param userId
+     * @throws AppException
+     * @return java.lang.Integer
+     * @Author dengbp
+     * @Date 1:35 PM 2/22/21
+     **/
+    Integer getFollows(String userId)throws AppException;
+
 }

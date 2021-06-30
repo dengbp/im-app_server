@@ -43,7 +43,7 @@ public class UserInfo implements Serializable {
     private String password;
 
     /**
-     * 性别，1男2女
+     * 性别，1女2男
      */
     private Integer sex;
 

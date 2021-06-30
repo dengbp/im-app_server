@@ -66,6 +66,11 @@ public class UserMomentsRespDto {
      */
     private Integer commentTotal;
 
+    /**
+     * 浏览量
+     */
+    private Integer viewTotal;
+
 
 
     /**

@@ -26,4 +26,5 @@ public class AlbumRequestDto extends QueryRequestPage {
      */
     @NotNull
     private Integer beUsed;
+
 }

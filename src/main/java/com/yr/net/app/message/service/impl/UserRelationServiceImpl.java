@@ -60,4 +60,14 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         }
         return list.get(0);
     }
+
+    @Override
+    public Integer getFans(String userId) throws AppException {
+        return count(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getRelationId,userId).eq(UserRelation::getState,1));
+    }
+
+    @Override
+    public Integer getFollows(String userId) throws AppException {
+        return count(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getUserId,userId).eq(UserRelation::getState,1));
+    }
 }

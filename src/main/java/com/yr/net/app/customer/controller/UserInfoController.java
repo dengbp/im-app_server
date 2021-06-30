@@ -20,6 +20,7 @@ import com.yr.net.app.pojo.Position;
 import com.yr.net.app.tools.AppUtil;
 import com.yr.net.app.tools.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +86,21 @@ public class UserInfoController {
     public RestResult baseAdd(@RequestBody @Valid AddBaseInfoRequestDto baseInfoRequestDto)throws AppException{
         if (baseInfoRequestDto.getBirthday()==null || baseInfoRequestDto.getBirthday() > Integer.parseInt(DateUtil.current_yyyyMMdd())){
             return RestResult.error("出生日期不能为空或大于当前时间");
+        }
+        if (StringUtils.isBlank(baseInfoRequestDto.getUserName())){
+            return RestResult.error("请输入昵称");
+        }
+        if (baseInfoRequestDto.getBirthday()==null){
+            return RestResult.error("请选择生日");
+        }
+        if (baseInfoRequestDto.getSex()==null){
+            return RestResult.error("请选择性别");
+        }
+        if (baseInfoRequestDto.getBodyHeight()==null){
+            return RestResult.error("请输入身高");
+        }
+        if (baseInfoRequestDto.getBodyHeight()==null){
+            return RestResult.error("请输入体重");
         }
         baseInfoRequestDto.setUserId(AppUtil.getCurrentUserId());
         userInfoService.updateByUserId(baseInfoRequestDto);

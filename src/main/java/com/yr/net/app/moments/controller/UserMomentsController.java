@@ -7,6 +7,7 @@ import com.yr.net.app.common.annotation.ControllerEndpoint;
 import com.yr.net.app.common.annotation.Log;
 import com.yr.net.app.log.dto.OperationReqDto;
 import com.yr.net.app.log.service.IUserTrackService;
+import com.yr.net.app.message.service.IUserRelationService;
 import com.yr.net.app.moments.dto.AddMomentDto;
 import com.yr.net.app.moments.dto.AddSimpleMomentDto;
 import com.yr.net.app.moments.dto.UserMomentsReqDto;
@@ -31,8 +32,9 @@ public class UserMomentsController {
     @Autowired
     private IUserMomentsService userMomentsService;
 
+
     @Resource
-    private IUserTrackService userTrackService;
+    private IUserRelationService userRelationService;
 
     @PostMapping("/add")
     @ControllerEndpoint(operation = "发布动态", exceptionMessage = "发布动态失败")
@@ -81,8 +83,7 @@ public class UserMomentsController {
     @Log("用户粉丝量查询接口")
     public RestResult fans(@RequestBody  OperationReqDto reqDto){
         String userId = StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId();
-        userTrackService.getFans(userId);
-        return RestResult.ok().setResult(2321);
+        return RestResult.ok().setResult(userRelationService.getFans(userId));
     }
 
     @PostMapping("/follow")
@@ -91,8 +92,7 @@ public class UserMomentsController {
     @Log("用户关注量查询接口")
     public RestResult follow(@RequestBody OperationReqDto reqDto){
         String userId = StringUtils.isBlank(reqDto.getUserId())? AppUtil.getCurrentUserId():reqDto.getUserId();
-        userTrackService.getFollows(userId);
-        return RestResult.ok().setResult(210);
+        return RestResult.ok().setResult(userRelationService.getFollows(userId));
     }
 
 
