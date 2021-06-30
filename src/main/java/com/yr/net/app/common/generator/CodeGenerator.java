@@ -25,7 +25,7 @@ public class CodeGenerator {
     // 数据库驱动
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     // 数据库用户名
-    private static final String USERNAME = "root";
+    private static final String USERNAME = "dengbp";
     // 数据库密码
     private static final String PASSWORD = "20200922#doc";
     // @author 值
